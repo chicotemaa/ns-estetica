@@ -1,0 +1,47 @@
+root
+│
+├── .next
+├── node_modules
+├── public
+│   └── favicon.ico
+├── src
+│   ├── app
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components
+│   │   ├── about
+│   │   ├── common
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── ScrollToTopButton.tsx
+│   │   │   ├── SEO.tsx
+│   │   │   ├── ThemeToggle.tsx
+│   │   │   └── WhatsAppButton.tsx
+│   │   ├── contact
+│   │   │   ├── ContactForm.tsx
+│   │   │   └── GoogleMapComponent.tsx
+│   │   ├── home
+│   │   │   └── Home.tsx
+│   │   ├── info
+│   │   │   └── WorkInfo.tsx
+│   │   ├── pop-up
+│   │   │   └── Modal.tsx
+│   │   └── services
+│   │       ├── ServiceCard.tsx
+│   │       └── Services.tsx
+│   ├── telegrama
+│   │   └── Telegramas.tsx
+├── .eslintrc.json
+├── .gitignore
+├── Estructura.txt
+├── next.config.mjs
+├── next-env.d.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── tailwind.config.ts
+├── tsconfig.json
+└── yarn.lock
