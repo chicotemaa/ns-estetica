@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 const images = [
-  '/images/NS-estetica1.webp', 
+  '/images/LOGO-1.png', 
 ];
 
 const About = () => {
@@ -39,10 +39,10 @@ const About = () => {
       <div className="w-full lg:w-1/2 lg:pl-8 mt-8 lg:mt-0" data-aos="fade-up">
         <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">Sobre mi</h2>
         <p className="text-lg text-gray-800 dark:text-gray-300 mb-4">
-          Nos complace presentarnos como un equipo legal altamente especializado en casos de accidentes laborales y de tráfico.
+          Bienvenidos a Natalia Sanchez Estética, donde nos especializamos en ofrecer tratamientos personalizados para el cuidado de tu piel y bienestar general.
         </p>
         <p className="text-lg text-gray-800 dark:text-gray-300">
-          Entendemos que enfrentar situaciones legales derivadas de estos eventos puede ser desafiante, por lo que estamos aquí para guiarte a lo largo de todo el proceso legal con experiencia, dedicación y un enfoque personalizado.
+          Nuestro compromiso es brindarte una experiencia única que resalte tu belleza natural. Contamos con un equipo profesional dedicado a ofrecer los mejores tratamientos estéticos, desde limpieza facial hasta tratamientos avanzados para mejorar tu piel y tu bienestar. En Natalia Sanchez Estética, tu satisfacción es nuestra prioridad.
         </p>
       </div>
     </section>

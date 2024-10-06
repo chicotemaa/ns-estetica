@@ -78,7 +78,7 @@ const ContactForm = () => {
       </div>
       <div className="w-full lg:w-1/2 pl-0 lg:pl-8 pt-36 lg:pt-0">
         <h2 className="text-3xl font-bold mb-4">Contacto</h2>
-        <p className="text-md text-gray-800 dark:text-gray-300">¡No dude en realizar su consulta! Estamos aquí para ayudarle y ofrecerle el mejor asesoramiento legal.</p>
+        <p className="text-md text-gray-800 dark:text-gray-300">¡No dude en realizar su consulta! Estamos aquí para ayudarle y ofrecerle la mejor atención estética.</p>
         <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-lg text-gray-800 dark:text-white">

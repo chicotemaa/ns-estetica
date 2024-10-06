@@ -33,7 +33,7 @@ export default function Page() {
         <Navbar toggleTheme={toggleTheme} theme={theme} />
         <Home />
         <Services />
-        {/* <About /> */}
+         <About /> 
          {/* <Telegramas /> */}
         <WorkInfo />
         <ContactForm />

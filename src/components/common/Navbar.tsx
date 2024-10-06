@@ -62,7 +62,6 @@ const Navbar: FC<NavbarProps> = ({ toggleTheme, theme }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-gray-900 shadow-md">
           <a href="#services" className="block font-normal text-lg text-gray-800 dark:text-white px-4 py-2">SERVICIOS</a>
-          <a href="#telegramas" className="block font-normal text-lg text-gray-800 dark:text-white px-4 py-2">TELEGRAMAS</a>
           <a href="#workinfo" className="block font-normal text-lg text-gray-800 dark:text-white px-4 py-2">TRABAJOS</a>
           <a href="#contact" className="block font-normal text-lg text-gray-800 dark:text-white px-4 py-2">CONTACTO</a>
           <button onClick={toggleTheme} className="w-full text-lg text-gray-800 dark:text-white px-4 py-2 flex justify-start items-center">
