@@ -21,8 +21,8 @@ const Footer = () => (
           Somos especialistas en estética con una amplia experiencia en tratamientos de cuidado personal.
         </p>
         <div className="flex space-x-6 mt-4">
-          <a href="https://instagram.com/Abogado.caba" target="_blank" rel="noopener noreferrer" className="text-2xl text-gray-800 dark:text-white hover:text-blue-700"><FaInstagram /></a>
-          <a href="https://wa.me/01166959255" target="_blank" rel="noopener noreferrer" className="text-2xl text-gray-800 dark:text-white hover:text-blue-700"><FaFacebook /></a>
+          <a href="https://instagram.com/natalias.estetica" target="_blank" rel="noopener noreferrer" className="text-2xl text-gray-800 dark:text-white hover:text-blue-700"><FaInstagram /></a>
+         {/*  <a href="https://wa.me/01166959255" target="_blank" rel="noopener noreferrer" className="text-2xl text-gray-800 dark:text-white hover:text-blue-700"><FaFacebook /></a> */}
         </div>
       </div>
 
