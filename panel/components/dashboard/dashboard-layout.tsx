@@ -239,9 +239,9 @@ export default function DashboardLayout({
                     </Avatar>
                     <div className="flex-1 text-left">
                       <p className="text-sm font-medium text-slate-900">
-                        Equipo admin
+                        Natalia
                       </p>
-                      <p className="text-xs text-slate-500">Administración</p>
+                      <p className="text-xs text-slate-500">Estética</p>
                     </div>
                     <ChevronDown className="w-4 h-4" />
                   </SidebarMenuButton>
