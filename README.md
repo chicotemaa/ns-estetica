@@ -26,6 +26,10 @@ La web usa `/api/reservas/*` como intermediario. Sólo admite catálogo, disponi
 
 ## Publicación
 
-Se necesitan tres despliegues nuevos para la estética: web, panel y Strapi, más una base PostgreSQL nueva. En el panel, `PANEL_ORIGIN` debe coincidir con su URL HTTPS y `STRAPI_URL` debe ser el backend de estética. En la web, `ESTETICA_BACKEND_URL` debe ser ese mismo backend. En el backend, `CORS_ORIGINS`, `PUBLIC_URL` y `PANEL_ORIGIN` deben reflejar los nuevos dominios. La configuración de la peluquería se mantiene independiente.
+La instancia de producción de estética está en el proyecto Railway `ns-estetica` (`153ff1ad-b6cc-4b1f-8666-ad51f82c8a86`), con PostgreSQL propio, servicio `ns-estetica` para Strapi y servicio `mi-comercio-estetica` para el panel. Ambos usan la rama `codex/estetica-mi-comercio` de este repositorio y las raíces `/backend` y `/panel`, respectivamente. El backend responde en `https://ns-estetica-production.up.railway.app` y el panel tiene la URL temporal `https://mi-comercio-estetica-production.up.railway.app`.
+
+El dominio `app.natalestancias.com.ar` está añadido al panel en Railway, pendiente de que el DNS del dominio apunte a Railway y se verifique. Los registros solicitados por Railway son `CNAME app → n5ehivqt.up.railway.app` y `TXT _railway-verify.app → railway-verify=fd79fd5b4c1e39d9854366b5d742ab3bd9a7ec0932cf23cfd73f2b349a117f60`. Verificar el dominio exacto y sus registros antes de publicar la URL personalizada. El sitio público sigue requiriendo un despliegue propio; en ese servicio configurar `ESTETICA_BACKEND_URL=https://ns-estetica-production.up.railway.app`.
+
+Las variables `PANEL_ORIGIN`, `STRAPI_URL`, `PUBLIC_URL`, `CORS_ORIGINS` y `BUSINESS_SLUG` están configuradas para la instancia de estética. Los servicios iniciales permanecen inactivos y sin precio; revisar catálogo, profesionales y horarios antes de abrir las reservas públicas. La configuración de la peluquería se mantiene independiente.
 
 No se incluyen credenciales, datos de clientes ni precios reales. Los valores de catálogo inicial son borradores inactivos.
