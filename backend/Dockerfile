@@ -4,7 +4,7 @@ ENV STRAPI_TELEMETRY_DISABLED=true
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+RUN ESTETICA_DATABASE_URL=postgresql://build:build@localhost:5432/build npm run build
 RUN npm prune --omit=dev
 RUN mkdir -p /app/public/uploads
 ENV NODE_ENV=production
