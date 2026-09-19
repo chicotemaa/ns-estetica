@@ -23,7 +23,7 @@ export default async function AuthPage() {
   const logo = identity.logo.startsWith("/")
     ? new URL(
         identity.logo,
-        process.env.PUBLIC_SITE_URL || "http://localhost:3000",
+        process.env.PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://www.nataliasanchez.com.ar",
       ).href
     : identity.logo;
   return <LoginForm identity={{ ...identity, logo }} />;

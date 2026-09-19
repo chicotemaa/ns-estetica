@@ -183,7 +183,7 @@ export default function DashboardLayout({
                 <img
                   src={
                     brand.identity.logo.startsWith("/")
-                      ? `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}${brand.identity.logo}`
+                      ? `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.nataliasanchez.com.ar'}${brand.identity.logo}`
                       : brand.identity.logo
                   }
                   alt=""
