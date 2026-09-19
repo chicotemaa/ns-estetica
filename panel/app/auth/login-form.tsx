@@ -103,14 +103,14 @@ export default function LoginForm({
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Usuario o email</Label>
                 <Input
                   id="email"
                   name="email"
-                  type="email"
+                  type="text"
                   autoComplete="username"
                   maxLength={254}
-                  placeholder="tu@email.com"
+                  placeholder="natalia"
                   required
                   disabled={isLoading}
                 />

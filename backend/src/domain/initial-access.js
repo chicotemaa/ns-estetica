@@ -24,8 +24,8 @@ module.exports = async function initialAccess(strapi) {
       await strapi.admin.services.user.createFirstAdmin({
         email,
         password: adminPassword,
-        firstname: "Administrador",
-        lastname: "Prueba",
+        firstname: "Natalia",
+        lastname: "Sánchez",
       });
     }
     const users = strapi.db.query("plugin::users-permissions.user");
@@ -35,7 +35,7 @@ module.exports = async function initialAccess(strapi) {
         .query("plugin::users-permissions.role")
         .findOne({ where: { type: "business-manager" } });
       await strapi.plugin("users-permissions").service("user").add({
-        username: email,
+        username: process.env.INITIAL_MANAGER_USERNAME?.trim() || email,
         email,
         password: managerPassword,
         provider: "local",

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
           error:
             response.status === 429
               ? "Demasiados intentos. Esperá un minuto."
-              : "Revisá tu email y contraseña.",
+              : "Revisá tu usuario y contraseña.",
         },
         { status: response.status === 429 ? 429 : 401 },
       );
