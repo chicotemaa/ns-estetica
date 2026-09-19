@@ -147,7 +147,7 @@ export function EmployeesPageClient({
             <Input
               className="pl-9"
               onChange={(event) => controller.setSearchTerm(event.target.value)}
-              placeholder="Ej: nerea, agos, NERE..."
+              placeholder="Ej: natalia, especialista, NAT..."
               value={controller.searchTerm}
             />
           </div>

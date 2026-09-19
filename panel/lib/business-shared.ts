@@ -516,11 +516,11 @@ export function formatDisplayDate(value: string | null, timeZone: string) {
 export function getServiceCategoryLabel(category: ServiceCategory | null) {
   switch (category) {
     case "corte":
-      return "Corte";
+      return "Facial";
     case "coloraciones":
-      return "Coloraciones";
+      return "Corporal";
     case "tratamiento":
-      return "Tratamiento";
+      return "Manos y pies";
     default:
       return "Sin categoría";
   }

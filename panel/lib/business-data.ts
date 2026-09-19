@@ -357,28 +357,27 @@ function createDemoBundle(): BusinessDataBundle {
 
   const services: ServiceRecord[] = [
     {
-      id: "service-fade",
+      id: "service-masaje",
       name: "Masaje descontracturante",
-      description: "Laterales prolijos y volumen trabajado arriba.",
+      description: "Sesión de bienestar para aliviar tensiones musculares.",
       durationMinutes: 45,
       price: 18000,
       isActive: true,
       category: "corte",
     },
     {
-      id: "service-barba",
+      id: "service-facial",
       name: "Tratamiento facial",
-      description: "Lineas, contornos y terminacion natural.",
+      description: "Cuidado facial personalizado según las necesidades de la piel.",
       durationMinutes: 30,
       price: 12000,
       isActive: true,
       category: "corte",
     },
     {
-      id: "service-combo",
+      id: "service-manicura",
       name: "Manicura",
-      description:
-        "Servicio completo para resolver el turno en una sola visita.",
+      description: "Cuidado y presentación de uñas y manos.",
       durationMinutes: 60,
       price: 26000,
       isActive: true,
@@ -388,15 +387,15 @@ function createDemoBundle(): BusinessDataBundle {
 
   const staffMembers: StaffRecord[] = [
     {
-      id: "staff-nerea",
+      id: "staff-natalia",
       fullName: "Natalia Sánchez",
       role: "Especialista en estética",
       email: "natalia@demo.local",
       phone: "+54 362 400-0000",
       isActive: true,
-      bio: "Especialista en cortes y atención personalizada.",
+      bio: "Especialista en estética y atención personalizada.",
       joinDate: "2021-01-01",
-      employeeCode: "NERE",
+      employeeCode: "NAT",
       hourlyRate: 3500,
       rating: 4.9,
       compensationType: "hourly",
@@ -591,7 +590,7 @@ function createDemoOperationsBundle(): BusinessOperationsBundle {
   const staffTimeLogs: StaffTimeLogRecord[] = [
     {
       id: "time-log-demo-1",
-      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-nerea",
+      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-natalia",
       staffName: demoBundle.staffMembers[0]?.fullName ?? "Natalia Sánchez",
       workDate: new Date().toISOString().slice(0, 10),
       startTime: "11:00:00",
@@ -667,7 +666,7 @@ function createDemoTeamBundle(): BusinessTeamBundle {
   const staffTimeLogs: StaffTimeLogRecord[] = [
     {
       id: "team-time-log-demo-1",
-      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-nerea",
+      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-natalia",
       staffName: demoBundle.staffMembers[0]?.fullName ?? "Natalia Sánchez",
       workDate: new Date().toISOString().slice(0, 10),
       startTime: "11:00:00",
@@ -682,7 +681,7 @@ function createDemoTeamBundle(): BusinessTeamBundle {
   const staffWorkingHours: StaffWorkingHourRecord[] =
     createDefaultBusinessHours().map((day) => ({
       id: `team-hour-${day.dayOfWeek}`,
-      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-nerea",
+      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-natalia",
       dayOfWeek: day.dayOfWeek,
       startTime: day.openTime,
       endTime: day.closeTime,
@@ -694,7 +693,7 @@ function createDemoTeamBundle(): BusinessTeamBundle {
   const staffServiceAssignments: StaffServiceAssignmentRecord[] =
     demoBundle.services.map((service) => ({
       id: `team-assignment-${service.id}`,
-      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-nerea",
+      staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-natalia",
       serviceId: service.id,
     }));
 
@@ -705,7 +704,7 @@ function createDemoTeamBundle(): BusinessTeamBundle {
     ["corte", "coloraciones", "tratamiento"] as const
   ).map((category) => ({
     id: `team-rate-${category}`,
-    staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-nerea",
+    staffMemberId: demoBundle.staffMembers[0]?.id ?? "staff-natalia",
     category,
     percentage: defaultRates[category],
   }));
@@ -1822,3 +1821,4 @@ export async function getBusinessTeamBundle(): Promise<BusinessTeamBundle> {
     throw new Error("No se pudo cargar el negocio desde Strapi.");
   }
 }
+

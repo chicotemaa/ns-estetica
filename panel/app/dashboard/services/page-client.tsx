@@ -129,7 +129,7 @@ export function ServicesPageClient({
             <Input
               className="pl-9"
               onChange={(event) => controller.setSearchTerm(event.target.value)}
-              placeholder="Ej: corte, balayage, nanoplastia..."
+              placeholder="Ej: limpieza facial, masaje, manicura..."
               value={controller.searchTerm}
             />
           </div>

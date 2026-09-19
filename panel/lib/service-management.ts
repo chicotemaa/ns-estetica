@@ -68,7 +68,7 @@ export function parseServicePayload(payload: ServicePayload): {
 
   if (!SERVICE_CATEGORIES.includes(category as ServiceCategory)) {
     return {
-      error: "La categoría debe ser corte, coloraciones o tratamiento.",
+      error: "La categoría debe ser facial, corporal o manos y pies.",
     };
   }
 

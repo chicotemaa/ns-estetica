@@ -175,7 +175,7 @@ export function ClientFormDialog({
             <Textarea
               id="client-preferred-services"
               rows={3}
-              placeholder="jj: Corte de hombre, Corte y barba"
+              placeholder="Ej: limpieza facial, masaje, manicura"
               value={formState.preferredServices}
               onChange={(event) =>
                 onUpdateField("preferredServices", event.target.value)
