@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 type Service = { id: string; name: string; price: number; bookingEnabled?: boolean; variants?: { id: string; name: string; price: number }[] };
@@ -50,7 +52,7 @@ export default function Booking() {
   }, [catalog, serviceId, variantId, staffId, date]);
 
   const service = catalog?.services.find((item) => item.id === serviceId);
-  const inputClass = 'w-full rounded border border-gray-300 bg-white p-3 text-gray-900';
+  const inputClass = 'booking-input';
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -69,13 +71,18 @@ export default function Booking() {
     finally { setBusy(false); }
   }
 
-  return <section id="reservas" className="bg-white px-6 py-20 text-gray-900 dark:bg-gray-900 dark:text-white">
-    <div className="mx-auto max-w-3xl">
-      <h2 className="mb-3 text-3xl font-bold">Reservá tu turno</h2>
-      <p className="mb-8">Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar.</p>
-      {error && <p role="alert" className="mb-5 rounded bg-red-100 p-4 text-red-800">{error}</p>}
-      {sent ? <p role="status" className="rounded bg-green-100 p-5 text-green-900">Recibimos tu solicitud. Te contactaremos para confirmar el turno.</p> : catalog ?
-        <form onSubmit={submit} className="grid gap-4 md:grid-cols-2">
+  return <section id="reservas" className="booking-section section-pad">
+    <div className="booking-intro">
+      <p className="eyebrow">RESERVAS</p>
+      <h2>Tu próximo momento <em>empieza acá.</em></h2>
+      <p>Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.</p>
+      <span className="booking-ornament" aria-hidden="true">✳</span>
+    </div>
+    <div className="booking-panel">
+      <p className="booking-panel-label">SOLICITAR TURNO <span>01 — 02</span></p>
+      {error && <p role="alert" className="booking-error">{error}</p>}
+      {sent ? <p role="status" className="booking-success">Recibimos tu solicitud. Te contactaremos para confirmar el turno.</p> : catalog ?
+        <form onSubmit={submit} className="booking-form">
           <label>Tratamiento<select required className={inputClass} value={serviceId} onChange={e => { setServiceId(e.target.value); setVariantId(''); }}><option value="">Elegí un tratamiento</option>{catalog.services.filter(s => s.bookingEnabled !== false).map(s => <option key={s.id} value={s.id}>{s.name} · {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(s.price)}</option>)}</select></label>
           {service?.variants && service.variants.length > 1 && <label>Variante<select required className={inputClass} value={variantId} onChange={e => setVariantId(e.target.value)}><option value="">Elegí una variante</option>{service.variants.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}</select></label>}
           <label>Profesional<select className={inputClass} value={staffId} onChange={e => setStaffId(e.target.value)}><option value="">Sin preferencia</option>{catalog.staffMembers.map(s => <option key={s.id} value={s.id}>{s.fullName}</option>)}</select></label>
@@ -84,9 +91,9 @@ export default function Booking() {
           <label>Nombre<input required minLength={2} maxLength={100} className={inputClass} value={name} onChange={e => setName(e.target.value)} /></label>
           <label>Teléfono o Instagram<input required minLength={3} maxLength={100} className={inputClass} value={contact} onChange={e => setContact(e.target.value)} /></label>
           <label>Email opcional<input type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
-          <label className="md:col-span-2">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
-          <button disabled={busy || !time} className="rounded bg-gray-900 px-6 py-3 font-semibold text-white disabled:opacity-50 dark:bg-white dark:text-gray-900">{busy ? 'Enviando…' : 'Solicitar turno'}</button>
-        </form> : !error && <p>Cargando servicios…</p>}
+          <label className="booking-wide">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
+          <button disabled={busy || !time} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
+        </form> : !error && <p>Cargando tratamientos…</p>}
     </div>
   </section>;
 }

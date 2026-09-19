@@ -1,24 +1,12 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'NS Estética - Belleza y Bienestar',
-  description: 'En NS Estética ofrecemos tratamientos personalizados de cuidado de la piel, rejuvenecimiento facial, cavitación, y mucho más para ayudarte a sentirte mejor contigo misma.',
-  keywords: ['centro estético', 'cuidado de la piel', 'rejuvenecimiento facial', 'cavitación', 'belleza', 'tratamientos estéticos', 'bienestar'],
+  title: 'Natalia Sánchez Estética | Cuidado y bienestar',
+  description: 'Tratamientos personalizados de estética, cuidado de la piel y bienestar en Resistencia, Chaco.',
+  keywords: ['Natalia Sánchez Estética', 'tratamientos faciales', 'masajes', 'manicura', 'bienestar', 'Resistencia'],
 };
 
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="es-AR">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="es-AR"><body>{children}</body></html>;
 }

@@ -1,49 +1,26 @@
-import ServiceCard from './ServiceCard';
+import Image from 'next/image';
 
-const Services = () => (
-  <>   
-    <section id="services" className="min-h-screen p-8 bg-gray-200 dark:bg-gray-800 text-black dark:text-white flex flex-col justify-center">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-8 text-left" data-aos="fade-up">Servicios</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ServiceCard 
-            data-aos="fade-left"
-            title="Masajes Descontracturantes"
-            imageSrc="/images/masajes.jpg"
-            description="Alivia tensiones y contracturas musculares con nuestros masajes descontracturantes. Relájate y siente el bienestar en todo tu cuerpo."
-            additionalInfo={[
-              'Masajes personalizados según tus necesidades',
-              'Duración de 30, 60 o 90 minutos',
-              'Uso de aceites esenciales para mayor relajación'
-            ]}
-            link="#"
-          />
-          <ServiceCard 
-            title="Tratamientos Faciales"
-            imageSrc="/images/faciales.jpg"
-            description="Mejora el aspecto y salud de tu piel con nuestros tratamientos faciales. Ideales para rejuvenecer y revitalizar tu rostro."
-            additionalInfo={[
-              'Limpieza facial profunda',
-              'Tratamiento hidratante y rejuvenecedor',
-              'Personalizados según tu tipo de piel'
-            ]}
-            link="#"
-          />
-          <ServiceCard             
-            title="Manicura"
-            imageSrc="/images/manicura.jpg"
-            description="Cuida y embellece tus manos con nuestro servicio de manicura. Incluye limpieza, limado, esmaltado y tratamiento hidratante."
-            additionalInfo={[
-              'Manicura tradicional y semipermanente',
-              'Decoración personalizada de uñas',
-              'Tratamiento para el fortalecimiento de uñas'
-            ]}
-            link="#"
-          />
-        </div>
+const services = [
+  { number: '01', name: 'Masajes', detail: 'Un espacio para aflojar tensiones y volver a vos.', image: '/images/masajes.jpg', alt: 'Masaje descontracturante' },
+  { number: '02', name: 'Tratamientos faciales', detail: 'Cuidado de la piel pensado para tus necesidades.', image: '/images/faciales.jpg', alt: 'Aplicación de un tratamiento facial' },
+  { number: '03', name: 'Manicura', detail: 'Tiempo para cuidar los detalles que te acompañan.', image: '/images/manicura.jpg', alt: 'Servicio de manicura' },
+];
+
+export default function Services() {
+  return (
+    <section id="services" className="services-section section-pad">
+      <div className="section-heading">
+        <div><p className="eyebrow">TRATAMIENTOS</p><h2>Un cuidado para <em>cada momento.</em></h2></div>
+        <p>Elegí el tratamiento que mejor acompañe lo que necesitás hoy.</p>
+      </div>
+      <div className="service-grid">
+        {services.map(service => <article key={service.number} className="service-card">
+          <div className="service-photo"><Image src={service.image} alt={service.alt} fill sizes="(max-width: 800px) 100vw, 33vw" className="cover-image" /></div>
+          <div className="service-meta"><span>{service.number} / TRATAMIENTOS</span><span aria-hidden="true">↗</span></div>
+          <h3>{service.name}</h3><p>{service.detail}</p>
+          <a href="#reservas" aria-label={`Reservar ${service.name}`}>Reservar tratamiento <span aria-hidden="true">→</span></a>
+        </article>)}
       </div>
     </section>
-  </>
-);
-
-export default Services;
+  );
+}

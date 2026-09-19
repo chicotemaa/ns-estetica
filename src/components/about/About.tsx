@@ -1,52 +1,19 @@
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-const images = [
-  '/images/LOGO-1.png', 
-];
-
-const About = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+export default function About() {
   return (
-    <section id="about" className="min-h-screen p-8 bg-white dark:bg-gray-800 flex flex-col lg:flex-row items-center">
-      <div className="relative w-full h-64 md:h-96 lg:w-1/2">
-        {images.map((src, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentImageIndex === index ? 'opacity-100' : 'opacity-0'}`}
-            data-aos="fade-up"
-         >
-            <Image
-              src={src}
-              alt={`Descripción de la imagen ${index + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{ objectFit: 'cover', objectPosition: 'top 10%' }} 
-              className="rounded-lg"
-            />
-          </div>
-        ))}
+    <section id="about" className="about-section section-pad">
+      <div className="about-visual">
+        <div className="about-photo"><Image src="/images/masajes.jpg" alt="Sesión de masaje en Natalia Sánchez Estética" fill sizes="(max-width: 800px) 100vw, 48vw" className="cover-image" /></div>
+        <span className="about-caption">UN ESPACIO PARA VOS <span aria-hidden="true">✳</span></span>
       </div>
-      <div className="w-full lg:w-1/2 lg:pl-8 mt-8 lg:mt-0" data-aos="fade-up">
-        <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">Sobre mi</h2>
-        <p className="text-lg text-gray-800 dark:text-gray-300 mb-4">
-          Bienvenidos a Natalia Sanchez Estética, donde nos especializamos en ofrecer tratamientos personalizados para el cuidado de tu piel y bienestar general.
-        </p>
-        <p className="text-lg text-gray-800 dark:text-gray-300">
-          Nuestro compromiso es brindarte una experiencia única que resalte tu belleza natural. Contamos con un equipo profesional dedicado a ofrecer los mejores tratamientos estéticos, desde limpieza facial hasta tratamientos avanzados para mejorar tu piel y tu bienestar. En Natalia Sanchez Estética, tu satisfacción es nuestra prioridad.
-        </p>
+      <div className="about-copy">
+        <p className="eyebrow">SOBRE NOSOTROS</p>
+        <h2>La belleza empieza <em>por sentirte bien.</em></h2>
+        <p>En Natalia Sánchez Estética creemos en el cuidado como un momento propio. Cada tratamiento es una oportunidad para hacer una pausa y dedicarte atención.</p>
+        <p>Te acompañamos con una atención cercana y propuestas pensadas para tu piel y tu bienestar.</p>
+        <a href="#contact" className="text-link">Conocé nuestro espacio <span aria-hidden="true">→</span></a>
       </div>
     </section>
   );
-};
-
-export default About;
+}
