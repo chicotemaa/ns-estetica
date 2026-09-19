@@ -35,7 +35,8 @@ export default function Booking() {
   }, []);
 
   useEffect(() => {
-    if (!serviceId || !date) { setTimes([]); return; }
+    const selected = catalog?.services.find((item) => item.id === serviceId);
+    if (!serviceId || !date || (selected?.variants && selected.variants.length > 1 && !variantId)) { setTimes([]); return; }
     const controller = new AbortController();
     const query = new URLSearchParams({ date, serviceId, staffMemberId: staffId });
     if (variantId) query.set('serviceVariantId', variantId);
@@ -46,7 +47,7 @@ export default function Booking() {
       .then(readJson).then((value: { times: string[] }) => setTimes(value.times))
       .catch((reason: Error) => { if (reason.name !== 'AbortError') setError(reason.message); });
     return () => controller.abort();
-  }, [serviceId, variantId, staffId, date]);
+  }, [catalog, serviceId, variantId, staffId, date]);
 
   const service = catalog?.services.find((item) => item.id === serviceId);
   const inputClass = 'w-full rounded border border-gray-300 bg-white p-3 text-gray-900';
