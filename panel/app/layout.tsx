@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mi Comercio · Natalia Sánchez aairstudio",
+  title: "Mi Comercio · Natalia Sánchez Estética",
   description: "Administración del negocio, agenda, clientes y caja.",
   robots: { index: false, follow: false },
 };

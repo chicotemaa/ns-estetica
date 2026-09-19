@@ -28,7 +28,9 @@ La web usa `/api/reservas/*` como intermediario. Sólo admite catálogo, disponi
 
 La instancia de producción de estética está en el proyecto Railway `ns-estetica` (`153ff1ad-b6cc-4b1f-8666-ad51f82c8a86`), con PostgreSQL propio, servicio `ns-estetica` para Strapi y servicio `mi-comercio-estetica` para el panel. Ambos usan la rama `codex/estetica-mi-comercio` de este repositorio y las raíces `/backend` y `/panel`, respectivamente. El backend responde en `https://ns-estetica-production.up.railway.app` y el panel tiene la URL temporal `https://mi-comercio-estetica-production.up.railway.app`.
 
-El dominio real en Vercel es `nataliasanchez.com.ar`. La web pública está asociada al proyecto Vercel `ns-estetica` en `www.nataliasanchez.com.ar`; configurar allí `ESTETICA_BACKEND_URL=https://ns-estetica-production.up.railway.app`. El subdominio `app.nataliasanchez.com.ar` sigue asociado al proyecto antiguo `back-office` hasta completar su migración al panel nuevo de Railway.
+El dominio real en Vercel es `nataliasanchez.com.ar`. La web pública está publicada en el proyecto Vercel `ns-estetica`, desde la rama `main`, en `www.nataliasanchez.com.ar`, con `ESTETICA_BACKEND_URL=https://ns-estetica-production.up.railway.app`. El panel está operativo en `https://app.nataliasanchez.com.ar`, con HTTPS de Railway. El DNS se administra en Vercel: el CNAME `app` apunta a `xc5kasbf.up.railway.app`, con su TXT de verificación de Railway y autorización CAA para Let's Encrypt. La URL temporal sigue disponible como acceso alternativo.
+
+La dirección confirmada del negocio es **Wilde 12, local 1, planta baja**, en Resistencia, Chaco; está publicada en la web y guardada en la configuración del panel.
 
 Las variables `PANEL_ORIGIN`, `STRAPI_URL`, `PUBLIC_URL`, `CORS_ORIGINS` y `BUSINESS_SLUG` están configuradas para la instancia de estética. Los servicios iniciales permanecen inactivos y sin precio; revisar catálogo, profesionales y horarios antes de abrir las reservas públicas. La configuración de la peluquería se mantiene independiente.
 
