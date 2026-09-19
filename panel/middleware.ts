@@ -5,8 +5,10 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
     const origin = request.headers.get("origin");
-    const expected = process.env.PANEL_ORIGIN || request.nextUrl.origin;
-    if (origin !== expected)
+    const allowed = (process.env.PANEL_ORIGINS || process.env.PANEL_ORIGIN || request.nextUrl.origin)
+      .split(",")
+      .map((value) => value.trim());
+    if (!origin || !allowed.includes(origin))
       return NextResponse.json(
         { error: "Origen de solicitud inválido." },
         { status: 403 },
