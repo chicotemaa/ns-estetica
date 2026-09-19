@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_online_payments",
+  "info": {
+    "singularName": "online-payment",
+    "pluralName": "online-payments",
+    "displayName": "online-payment"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business_id": {
+      "type": "integer"
+    },
+    "intent_id": {
+      "type": "integer"
+    },
+    "provider_id": {
+      "type": "string",
+      "unique": true
+    },
+    "provider_status": {
+      "type": "string"
+    },
+    "amount_cents": {
+      "type": "biginteger"
+    },
+    "refunded_cents": {
+      "type": "biginteger"
+    },
+    "provider_updated_at": {
+      "type": "datetime"
+    },
+    "ledger_id": {
+      "type": "integer"
+    },
+    "review_reason": {
+      "type": "text"
+    }
+  }
+}

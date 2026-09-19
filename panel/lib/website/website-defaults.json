@@ -1,0 +1,94 @@
+{
+  "identity": {
+    "name": "Natalia Sánchez Estética",
+    "shortName": "Natalia Sánchez",
+    "logo": "/images/LOGO.png",
+    "gray": "#d9d9d9",
+    "black": "#151515",
+    "burgundy": "#6b2036",
+    "white": "#ffffff",
+    "font": "manrope",
+    "rounded": false
+  },
+  "navigation": {
+    "topbar": "Estética y bienestar",
+    "services": "Servicios",
+    "work": "Nuestro trabajo",
+    "about": "El estudio",
+    "booking": "Reservar",
+    "journal": "Consejos"
+  },
+  "hero": {
+    "eyebrow": "Natalia Sánchez · Estética",
+    "title": "NS ESTÉTICA",
+    "note": "Un momento para vos.",
+    "image": "/images/fondo-home.webp",
+    "alt": "Natalia Sánchez Estética",
+    "buttonText": "Reservar turno",
+    "secondaryText": "Nuestro trabajo",
+    "signature": "Estética y bienestar"
+  },
+  "services": {
+    "enabled": true,
+    "title": "Nuestros servicios",
+    "linkText": "Ver servicios y precios"
+  },
+  "work": {
+    "enabled": true,
+    "eyebrow": "Hecho en Natalia",
+    "title": "El detalle hace\nla diferencia.",
+    "linkText": "Ver todos los trabajos"
+  },
+  "about": {
+    "enabled": true,
+    "eyebrow": "La persona detrás del estilo",
+    "title": "Hola,\nsoy Natalia.",
+    "body": "Tratamientos estéticos y atención personalizada para tu bienestar.",
+    "image": "/images/masajes.jpg",
+    "alt": "Natalia Sánchez",
+    "caption": "Natalia Sánchez · En el estudio",
+    "buttonText": "Reservar turno"
+  },
+  "brand": {
+    "enabled": false,
+    "eyebrow": "El universo Natalia",
+    "title": "Un estilo.\nNuestra firma.",
+    "body": "Líneas simples, contraste y un sello propio.\nLa identidad del estudio, en cada detalle.",
+    "credit": "Colección visual · Aplicaciones de nuestra marca",
+    "photos": []
+  },
+  "visit": {
+    "enabled": true,
+    "eyebrow": "Un momento para vos",
+    "title": "Nos vemos\nen el estudio.",
+    "body": "Elegí tu tratamiento y encontrá un momento para vos.",
+    "buttonText": "Elegí tu servicio"
+  },
+  "gallery": {
+    "eyebrow": "La mirada Natalia",
+    "title": "El estilo está\nen los detalles.",
+    "body": "Cortes, texturas y momentos en el estudio. Mirá de cerca nuestro trabajo y encontrá inspiración para tu próxima visita.",
+    "photos": []
+  },
+  "journal": {
+    "enabled": false,
+    "eyebrow": "El cuaderno de Natalia",
+    "title": "Ideas para\ntu pelo.",
+    "body": "Cómo elegir tu próximo corte y cuidarlo después. Una lectura breve antes de tu próxima visita.",
+    "posts": []
+  },
+  "videos": {
+    "enabled": false,
+    "eyebrow": "En movimiento",
+    "title": "Dentro del estudio.",
+    "items": []
+  },
+  "footer": {
+    "description": "Tratamientos estéticos y bienestar con atención personalizada.",
+    "bookingText": "Reservar turno"
+  },
+  "booking": {
+    "title": "Un momento para vos.",
+    "intro": "Elegí el servicio y el momento para vos. Te contactaremos para confirmar tu turno."
+  }
+}

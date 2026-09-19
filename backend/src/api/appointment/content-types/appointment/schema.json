@@ -1,0 +1,127 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_appointments",
+  "info": {
+    "singularName": "appointment",
+    "pluralName": "appointments",
+    "displayName": "appointments"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "customer_name": {
+      "type": "text",
+      "required": true
+    },
+    "customer_contact": {
+      "type": "text",
+      "required": true
+    },
+    "customer_email": {
+      "type": "text"
+    },
+    "appointment_date": {
+      "type": "date",
+      "required": true
+    },
+    "appointment_time": {
+      "type": "time",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled",
+        "completed"
+      ],
+      "required": true,
+      "default": "pending"
+    },
+    "channel": {
+      "type": "enumeration",
+      "enum": [
+        "website",
+        "whatsapp",
+        "instagram",
+        "manual"
+      ],
+      "required": true,
+      "default": "website"
+    },
+    "service_name_snapshot": {
+      "type": "text",
+      "required": true
+    },
+    "staff_name_snapshot": {
+      "type": "text"
+    },
+    "price_snapshot": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "duration_snapshot": {
+      "type": "integer",
+      "required": true,
+      "default": 30
+    },
+    "notes": {
+      "type": "text"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::customer.customer"
+    },
+    "internal_notes": {
+      "type": "text"
+    },
+    "cancellation_reason": {
+      "type": "text"
+    },
+    "request_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "request_hash": {
+      "type": "string",
+      "private": true
+    },
+    "arrived_at": {
+      "type": "datetime"
+    },
+    "started_at": {
+      "type": "datetime"
+    },
+    "finished_at": {
+      "type": "datetime"
+    },
+    "checkout_total": {
+      "type": "decimal",
+      "min": 0
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_services",
+  "info": {
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "services"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "min": 1
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "display_order": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "category": {
+      "type": "text"
+    },
+    "image_url": {
+      "type": "text"
+    },
+    "booking_enabled": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "source_label": {
+      "type": "text"
+    },
+    "source_ref": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}

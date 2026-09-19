@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_staff_member_services",
+  "info": {
+    "singularName": "staff-service",
+    "pluralName": "staff-services",
+    "displayName": "staff member services"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service"
+    }
+  }
+}

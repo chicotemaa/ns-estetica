@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_invoices",
+  "info": {
+    "singularName": "invoice",
+    "pluralName": "invoices",
+    "displayName": "invoices"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::customer.customer"
+    },
+    "appointment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::appointment.appointment"
+    },
+    "number": {
+      "type": "text",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "draft",
+        "issued",
+        "paid",
+        "overdue",
+        "cancelled"
+      ],
+      "required": true,
+      "default": "draft"
+    },
+    "issued_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "due_at": {
+      "type": "datetime"
+    },
+    "paid_at": {
+      "type": "datetime"
+    },
+    "subtotal": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "tax_amount": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "total": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

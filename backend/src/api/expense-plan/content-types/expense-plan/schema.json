@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_expense_plans",
+  "info": {
+    "singularName": "expense-plan",
+    "pluralName": "expense-plans",
+    "displayName": "expense_plans"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "title": {
+      "type": "text",
+      "required": true
+    },
+    "category": {
+      "type": "text"
+    },
+    "vendor": {
+      "type": "text"
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "recurrence": {
+      "type": "enumeration",
+      "enum": [
+        "monthly",
+        "once"
+      ],
+      "required": true
+    },
+    "start_month": {
+      "type": "string",
+      "required": true
+    },
+    "end_month": {
+      "type": "string"
+    },
+    "due_day": {
+      "type": "integer",
+      "min": 1,
+      "max": 31,
+      "required": true
+    },
+    "notes": {
+      "type": "text"
+    },
+    "operation_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "operation_hash": {
+      "type": "string",
+      "private": true
+    }
+  }
+}

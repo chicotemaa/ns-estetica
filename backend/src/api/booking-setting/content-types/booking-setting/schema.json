@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_booking_settings",
+  "info": {
+    "singularName": "booking-setting",
+    "pluralName": "booking-settings",
+    "displayName": "booking settings"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "slot_interval_minutes": {
+      "type": "integer",
+      "required": true,
+      "default": 30,
+      "min": 5,
+      "max": 120
+    },
+    "lead_time_minutes": {
+      "type": "integer",
+      "required": true,
+      "default": 120,
+      "min": 0,
+      "max": 10080
+    },
+    "max_booking_days_in_advance": {
+      "type": "integer",
+      "required": true,
+      "default": 30,
+      "min": 1,
+      "max": 365
+    },
+    "buffer_between_appointments_minutes": {
+      "type": "integer",
+      "required": true,
+      "default": 0,
+      "min": 0,
+      "max": 120
+    }
+  }
+}

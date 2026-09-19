@@ -15,6 +15,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ScrollToTopButton from '../components/common/ScrollToTopButton';
 import Telegramas from '../components/telegrama/Telegramas';
+import Booking from '../components/booking/Booking';
 
 export default function Page() {
   const { theme, toggleTheme } = ThemeToggle();
@@ -33,6 +34,7 @@ export default function Page() {
         <Navbar toggleTheme={toggleTheme} theme={theme} />
         <Home />
         <Services />
+        <Booking />
          <About /> 
          {/* <Telegramas /> */}
         <WorkInfo />

@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_service_price_variants",
+  "info": {
+    "singularName": "service-price-variant",
+    "pluralName": "service-price-variants",
+    "displayName": "service price variants"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service"
+    },
+    "variant_name": {
+      "type": "text",
+      "required": true
+    },
+    "variant_code": {
+      "type": "text"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "duration_minutes": {
+      "type": "integer",
+      "min": 1
+    },
+    "is_default": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "display_order": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

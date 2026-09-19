@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_checkout_events",
+  "info": {
+    "singularName": "checkout-event",
+    "pluralName": "checkout-events",
+    "displayName": "checkout_events"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "appointment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::appointment.appointment"
+    },
+    "payment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::payment.payment"
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": [
+        "adjustment",
+        "method",
+        "void"
+      ],
+      "required": true
+    },
+    "reason": {
+      "type": "text",
+      "required": true
+    },
+    "before_value": {
+      "type": "json"
+    },
+    "after_value": {
+      "type": "json"
+    },
+    "actor": {
+      "type": "string"
+    }
+  }
+}

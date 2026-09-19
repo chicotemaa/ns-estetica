@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.*
+*.local
+!.env.example
+.cache
+.tmp
+dist
+build
+tests
+public/uploads/*

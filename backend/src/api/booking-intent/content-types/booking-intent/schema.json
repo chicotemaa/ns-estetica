@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_booking_intents",
+  "info": {
+    "singularName": "booking-intent",
+    "pluralName": "booking-intents",
+    "displayName": "booking-intent"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "deposit_percent": { "type": "integer", "default": 50 },
+    "booking_data": { "type": "json", "private": true },
+    "business_id": {
+      "type": "integer"
+    },
+    "account_id": {
+      "type": "integer"
+    },
+    "key": {
+      "type": "string",
+      "unique": true
+    },
+    "request_hash": {
+      "type": "string"
+    },
+    "appointment_id": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "awaiting_payment",
+        "confirmed",
+        "expired",
+        "cancelled",
+        "review"
+      ]
+    },
+    "expires_at": {
+      "type": "datetime"
+    },
+    "total_cents": {
+      "type": "biginteger"
+    },
+    "deposit_cents": {
+      "type": "biginteger"
+    },
+    "reference": {
+      "type": "string",
+      "unique": true
+    },
+    "preference_id": {
+      "type": "string"
+    },
+    "checkout_url": {
+      "type": "text"
+    },
+    "payment_id": {
+      "type": "string"
+    },
+    "policy_version": {
+      "type": "string"
+    },
+    "policy_accepted_at": {
+      "type": "datetime"
+    },
+    "review_reason": {
+      "type": "text"
+    }
+  }
+}

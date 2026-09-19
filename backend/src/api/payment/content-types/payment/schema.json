@@ -1,0 +1,119 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "payments"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::customer.customer"
+    },
+    "appointment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::appointment.appointment"
+    },
+    "invoice": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::invoice.invoice"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "method": {
+      "type": "enumeration",
+      "enum": [
+        "cash",
+        "card",
+        "transfer",
+        "mercado_pago",
+        "other"
+      ],
+      "required": true,
+      "default": "cash"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "completed",
+        "failed",
+        "refunded",
+        "voided"
+      ],
+      "required": true,
+      "default": "pending"
+    },
+    "transaction_id": {
+      "type": "text"
+    },
+    "processed_at": {
+      "type": "datetime"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "commission_rate": {
+      "type": "decimal",
+      "min": 0,
+      "max": 100
+    },
+    "commission_amount": {
+      "type": "decimal",
+      "min": 0
+    },
+    "checkout_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "checkout_hash": {
+      "type": "string",
+      "private": true
+    },
+    "collection_date": {
+      "type": "date"
+    },
+    "work_record": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::work-record.work-record"
+    },
+    "import_ref": {
+      "type": "string",
+      "unique": true
+    },
+    "import_hash": {
+      "type": "string",
+      "private": true
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_customer_challenges",
+  "info": {
+    "singularName": "customer-challenge",
+    "pluralName": "customer-challenges",
+    "displayName": "customer-challenge"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business_id": {
+      "type": "integer"
+    },
+    "key": {
+      "type": "string",
+      "unique": true
+    },
+    "kind": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "proof_hash": {
+      "type": "string",
+      "private": true
+    },
+    "attempts": {
+      "type": "integer",
+      "default": 0
+    },
+    "expires_at": {
+      "type": "datetime"
+    },
+    "consumed_at": {
+      "type": "datetime"
+    }
+  }
+}

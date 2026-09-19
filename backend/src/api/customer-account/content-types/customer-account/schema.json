@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_customer_accounts",
+  "info": {
+    "singularName": "customer-account",
+    "pluralName": "customer-accounts",
+    "displayName": "customer-account"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business_id": {
+      "type": "integer"
+    },
+    "email_key": {
+      "type": "string",
+      "unique": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "google_key": {
+      "type": "string",
+      "unique": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "integer"
+    }
+  }
+}

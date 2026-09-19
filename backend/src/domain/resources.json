@@ -1,0 +1,962 @@
+{
+  "businesses": {
+    "uid": "api::business.business",
+    "fields": {
+      "name": {
+        "attribute": "name"
+      },
+      "slug": {
+        "attribute": "slug"
+      },
+      "description": {
+        "attribute": "description"
+      },
+      "time_zone": {
+        "attribute": "time_zone"
+      },
+      "brand_initials": {
+        "attribute": "brand_initials"
+      },
+      "short_name": {
+        "attribute": "short_name"
+      },
+      "founded_year": {
+        "attribute": "founded_year"
+      },
+      "address": {
+        "attribute": "address"
+      },
+      "phone": {
+        "attribute": "phone"
+      },
+      "email": {
+        "attribute": "email"
+      },
+      "website": {
+        "attribute": "website"
+      },
+      "cuit": {
+        "attribute": "cuit"
+      },
+      "logo_url": {
+        "attribute": "logo_url"
+      },
+      "hero_headline": {
+        "attribute": "hero_headline"
+      },
+      "hero_copy": {
+        "attribute": "hero_copy"
+      },
+      "google_maps_query": {
+        "attribute": "google_maps_query"
+      },
+      "map_lat": {
+        "attribute": "map_lat"
+      },
+      "map_lng": {
+        "attribute": "map_lng"
+      },
+      "instagram_handle": {
+        "attribute": "instagram_handle"
+      },
+      "whatsapp_phone": {
+        "attribute": "whatsapp_phone"
+      },
+      "monthly_collection_target": {
+        "attribute": "monthly_collection_target"
+      },
+      "brand_palette": {
+        "attribute": "brand_palette"
+      },
+      "booking_intro": {
+        "attribute": "booking_intro"
+      },
+      "website_content": {
+        "attribute": "website_content"
+      }
+    }
+  },
+  "services": {
+    "uid": "api::service.service",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "name": {
+        "attribute": "name"
+      },
+      "description": {
+        "attribute": "description"
+      },
+      "duration_minutes": {
+        "attribute": "duration_minutes"
+      },
+      "price": {
+        "attribute": "price"
+      },
+      "is_active": {
+        "attribute": "is_active"
+      },
+      "display_order": {
+        "attribute": "display_order"
+      },
+      "category": {
+        "attribute": "category"
+      },
+      "image_url": {
+        "attribute": "image_url"
+      },
+      "booking_enabled": {
+        "attribute": "booking_enabled"
+      },
+      "source_label": {
+        "attribute": "source_label"
+      },
+      "source_ref": {
+        "attribute": "source_ref"
+      }
+    }
+  },
+  "staff_members": {
+    "uid": "api::staff-member.staff-member",
+    "fields": {
+      "accepts_bookings": {
+        "attribute": "accepts_bookings"
+      },
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "full_name": {
+        "attribute": "full_name"
+      },
+      "role": {
+        "attribute": "role"
+      },
+      "email": {
+        "attribute": "email"
+      },
+      "phone": {
+        "attribute": "phone"
+      },
+      "is_active": {
+        "attribute": "is_active"
+      },
+      "display_order": {
+        "attribute": "display_order"
+      },
+      "bio": {
+        "attribute": "bio"
+      },
+      "image_url": {
+        "attribute": "image_url"
+      },
+      "join_date": {
+        "attribute": "join_date"
+      },
+      "employee_code": {
+        "attribute": "employee_code"
+      },
+      "hourly_rate": {
+        "attribute": "hourly_rate"
+      },
+      "rating": {
+        "attribute": "rating"
+      },
+      "compensation_type": {
+        "attribute": "compensation_type"
+      },
+      "collection_commission_rate": {
+        "attribute": "collection_commission_rate"
+      },
+      "payroll_mode": {
+        "attribute": "payroll_mode"
+      },
+      "payroll_cadence": {
+        "attribute": "payroll_cadence"
+      },
+      "payroll_cutoff_first": {
+        "attribute": "payroll_cutoff_first"
+      },
+      "payroll_cutoff_second": {
+        "attribute": "payroll_cutoff_second"
+      },
+      "payroll_pay_delay": {
+        "attribute": "payroll_pay_delay"
+      },
+      "payroll_weekday": {
+        "attribute": "payroll_weekday"
+      }
+    }
+  },
+  "business_hours": {
+    "uid": "api::business-hour.business-hour",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "day_of_week": {
+        "attribute": "day_of_week"
+      },
+      "label": {
+        "attribute": "label"
+      },
+      "open_time": {
+        "attribute": "open_time"
+      },
+      "close_time": {
+        "attribute": "close_time"
+      },
+      "break_start_time": {
+        "attribute": "break_start_time"
+      },
+      "break_end_time": {
+        "attribute": "break_end_time"
+      },
+      "is_open": {
+        "attribute": "is_open"
+      }
+    }
+  },
+  "booking_settings": {
+    "uid": "api::booking-setting.booking-setting",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "slot_interval_minutes": {
+        "attribute": "slot_interval_minutes"
+      },
+      "lead_time_minutes": {
+        "attribute": "lead_time_minutes"
+      },
+      "max_booking_days_in_advance": {
+        "attribute": "max_booking_days_in_advance"
+      },
+      "buffer_between_appointments_minutes": {
+        "attribute": "buffer_between_appointments_minutes"
+      }
+    }
+  },
+  "staff_member_working_hours": {
+    "uid": "api::staff-working-hour.staff-working-hour",
+    "fields": {
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": true
+      },
+      "day_of_week": {
+        "attribute": "day_of_week"
+      },
+      "start_time": {
+        "attribute": "start_time"
+      },
+      "end_time": {
+        "attribute": "end_time"
+      },
+      "break_start_time": {
+        "attribute": "break_start_time"
+      },
+      "break_end_time": {
+        "attribute": "break_end_time"
+      },
+      "is_active": {
+        "attribute": "is_active"
+      }
+    }
+  },
+  "staff_member_services": {
+    "uid": "api::staff-service.staff-service",
+    "fields": {
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": true
+      },
+      "service_id": {
+        "attribute": "service",
+        "target": "services",
+        "required": true
+      }
+    }
+  },
+  "staff_member_category_rates": {
+    "uid": "api::staff-category-rate.staff-category-rate",
+    "fields": {
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": true
+      },
+      "service_category": {
+        "attribute": "service_category"
+      },
+      "percentage": {
+        "attribute": "percentage"
+      }
+    }
+  },
+  "service_price_variants": {
+    "uid": "api::service-price-variant.service-price-variant",
+    "fields": {
+      "service_id": {
+        "attribute": "service",
+        "target": "services",
+        "required": true
+      },
+      "variant_name": {
+        "attribute": "variant_name"
+      },
+      "variant_code": {
+        "attribute": "variant_code"
+      },
+      "price": {
+        "attribute": "price"
+      },
+      "duration_minutes": {
+        "attribute": "duration_minutes"
+      },
+      "is_default": {
+        "attribute": "is_default"
+      },
+      "is_active": {
+        "attribute": "is_active"
+      },
+      "display_order": {
+        "attribute": "display_order"
+      },
+      "notes": {
+        "attribute": "notes"
+      }
+    }
+  },
+  "customers": {
+    "uid": "api::customer.customer",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "full_name": {
+        "attribute": "full_name"
+      },
+      "primary_contact": {
+        "attribute": "primary_contact"
+      },
+      "email": {
+        "attribute": "email"
+      },
+      "phone": {
+        "attribute": "phone"
+      },
+      "instagram_handle": {
+        "attribute": "instagram_handle"
+      },
+      "address": {
+        "attribute": "address"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "preferred_services": {
+        "attribute": "preferred_services"
+      },
+      "status": {
+        "attribute": "status"
+      },
+      "rating": {
+        "attribute": "rating"
+      },
+      "marketing_opt_in": {
+        "attribute": "marketing_opt_in"
+      },
+      "last_visit_at": {
+        "attribute": "last_visit_at"
+      },
+      "total_appointments": {
+        "attribute": "total_appointments"
+      },
+      "total_spent": {
+        "attribute": "total_spent"
+      },
+      "joined_at": {
+        "attribute": "joined_at"
+      }
+    }
+  },
+  "appointments": {
+    "uid": "api::appointment.appointment",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "service_id": {
+        "attribute": "service",
+        "target": "services",
+        "required": false
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": false
+      },
+      "customer_name": {
+        "attribute": "customer_name"
+      },
+      "customer_contact": {
+        "attribute": "customer_contact"
+      },
+      "customer_email": {
+        "attribute": "customer_email"
+      },
+      "appointment_date": {
+        "attribute": "appointment_date"
+      },
+      "appointment_time": {
+        "attribute": "appointment_time"
+      },
+      "status": {
+        "attribute": "status"
+      },
+      "channel": {
+        "attribute": "channel"
+      },
+      "service_name_snapshot": {
+        "attribute": "service_name_snapshot"
+      },
+      "staff_name_snapshot": {
+        "attribute": "staff_name_snapshot"
+      },
+      "price_snapshot": {
+        "attribute": "price_snapshot"
+      },
+      "duration_snapshot": {
+        "attribute": "duration_snapshot"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "customer_id": {
+        "attribute": "customer",
+        "target": "customers",
+        "required": false
+      },
+      "internal_notes": {
+        "attribute": "internal_notes"
+      },
+      "cancellation_reason": {
+        "attribute": "cancellation_reason"
+      },
+      "arrived_at": {
+        "attribute": "arrived_at"
+      },
+      "started_at": {
+        "attribute": "started_at"
+      },
+      "finished_at": {
+        "attribute": "finished_at"
+      },
+      "checkout_total": {
+        "attribute": "checkout_total"
+      }
+    }
+  },
+  "staff_time_logs": {
+    "uid": "api::staff-time-log.staff-time-log",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": true
+      },
+      "work_date": {
+        "attribute": "work_date"
+      },
+      "start_time": {
+        "attribute": "start_time"
+      },
+      "end_time": {
+        "attribute": "end_time"
+      },
+      "hours_worked": {
+        "attribute": "hours_worked"
+      },
+      "entry_type": {
+        "attribute": "entry_type"
+      },
+      "source": {
+        "attribute": "source"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "hourly_rate_snapshot": {
+        "attribute": "hourly_rate_snapshot"
+      },
+      "payable_amount": {
+        "attribute": "payable_amount"
+      }
+    }
+  },
+  "invoices": {
+    "uid": "api::invoice.invoice",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "customer_id": {
+        "attribute": "customer",
+        "target": "customers",
+        "required": false
+      },
+      "appointment_id": {
+        "attribute": "appointment",
+        "target": "appointments",
+        "required": false
+      },
+      "number": {
+        "attribute": "number"
+      },
+      "status": {
+        "attribute": "status"
+      },
+      "issued_at": {
+        "attribute": "issued_at"
+      },
+      "due_at": {
+        "attribute": "due_at"
+      },
+      "paid_at": {
+        "attribute": "paid_at"
+      },
+      "subtotal": {
+        "attribute": "subtotal"
+      },
+      "tax_amount": {
+        "attribute": "tax_amount"
+      },
+      "total": {
+        "attribute": "total"
+      },
+      "notes": {
+        "attribute": "notes"
+      }
+    }
+  },
+  "payments": {
+    "uid": "api::payment.payment",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "customer_id": {
+        "attribute": "customer",
+        "target": "customers",
+        "required": false
+      },
+      "appointment_id": {
+        "attribute": "appointment",
+        "target": "appointments",
+        "required": false
+      },
+      "invoice_id": {
+        "attribute": "invoice",
+        "target": "invoices",
+        "required": false
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": false
+      },
+      "description": {
+        "attribute": "description"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "method": {
+        "attribute": "method"
+      },
+      "status": {
+        "attribute": "status"
+      },
+      "transaction_id": {
+        "attribute": "transaction_id"
+      },
+      "processed_at": {
+        "attribute": "processed_at"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "commission_rate": {
+        "attribute": "commission_rate"
+      },
+      "commission_amount": {
+        "attribute": "commission_amount"
+      },
+      "collection_date": {
+        "attribute": "collection_date"
+      },
+      "work_record_id": {
+        "attribute": "work_record",
+        "target": "work_records",
+        "required": false
+      },
+      "import_ref": {
+        "attribute": "import_ref"
+      }
+    }
+  },
+  "expenses": {
+    "uid": "api::expense.expense",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "expense_date": {
+        "attribute": "expense_date"
+      },
+      "category": {
+        "attribute": "category"
+      },
+      "subcategory": {
+        "attribute": "subcategory"
+      },
+      "description": {
+        "attribute": "description"
+      },
+      "vendor_name": {
+        "attribute": "vendor_name"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "method": {
+        "attribute": "method"
+      },
+      "source": {
+        "attribute": "source"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "import_ref": {
+        "attribute": "import_ref"
+      }
+    }
+  },
+  "payouts": {
+    "uid": "api::payout.payout",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "payout_date": {
+        "attribute": "payout_date"
+      },
+      "recipient_name": {
+        "attribute": "recipient_name"
+      },
+      "recipient_type": {
+        "attribute": "recipient_type"
+      },
+      "category": {
+        "attribute": "category"
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": false
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "method": {
+        "attribute": "method"
+      },
+      "source": {
+        "attribute": "source"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "period_start": {
+        "attribute": "period_start"
+      },
+      "period_end": {
+        "attribute": "period_end"
+      },
+      "payroll_detail": {
+        "attribute": "payroll_detail"
+      }
+    }
+  },
+  "work_records": {
+    "uid": "api::work-record.work-record",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "customer_id": {
+        "attribute": "customer",
+        "target": "customers",
+        "required": false
+      },
+      "service_id": {
+        "attribute": "service",
+        "target": "services",
+        "required": false
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": false
+      },
+      "work_date": {
+        "attribute": "work_date"
+      },
+      "customer_name": {
+        "attribute": "customer_name"
+      },
+      "service_name": {
+        "attribute": "service_name"
+      },
+      "staff_name": {
+        "attribute": "staff_name"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "notes": {
+        "attribute": "notes"
+      },
+      "source_ref": {
+        "attribute": "source_ref"
+      },
+      "collection_verified": {
+        "attribute": "collection_verified"
+      }
+    }
+  },
+  "import_rows": {
+    "uid": "api::import-row.import-row",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "source_sheet": {
+        "attribute": "source_sheet"
+      },
+      "source_row": {
+        "attribute": "source_row"
+      },
+      "source_hash": {
+        "attribute": "source_hash"
+      },
+      "source_data": {
+        "attribute": "source_data"
+      },
+      "record_date": {
+        "attribute": "record_date"
+      },
+      "review_notes": {
+        "attribute": "review_notes"
+      },
+      "outcome": {
+        "attribute": "outcome"
+      },
+      "source_key": {
+        "attribute": "source_key"
+      }
+    }
+  },
+  "expense_plans": {
+    "uid": "api::expense-plan.expense-plan",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "title": {
+        "attribute": "title"
+      },
+      "category": {
+        "attribute": "category"
+      },
+      "vendor": {
+        "attribute": "vendor"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "recurrence": {
+        "attribute": "recurrence"
+      },
+      "start_month": {
+        "attribute": "start_month"
+      },
+      "end_month": {
+        "attribute": "end_month"
+      },
+      "due_day": {
+        "attribute": "due_day"
+      },
+      "notes": {
+        "attribute": "notes"
+      }
+    }
+  },
+  "expense_obligations": {
+    "uid": "api::expense-obligation.expense-obligation",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "expense_plan_id": {
+        "attribute": "expense_plan",
+        "target": "expense_plans",
+        "required": false
+      },
+      "period": {
+        "attribute": "period"
+      },
+      "due_date": {
+        "attribute": "due_date"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "state": {
+        "attribute": "state"
+      },
+      "expense_id": {
+        "attribute": "expense",
+        "target": "expenses",
+        "required": false
+      },
+      "notes": {
+        "attribute": "notes"
+      }
+    }
+  },
+  "payroll_lines": {
+    "uid": "api::payroll-line.payroll-line",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "payout_id": {
+        "attribute": "payout",
+        "target": "payouts",
+        "required": false
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members",
+        "required": false
+      },
+      "source_key": {
+        "attribute": "source_key"
+      },
+      "earning_date": {
+        "attribute": "earning_date"
+      },
+      "description": {
+        "attribute": "description"
+      },
+      "amount": {
+        "attribute": "amount"
+      },
+      "payment_id": {
+        "attribute": "payment",
+        "target": "payments",
+        "required": false
+      },
+      "staff_time_log_id": {
+        "attribute": "staff_time_log",
+        "target": "staff_time_logs",
+        "required": false
+      }
+    }
+  },
+  "finance_operations": {
+    "uid": "api::finance-operation.finance-operation",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      }
+    }
+  },
+  "checkout_events": {
+    "uid": "api::checkout-event.checkout-event",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "appointment_id": {
+        "attribute": "appointment",
+        "target": "appointments",
+        "required": false
+      },
+      "payment_id": {
+        "attribute": "payment",
+        "target": "payments",
+        "required": false
+      },
+      "kind": {
+        "attribute": "kind"
+      },
+      "reason": {
+        "attribute": "reason"
+      },
+      "before_value": {
+        "attribute": "before_value"
+      },
+      "after_value": {
+        "attribute": "after_value"
+      },
+      "actor": {
+        "attribute": "actor"
+      }
+    }
+  }
+}

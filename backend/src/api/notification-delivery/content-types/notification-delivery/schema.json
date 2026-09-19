@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_notification_deliverys",
+  "info": {
+    "singularName": "notification-delivery",
+    "pluralName": "notification-deliverys",
+    "displayName": "notification-delivery"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "delivery_key": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "business_id": {
+      "type": "integer",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "sending",
+        "delivered",
+        "queued",
+        "bounced",
+        "failed",
+        "unknown",
+        "disabled"
+      ],
+      "required": true
+    },
+    "recipient": {
+      "type": "email"
+    },
+    "error": {
+      "type": "text"
+    }
+  }
+}

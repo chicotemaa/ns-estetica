@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_expense_obligations",
+  "info": {
+    "singularName": "expense-obligation",
+    "pluralName": "expense-obligations",
+    "displayName": "expense_obligations"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "expense_plan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::expense-plan.expense-plan"
+    },
+    "period": {
+      "type": "string",
+      "required": true
+    },
+    "due_date": {
+      "type": "date",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "paid",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "expense": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::expense.expense"
+    },
+    "occurrence_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

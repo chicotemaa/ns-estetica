@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_customer_sessions",
+  "info": {
+    "singularName": "customer-session",
+    "pluralName": "customer-sessions",
+    "displayName": "customer-session"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "account_id": {
+      "type": "integer"
+    },
+    "token_hash": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "expires_at": {
+      "type": "datetime"
+    }
+  }
+}

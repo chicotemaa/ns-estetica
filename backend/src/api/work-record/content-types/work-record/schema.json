@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_work_records",
+  "info": {
+    "singularName": "work-record",
+    "pluralName": "work-records",
+    "displayName": "work_records"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::customer.customer"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::service.service"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "work_date": {
+      "type": "date",
+      "required": true
+    },
+    "customer_name": {
+      "type": "text",
+      "required": true
+    },
+    "service_name": {
+      "type": "text",
+      "required": true
+    },
+    "staff_name": {
+      "type": "text"
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "notes": {
+      "type": "text"
+    },
+    "source_ref": {
+      "type": "text"
+    },
+    "collection_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "import_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "import_hash": {
+      "type": "string",
+      "private": true
+    }
+  }
+}

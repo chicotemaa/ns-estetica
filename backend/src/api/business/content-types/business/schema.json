@@ -1,0 +1,120 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_businesses",
+  "info": {
+    "singularName": "business",
+    "pluralName": "businesses",
+    "displayName": "businesses"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "online_booking_settings": { "type": "json", "private": true },
+    "online_booking_secrets": { "type": "json", "private": true },
+    "online_booking_revision": {
+      "type": "integer",
+      "default": 0,
+      "private": true
+    },
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "time_zone": {
+      "type": "text",
+      "required": true,
+      "default": "America/Argentina/Cordoba"
+    },
+    "brand_initials": {
+      "type": "text"
+    },
+    "short_name": {
+      "type": "text"
+    },
+    "founded_year": {
+      "type": "integer"
+    },
+    "address": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "text"
+    },
+    "email": {
+      "type": "text"
+    },
+    "website": {
+      "type": "text"
+    },
+    "cuit": {
+      "type": "text"
+    },
+    "logo_url": {
+      "type": "text"
+    },
+    "hero_headline": {
+      "type": "text"
+    },
+    "hero_copy": {
+      "type": "text"
+    },
+    "google_maps_query": {
+      "type": "text"
+    },
+    "map_lat": {
+      "type": "decimal"
+    },
+    "map_lng": {
+      "type": "decimal"
+    },
+    "instagram_handle": {
+      "type": "text"
+    },
+    "whatsapp_phone": {
+      "type": "text"
+    },
+    "monthly_collection_target": {
+      "type": "decimal",
+      "min": 0,
+      "default": 0
+    },
+    "brand_palette": {
+      "type": "enumeration",
+      "enum": ["bronze", "forest", "graphite"]
+    },
+    "booking_intro": {
+      "type": "text"
+    },
+    "website_content": {
+      "type": "json"
+    },
+    "website_draft": {
+      "private": true,
+      "type": "json"
+    },
+    "website_media": {
+      "private": true,
+      "type": "json"
+    },
+    "website_revision": {
+      "default": 0,
+      "type": "integer"
+    },
+    "website_published_at": {
+      "type": "datetime"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_notification_receipts",
+  "info": {
+    "singularName": "notification-receipt",
+    "pluralName": "notification-receipts",
+    "displayName": "notification-receipt"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "receipt_key": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "business_id": {
+      "type": "integer",
+      "required": true
+    },
+    "manager_id": {
+      "type": "integer",
+      "required": true
+    },
+    "source_id": {
+      "type": "string",
+      "required": true
+    },
+    "revision": {
+      "type": "string",
+      "required": true
+    },
+    "read_at": {
+      "type": "datetime"
+    }
+  }
+}

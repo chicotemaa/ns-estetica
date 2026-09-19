@@ -1,0 +1,89 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_payouts",
+  "info": {
+    "singularName": "payout",
+    "pluralName": "payouts",
+    "displayName": "payouts"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "payout_date": {
+      "type": "date",
+      "required": true
+    },
+    "recipient_name": {
+      "type": "text",
+      "required": true
+    },
+    "recipient_type": {
+      "type": "text",
+      "required": true,
+      "default": "other"
+    },
+    "category": {
+      "type": "text",
+      "required": true,
+      "default": "distribution"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "method": {
+      "type": "enumeration",
+      "enum": [
+        "cash",
+        "card",
+        "transfer",
+        "mercado_pago",
+        "other"
+      ],
+      "required": true,
+      "default": "transfer"
+    },
+    "source": {
+      "type": "text",
+      "required": true,
+      "default": "manual"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "period_start": {
+      "type": "date"
+    },
+    "period_end": {
+      "type": "date"
+    },
+    "payroll_detail": {
+      "type": "json"
+    },
+    "operation_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "operation_hash": {
+      "type": "string",
+      "private": true
+    }
+  }
+}

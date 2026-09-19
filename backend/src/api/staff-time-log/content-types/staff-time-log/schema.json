@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_staff_time_logs",
+  "info": {
+    "singularName": "staff-time-log",
+    "pluralName": "staff-time-logs",
+    "displayName": "staff time logs"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "work_date": {
+      "type": "date",
+      "required": true
+    },
+    "start_time": {
+      "type": "time"
+    },
+    "end_time": {
+      "type": "time"
+    },
+    "hours_worked": {
+      "type": "decimal",
+      "required": true,
+      "default": 0,
+      "min": 0
+    },
+    "entry_type": {
+      "type": "text",
+      "required": true,
+      "default": "shift"
+    },
+    "source": {
+      "type": "text",
+      "required": true,
+      "default": "manual"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "hourly_rate_snapshot": {
+      "type": "decimal",
+      "min": 0
+    },
+    "payable_amount": {
+      "type": "decimal",
+      "min": 0
+    },
+    "operation_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "operation_hash": {
+      "type": "string",
+      "private": true
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_business_hours",
+  "info": {
+    "singularName": "business-hour",
+    "pluralName": "business-hours",
+    "displayName": "business hours"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "day_of_week": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "max": 6
+    },
+    "label": {
+      "type": "text",
+      "required": true
+    },
+    "open_time": {
+      "type": "time"
+    },
+    "close_time": {
+      "type": "time"
+    },
+    "break_start_time": {
+      "type": "time"
+    },
+    "break_end_time": {
+      "type": "time"
+    },
+    "is_open": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_staff_member_working_hours",
+  "info": {
+    "singularName": "staff-working-hour",
+    "pluralName": "staff-working-hours",
+    "displayName": "staff member working hours"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "day_of_week": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "max": 6
+    },
+    "start_time": {
+      "type": "time"
+    },
+    "end_time": {
+      "type": "time"
+    },
+    "break_start_time": {
+      "type": "time"
+    },
+    "break_end_time": {
+      "type": "time"
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    }
+  }
+}

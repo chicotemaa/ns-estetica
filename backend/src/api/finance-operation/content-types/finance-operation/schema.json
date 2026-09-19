@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_finance_operations",
+  "info": {
+    "singularName": "finance-operation",
+    "pluralName": "finance-operations",
+    "displayName": "finance_operations"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "operation_key": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "operation_hash": {
+      "type": "string",
+      "private": true
+    },
+    "result": {
+      "type": "json",
+      "private": true
+    }
+  }
+}

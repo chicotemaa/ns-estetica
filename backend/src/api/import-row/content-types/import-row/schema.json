@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_import_rows",
+  "info": {
+    "singularName": "import-row",
+    "pluralName": "import-rows",
+    "displayName": "import_rows"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "source_sheet": {
+      "type": "text",
+      "required": true
+    },
+    "source_row": {
+      "type": "integer",
+      "min": 1,
+      "required": true
+    },
+    "source_hash": {
+      "type": "string",
+      "required": true
+    },
+    "source_data": {
+      "type": "json",
+      "required": true
+    },
+    "record_date": {
+      "type": "date"
+    },
+    "review_notes": {
+      "type": "json",
+      "default": []
+    },
+    "outcome": {
+      "type": "enumeration",
+      "enum": [
+        "processed",
+        "review",
+        "empty"
+      ],
+      "required": true
+    },
+    "source_key": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_customer_messages",
+  "info": {
+    "singularName": "customer-message",
+    "pluralName": "customer-messages",
+    "displayName": "customer-message"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business_id": {
+      "type": "integer"
+    },
+    "key": {
+      "type": "string",
+      "unique": true
+    },
+    "intent_id": {
+      "type": "integer"
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "text": {
+      "type": "text"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "sending", "sent", "failed", "unknown"]
+    },
+    "attempts": {
+      "type": "integer",
+      "default": 0
+    },
+    "next_attempt_at": {
+      "type": "datetime"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "error": {
+      "type": "text"
+    }
+  }
+}

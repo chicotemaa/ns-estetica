@@ -1,0 +1,109 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_staff_members",
+  "info": {
+    "singularName": "staff-member",
+    "pluralName": "staff-members",
+    "displayName": "staff members"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "accepts_bookings": { "type": "boolean", "default": true },
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "full_name": {
+      "type": "text",
+      "required": true
+    },
+    "role": {
+      "type": "text"
+    },
+    "email": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "text"
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "display_order": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "bio": {
+      "type": "text"
+    },
+    "image_url": {
+      "type": "text"
+    },
+    "join_date": {
+      "type": "date"
+    },
+    "employee_code": {
+      "type": "text"
+    },
+    "hourly_rate": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "rating": {
+      "type": "decimal",
+      "required": true,
+      "default": 5
+    },
+    "compensation_type": {
+      "type": "enumeration",
+      "enum": ["hourly", "category_percentage"],
+      "required": true,
+      "default": "hourly"
+    },
+    "collection_commission_rate": {
+      "type": "decimal",
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    "payroll_mode": {
+      "type": "enumeration",
+      "enum": ["hourly", "percentage"]
+    },
+    "payroll_cadence": {
+      "type": "enumeration",
+      "enum": ["weekly", "semimonthly", "monthly"]
+    },
+    "payroll_cutoff_first": {
+      "type": "integer",
+      "min": 1,
+      "max": 27
+    },
+    "payroll_cutoff_second": {
+      "type": "integer",
+      "min": 1,
+      "max": 31
+    },
+    "payroll_pay_delay": {
+      "type": "integer",
+      "min": 0,
+      "max": 30
+    },
+    "payroll_weekday": {
+      "type": "integer",
+      "min": 0,
+      "max": 6
+    }
+  }
+}

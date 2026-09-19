@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_staff_member_category_rates",
+  "info": {
+    "singularName": "staff-category-rate",
+    "pluralName": "staff-category-rates",
+    "displayName": "staff member category rates"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "service_category": {
+      "type": "text",
+      "required": true
+    },
+    "percentage": {
+      "type": "decimal",
+      "required": true,
+      "default": 0,
+      "min": 0,
+      "max": 100
+    }
+  }
+}

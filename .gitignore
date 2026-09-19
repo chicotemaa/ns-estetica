@@ -2,6 +2,18 @@
 
 # dependencies
 /node_modules
+**/node_modules/
+**/.next/
+backend/.cache/
+backend/.strapi/
+backend/.strapi-updater.json
+backend/.tmp/
+backend/build/
+backend/dist/
+backend/public/uploads/
+panel/supabase/
+panel/docs/
+panel/scripts/
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -34,3 +46,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/.reference/
+/backend/.env
+/panel/.env
+/panel/.env.local
+/backend/.tmp/

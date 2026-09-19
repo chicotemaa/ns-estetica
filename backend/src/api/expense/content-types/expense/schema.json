@@ -1,0 +1,70 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_expenses",
+  "info": {
+    "singularName": "expense",
+    "pluralName": "expenses",
+    "displayName": "expenses"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "expense_date": {
+      "type": "date",
+      "required": true
+    },
+    "category": {
+      "type": "text",
+      "required": true
+    },
+    "subcategory": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "vendor_name": {
+      "type": "text"
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "method": {
+      "type": "enumeration",
+      "enum": [
+        "cash",
+        "card",
+        "transfer",
+        "mercado_pago",
+        "other"
+      ],
+      "required": true,
+      "default": "cash"
+    },
+    "source": {
+      "type": "text",
+      "required": true,
+      "default": "manual"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "import_ref": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}

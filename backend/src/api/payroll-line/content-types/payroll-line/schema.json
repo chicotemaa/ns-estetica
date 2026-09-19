@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_payroll_lines",
+  "info": {
+    "singularName": "payroll-line",
+    "pluralName": "payroll-lines",
+    "displayName": "payroll_lines"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "payout": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::payout.payout"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "source_key": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "earning_date": {
+      "type": "date",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "payment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::payment.payment"
+    },
+    "staff_time_log": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-time-log.staff-time-log"
+    }
+  }
+}

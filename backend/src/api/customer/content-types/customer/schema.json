@@ -1,0 +1,89 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "customers"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "legacy_id": {
+      "type": "string",
+      "unique": true
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "full_name": {
+      "type": "text",
+      "required": true
+    },
+    "primary_contact": {
+      "type": "text",
+      "required": true
+    },
+    "email": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "text"
+    },
+    "instagram_handle": {
+      "type": "text"
+    },
+    "address": {
+      "type": "text"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "preferred_services": {
+      "type": "json",
+      "default": [],
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "active",
+        "inactive",
+        "vip",
+        "lead"
+      ],
+      "required": true,
+      "default": "active"
+    },
+    "rating": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "marketing_opt_in": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "last_visit_at": {
+      "type": "date"
+    },
+    "total_appointments": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    },
+    "total_spent": {
+      "type": "decimal",
+      "required": true,
+      "default": 0
+    },
+    "joined_at": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}
