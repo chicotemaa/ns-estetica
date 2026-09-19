@@ -30,7 +30,7 @@ export default function ContactForm() {
         <h2>Hablemos de <em>tu momento.</em></h2>
         <p>Si tenés una consulta sobre los tratamientos, escribinos y te ayudamos a encontrar la mejor opción.</p>
         <div className="contact-details">
-          <div><span>VISITANOS</span><p>Av. Wilde 12<br />Resistencia, Chaco</p></div>
+          <div><span>VISITANOS</span><p>Wilde 12, local 1, planta baja<br />Resistencia, Chaco</p></div>
           <div><span>ESCRIBINOS</span><p><a href="tel:+543624654117">+54 3624 654117</a><br /><a href="mailto:nabrizka@hotmail.com">nabrizka@hotmail.com</a></p></div>
         </div>
       </div>

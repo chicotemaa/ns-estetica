@@ -14,7 +14,7 @@ export default function WorkInfo() {
       <div className="experience-grid">
         {steps.map(step => <article key={step.number} className="experience-step"><span>{step.number}</span><div><h3>{step.title}</h3><p>{step.copy}</p></div></article>)}
       </div>
-      <div className="location-strip"><span>VISITANOS</span><p>Av. Wilde 12 · Resistencia, Chaco</p><a href="#contact">Cómo llegar <span aria-hidden="true">↗</span></a></div>
+      <div className="location-strip"><span>VISITANOS</span><p>Wilde 12, local 1, planta baja · Resistencia, Chaco</p><a href="#contact">Cómo llegar <span aria-hidden="true">↗</span></a></div>
     </section>
   );
 }
