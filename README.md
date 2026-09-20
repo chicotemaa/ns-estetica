@@ -35,3 +35,13 @@ La dirección confirmada del negocio es **Wilde 12, local 1, planta baja**, en R
 Las variables `PANEL_ORIGIN`, `STRAPI_URL`, `PUBLIC_URL`, `CORS_ORIGINS` y `BUSINESS_SLUG` están configuradas para la instancia de estética. Los servicios iniciales permanecen inactivos y sin precio; revisar catálogo, profesionales y horarios antes de abrir las reservas públicas. La configuración de la peluquería se mantiene independiente.
 
 No se incluyen credenciales, datos de clientes ni precios reales. Los valores de catálogo inicial son borradores inactivos.
+
+## Edición de la web y cuentas de clientes
+
+`Mi web` administra portada, tratamientos destacados, presentación, experiencia, galería, notas, videos, contacto y pie de página. Guardar conserva un borrador privado; Publicar actualiza el contenido que la web consulta sin caché. La vista previa acepta mensajes únicamente del panel de Natalia y del acceso alternativo autorizado. Dirección, teléfono y redes se toman de Configuración. Los precios siguen administrándose en Servicios.
+
+El backend tiene un volumen Railway montado en `/app/public/uploads` para conservar los archivos del editor entre despliegues.
+
+La página `/cuenta` permite ingresar con un código por email y editar nombre y teléfono. Las solicitudes de turno siguen disponibles sin cuenta. El intermediario `/api/cuenta/*` permite únicamente configuración, códigos, sesión y perfil; no publica rutas de pagos o reservas autenticadas. Vercel necesita `CUSTOMER_PROXY_SECRET` con el mismo valor privado del backend. La sesión se guarda exclusivamente en una cookie HttpOnly.
+
+El remitente elegido es `info@nataliasanchez.com.ar` y las respuestas van a `nabrizka@hotmail.com`. Cloudflare Email Sending requiere la cuenta y el dominio habilitados, `CLOUDFLARE_ACCOUNT_ID` y `CLOUDFLARE_EMAIL_API_TOKEN`. El remitente se guarda desde Configuración → Reservas online. `NOTIFICATION_EMAIL_REPLY_TO` permite cambiar el destino de las respuestas. Hasta validar Cloudflare y comprobar un envío real, el acceso por correo permanece pendiente de activación.

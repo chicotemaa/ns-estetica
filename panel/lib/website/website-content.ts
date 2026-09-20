@@ -1,4 +1,6 @@
 import raw from "./website-defaults.json";
+export type WebsitePhoto = { id: string; title: string; image: string; alt: string; description: string };
+export type WebsitePost = { id: string; title: string; excerpt: string; content: string };
 export type WebsiteVideo = {
   id: string;
   title: string;
@@ -6,7 +8,10 @@ export type WebsiteVideo = {
   url: string;
   poster: string;
 };
-export type WebsiteContent = Omit<typeof raw, "videos"> & {
+export type WebsiteContent = Omit<typeof raw, "videos" | "gallery" | "brand" | "journal"> & {
+  gallery: Omit<typeof raw.gallery, "photos"> & { photos: WebsitePhoto[] };
+  brand: Omit<typeof raw.brand, "photos"> & { photos: WebsitePhoto[] };
+  journal: Omit<typeof raw.journal, "posts"> & { posts: WebsitePost[] };
   videos: {
     enabled: boolean;
     eyebrow: string;

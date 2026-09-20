@@ -3,10 +3,10 @@
     "name": "Natalia Sánchez Estética",
     "shortName": "Natalia Sánchez",
     "logo": "/images/LOGO.png",
-    "gray": "#d9d9d9",
-    "black": "#151515",
-    "burgundy": "#6b2036",
-    "white": "#ffffff",
+    "gray": "#f7f3ee",
+    "black": "#2d2927",
+    "burgundy": "#78463e",
+    "white": "#fffdfa",
     "font": "manrope",
     "rounded": false
   },
@@ -20,34 +20,57 @@
   },
   "hero": {
     "eyebrow": "Natalia Sánchez · Estética",
-    "title": "NS ESTÉTICA",
-    "note": "Tu momento. Tu bienestar.",
+    "title": "Tu momento\nde bienestar.",
+    "note": "Tratamientos para conectar con vos, cuidar tu piel y sentirte bien en cada etapa.",
     "image": "/images/faciales.jpg",
     "alt": "Natalia Sánchez Estética",
     "buttonText": "Reservar turno",
-    "secondaryText": "Nuestro trabajo",
-    "signature": "Estética y bienestar"
+    "secondaryText": "Explorar tratamientos",
+    "signature": "Cuidado personal · Atención personalizada"
   },
   "services": {
     "enabled": true,
-    "title": "Nuestros servicios",
-    "linkText": "Ver servicios y precios"
+    "title": "Un cuidado para cada momento.",
+    "linkText": "Reservar tratamiento",
+    "cards": [
+      {
+        "id": "masajes",
+        "title": "Masajes",
+        "description": "Un espacio para aflojar tensiones y volver a vos.",
+        "image": "/images/masajes.jpg",
+        "alt": "Masaje descontracturante"
+      },
+      {
+        "id": "faciales",
+        "title": "Tratamientos faciales",
+        "description": "Cuidado de la piel pensado para tus necesidades.",
+        "image": "/images/faciales.jpg",
+        "alt": "Tratamiento facial"
+      },
+      {
+        "id": "manicura",
+        "title": "Manicura",
+        "description": "Tiempo para cuidar los detalles que te acompañan.",
+        "image": "/images/manicura.jpg",
+        "alt": "Manicura"
+      }
+    ]
   },
   "work": {
-    "enabled": true,
+    "enabled": false,
     "eyebrow": "Hecho en Natalia",
     "title": "El detalle hace\nla diferencia.",
     "linkText": "Ver todos los trabajos"
   },
   "about": {
     "enabled": true,
-    "eyebrow": "La persona detrás del estilo",
-    "title": "Hola,\nsoy Natalia.",
+    "eyebrow": "Sobre nosotros",
+    "title": "La belleza empieza por sentirte bien.",
     "body": "En Natalia Sánchez Estética creemos en el cuidado como un momento propio. Cada tratamiento es una oportunidad para hacer una pausa y dedicarte atención.",
     "image": "/images/masajes.jpg",
     "alt": "Natalia Sánchez",
-    "caption": "Natalia Sánchez · En el estudio",
-    "buttonText": "Reservar turno"
+    "caption": "Un espacio para vos",
+    "buttonText": "Conocé nuestro espacio"
   },
   "brand": {
     "enabled": false,
@@ -60,21 +83,21 @@
   "visit": {
     "enabled": true,
     "eyebrow": "Un momento para vos",
-    "title": "Nos vemos\nen el estudio.",
-    "body": "Elegí tu tratamiento y encontrá un momento para vos.",
+    "title": "Nos vemos en el estudio.",
+    "body": "Resistencia, Chaco",
     "buttonText": "Elegí tu servicio"
   },
   "gallery": {
     "eyebrow": "La mirada Natalia",
     "title": "El estilo está\nen los detalles.",
-    "body": "Cortes, texturas y momentos en el estudio. Mirá de cerca nuestro trabajo y encontrá inspiración para tu próxima visita.",
+    "body": "Tratamientos, detalles y momentos en el estudio.",
     "photos": []
   },
   "journal": {
     "enabled": false,
     "eyebrow": "El cuaderno de Natalia",
-    "title": "Ideas para\ntu pelo.",
-    "body": "Cómo elegir tu próximo corte y cuidarlo después. Una lectura breve antes de tu próxima visita.",
+    "title": "Ideas para tu bienestar.",
+    "body": "Consejos para cuidar tu piel y disfrutar de cada tratamiento.",
     "posts": []
   },
   "videos": {
@@ -84,11 +107,39 @@
     "items": []
   },
   "footer": {
-    "description": "Tratamientos estéticos y bienestar con atención personalizada.",
+    "description": "Un momento para vos. Siempre.",
     "bookingText": "Reservar turno"
   },
   "booking": {
-    "title": "Un momento para vos.",
+    "title": "Tu próximo momento empieza acá.",
     "intro": "Elegí el servicio y el momento para vos. Te contactaremos para confirmar tu turno."
+  },
+  "experience": {
+    "enabled": true,
+    "eyebrow": "La experiencia",
+    "title": "Un ritual de cuidado a tu medida.",
+    "body": "Nos importa tanto el resultado como la forma en que vivís cada visita.",
+    "steps": [
+      {
+        "id": "escucharte",
+        "title": "Escucharte",
+        "description": "Empezamos por conocer qué buscás y cómo querés sentirte."
+      },
+      {
+        "id": "acompanarte",
+        "title": "Acompañarte",
+        "description": "Elegimos un tratamiento acorde a tus necesidades y preferencias."
+      },
+      {
+        "id": "cuidarte",
+        "title": "Cuidarte",
+        "description": "Creamos un espacio tranquilo para que disfrutes el momento."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contacto",
+    "title": "Hablemos de tu momento.",
+    "body": "Si tenés una consulta sobre los tratamientos, escribinos y te ayudamos a encontrar la mejor opción."
   }
 }

@@ -15,19 +15,20 @@ async function sendMessage(message, fetcher = fetch, c = configuration()) {
     return { status: "failed", error: "Falta configurar el correo." };
   try {
     const res = await fetcher(
-      `https://api.cloudflare.com/client/v4/accounts/${c.CLOUDFLARs_ACCOUNT_ID}/email/sending/send`,
+      `https://api.cloudflare.com/client/v4/accounts/${c.CLOUDFLARE_ACCOUNT_ID}/email/sending/send`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${c.CLOUDFLARs_sMAIL_API_TOKsN}`,
+          Authorization: `Bearer ${c.CLOUDFLARE_EMAIL_API_TOKEN}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: c.NOTIFICATION_sMAIL_FROM,
+          from: c.NOTIFICATION_EMAIL_FROM,
+          reply_to: c.NOTIFICATION_EMAIL_REPLY_TO || "nabrizka@hotmail.com",
           to: message.recipient,
           subject: message.subject,
           text: message.text,
-          html: `<div style="font-family:Arial,sans-serif;color:#151515;max-width:560px;margin:auto;padding:24px"><h1 style="font-size:20px;color:#6b2036">Natalia Sánchez · aairstudio</h1><p style="white-space:pre-line;line-height:1.7">${escape(message.text)}</p></div>`,
+          html: `<div style="font-family:Arial,sans-serif;color:#151515;max-width:560px;margin:auto;padding:24px"><h1 style="font-size:20px;color:#6b2036">Natalia Sánchez Estética</h1><p style="white-space:pre-line;line-height:1.7">${escape(message.text)}</p></div>`,
         }),
         signal: AbortSignal.timeout(15000),
       },

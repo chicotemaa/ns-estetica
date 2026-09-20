@@ -12,7 +12,7 @@ async function readJson(response: Response) {
   return body;
 }
 
-export default function Booking() {
+export default function Booking({title='Tu próximo momento empieza acá.',intro='Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.',preview=false}:{title?:string;intro?:string;preview?:boolean}) {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -56,7 +56,7 @@ export default function Booking() {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (busy || preview) return;
     setBusy(true); setError('');
     try {
       const body = JSON.stringify({ clientName: name, contactInfo: contact, customerEmail: email, serviceId, serviceVariantId: variantId, staffMemberId: staffId, appointmentDate: date, appointmentTime: time, notes });
@@ -74,8 +74,8 @@ export default function Booking() {
   return <section id="reservas" className="booking-section section-pad">
     <div className="booking-intro">
       <p className="eyebrow">RESERVAS</p>
-      <h2>Tu próximo momento <em>empieza acá.</em></h2>
-      <p>Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.</p>
+      <h2>{title}</h2>
+      <p>{intro}</p>
       <span className="booking-ornament" aria-hidden="true">✳</span>
     </div>
     <div className="booking-panel">
@@ -92,7 +92,7 @@ export default function Booking() {
           <label>Teléfono o Instagram<input required minLength={3} maxLength={100} className={inputClass} value={contact} onChange={e => setContact(e.target.value)} /></label>
           <label>Email opcional<input type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
           <label className="booking-wide">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
-          <button disabled={busy || !time} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
+          <button disabled={busy || !time || preview} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
         </form> : !error && <p>Cargando tratamientos…</p>}
     </div>
   </section>;

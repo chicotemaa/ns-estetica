@@ -75,6 +75,7 @@ function configuration(env = process.env) {
   );
   return {
     ...values,
+    NOTIFICATION_EMAIL_REPLY_TO: env.NOTIFICATION_EMAIL_REPLY_TO?.trim() || "nabrizka@hotmail.com",
     ready,
     authReady,
     mailReady,

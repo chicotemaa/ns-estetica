@@ -71,7 +71,9 @@ function validateContent(input) {
         value.length > (path.endsWith("posts") ? 20 : 40)
       )
         fail(`Revisá la cantidad de elementos en ${path}.`);
-      const itemShape = shape[0] || videoTemplate;
+      const itemShape = shape[0] || (path.endsWith("photos")
+        ? { id: "", title: "", image: "", alt: "", description: "" }
+        : path.endsWith("posts") ? { id: "", title: "", excerpt: "", content: "" } : videoTemplate);
       const result = value.map((item, i) =>
         check(item, itemShape, `${path}.${i}`),
       );
@@ -144,17 +146,18 @@ function validateContent(input) {
     !c.name ||
     !c.shortName ||
     !content.hero.title ||
-    content.hero.title.length > 14
+    content.hero.title.length > 100
   )
-    fail("Completá el nombre y un título de portada de hasta 14 caracteres.");
+    fail("Completá el nombre y un título de portada de hasta 100 caracteres.");
   if (content.videos.enabled && !content.videos.items.length)
     fail("Agregá un video antes de mostrar la sección.");
   return content;
 }
 function state(business) {
-  const published = business.website_content || defaults;
+  const merge = (saved) => Object.fromEntries(Object.entries(defaults).map(([key, value]) => [key, { ...value, ...(saved?.[key] || {}) }]));
+  const published = merge(business.website_content);
   return {
-    draft: business.website_draft || published,
+    draft: business.website_draft ? merge(business.website_draft) : published,
     published,
     revision: business.website_revision || 0,
     publishedAt: business.website_published_at || null,

@@ -192,3 +192,18 @@ textarea.booking-input { min-height:84px; resize:vertical; }
   .footer-bottom { flex-direction:column; gap:10px; }
 }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { transition-duration:.01ms!important; animation-duration:.01ms!important; } }
+
+.editable-site .cover-image { width:100%; height:100%; object-fit:cover; }
+.editable-lines { white-space:pre-line; }
+.editable-title {font-size:clamp(40px,5vw,76px);line-height:1.1;white-space:pre-line;margin-bottom:24px;}
+.editable-copy {max-width:660px;line-height:1.7;margin-bottom:32px;}
+.site-video {width:100%;aspect-ratio:16/9;border:0;}
+.preview-banner {position:sticky;top:0;z-index:100;background:#78463e;color:white;text-align:center;padding:8px;font-size:13px;}
+.rounded-site .service-photo,.rounded-site .button-primary,.rounded-site .about-photo {border-radius:18px;}
+.account-page {min-height:100vh;background:var(--cream);padding:60px 24px;}
+.account-card {max-width:480px;margin:40px auto;background:var(--paper);border:1px solid var(--line);padding:32px;}
+.account-card h1 {font-size:44px;line-height:1.1;margin:20px 0;}
+.account-card form {display:grid;gap:18px;}
+.account-card label {display:grid;gap:8px;}
+.account-card p {line-height:1.6;margin:16px 0;}
+.account-card button {margin-top:12px;}

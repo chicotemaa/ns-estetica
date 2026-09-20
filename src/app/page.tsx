@@ -1,25 +1,4 @@
-import Navbar from '../components/common/Navbar';
-import Home from '../components/home/Home';
-import Services from '../components/services/Services';
-import About from '../components/about/About';
-import WorkInfo from '../components/info/WorkInfo';
-import Booking from '../components/booking/Booking';
-import ContactForm from '../components/contact/ContactForm';
-import Footer from '../components/common/Footer';
-
-export default function Page() {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <Home />
-        <Services />
-        <About />
-        <WorkInfo />
-        <Booking />
-        <ContactForm />
-      </main>
-      <Footer />
-    </>
-  );
-}
+import Site from '@/components/website/Site';
+import { getSiteCatalog, mergeWebsite } from '@/lib/public-site';
+export const dynamic = 'force-dynamic';
+export default async function Page() { const catalog=await getSiteCatalog(); return <Site initial={mergeWebsite(catalog.website)} catalog={catalog}/>; }

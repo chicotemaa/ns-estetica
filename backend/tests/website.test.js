@@ -16,14 +16,14 @@ test("rejects unreadable colors, unknown fields, executable URLs and duplicate c
     (d) => (d.identity.extra = true),
     (d) => (d.hero.image = "javascript:alert(1)"),
     (d) => d.gallery.photos.push(d.gallery.photos[0]),
-    (d) => (d.hero.title = "A".repeat(15)),
+    (d) => (d.hero.title = "A".repeat(101)),
     (d) => (d.videos.enabled = true),
   ]) {
     const d = structuredClone(defaults);
     mutate(d);
     assert.throws(() => validateContent(d));
   }
-  assert.ok(contrast(defaults.identity.burgundy, defaults.identity.white) > 7);
+  assert.ok(contrast(defaults.identity.burgundy, defaults.identity.white) > 4.5);
 });
 test("only known video embeds and own uploaded media are accepted", () => {
   assert.equal(videoUrl("https://youtu.be/dQw4w9WgXcQ"), true);

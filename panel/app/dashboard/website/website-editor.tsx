@@ -39,6 +39,8 @@ import {
 type Section = keyof WebsiteContent;
 type Value = string | boolean | Value[] | { [key: string]: Value };
 const sections: { id: Section; title: string; description: string }[] = [
+  {id:"experience",title:"La experiencia",description:"Los pasos de atención y cuidado de la estética."},
+  {id:"contact",title:"Contacto",description:"Textos de contacto. Teléfono, dirección y redes se editan en Configuración."},
   {
     id: "identity",
     title: "Identidad",
@@ -137,6 +139,8 @@ const labels: Record<string, string> = {
   linkText: "Texto del enlace",
   credit: "Crédito de las imágenes",
   photos: "Fotografías",
+  cards: "Tratamientos destacados",
+  steps: "Pasos de atención",
   posts: "Notas",
   items: "Videos",
   description: "Descripción",
@@ -162,6 +166,7 @@ const builtins: WebsiteMedia[] = [
     defaultWebsite.identity.logo,
     defaultWebsite.hero.image,
     defaultWebsite.about.image,
+    ...defaultWebsite.services.cards.map((card) => card.image),
     ...(defaultWebsite.gallery.photos as { image: string }[]).map((p) => p.image),
     ...(defaultWebsite.brand.photos as { image: string }[]).map((p) => p.image),
   ]),
@@ -209,7 +214,7 @@ const templateFor = (key: string): Value =>
           excerpt: "",
           content: "",
         }
-      : key === "photos"
+      : key === "photos" || key === "cards"
         ? {
             image: "",
             id: crypto.randomUUID(),
@@ -217,7 +222,7 @@ const templateFor = (key: string): Value =>
             alt: "",
             description: "",
           }
-        : {};
+        : key === "steps" ? { id: crypto.randomUUID(), title: "Nuevo paso", description: "" } : {};
 export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
   const router = useRouter();
   const [state, setState] = useState<WebsiteState | null>(null),
@@ -557,13 +562,7 @@ export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
             disabled={value.length >= (key === "posts" ? 20 : 40)}
             onClick={() => {
               const item =
-                path[0] === "brand"
-                  ? {
-                      image: defaultWebsite.identity.logo,
-                      title: "Nueva imagen",
-                      alt: "",
-                    }
-                  : templateFor(key);
+                templateFor(key);
               update(path, [...value, item]);
             }}
           >
@@ -573,7 +572,7 @@ export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
               ? "video"
               : key === "posts"
                 ? "nota"
-                : "fotografía"}
+                : key === "steps" ? "paso" : key === "cards" ? "tratamiento" : "fotografía"}
           </button>
         </div>
       );
@@ -677,7 +676,7 @@ export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
           ? 2000
           : key === "title"
             ? path[0] === "hero"
-              ? 14
+              ? 100
               : 100
             : 500;
     return (
@@ -948,9 +947,9 @@ export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
                 onChange={(e) => setPreviewPath(e.target.value)}
               >
                 <option value="/">Inicio</option>
-                <option value="/nuestro-trabajo">Galería</option>
-                <option value="/blog">Notas</option>
-                <option value="/reservas">Reservas</option>
+                <option value="/#gallery">Galería</option>
+                <option value="/#journal">Notas</option>
+                <option value="/#reservas">Reservas</option>
               </select>
               <div
                 ref={previewFrame}
@@ -960,7 +959,7 @@ export default function WebsiteEditor({ siteUrl }: { siteUrl: string }) {
                 <iframe
                   ref={iframe}
                   title="Vista previa de tu web"
-                  src={`${siteUrl.replace(/\/$/, "")}${previewPath}?editorPreview=1`}
+                  src={`${siteUrl.replace(/\/$/, "")}/?editorPreview=1${previewPath.includes("#") ? "#" + previewPath.split("#")[1] : ""}`}
                   onLoad={sendPreview}
                   style={{
                     width: mobile ? 390 : 1280,
