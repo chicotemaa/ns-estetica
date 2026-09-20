@@ -194,6 +194,26 @@ async function main() {
     const saved = await app.db
       .query(authDomain.ACCOUNT)
       .findOne({ where: { email: "client@example.test" } });
+    const { bookingCustomer } = require("../src/domain/booking-customer");
+    const { locked } = require("../src/domain/booking");
+    const customerInput = { clientName: "Cliente uno", contactInfo: "@cliente", customerEmail: "CLIENT@example.test" };
+    const resolveCustomer = (data, account) => locked(app, saved.business_id, () => bookingCustomer(app, saved.business_id, data, account));
+    const firstCustomer = await resolveCustomer(customerInput);
+    const repeatCustomer = await resolveCustomer({ ...customerInput, contactInfo: "+543621234567", customerEmail: "client@example.test" });
+    assert.equal(firstCustomer.id, repeatCustomer.id, "same email reuses client even with a different contact");
+    const accountCustomer = await resolveCustomer({ ...customerInput, customerEmail: "spoof@example.test" }, saved);
+    assert.equal(accountCustomer.id, firstCustomer.id, "authenticated identity uses account email");
+    const linkedAccount = await app.db.query(authDomain.ACCOUNT).findOne({ where: { id: saved.id } });
+    assert.equal(linkedAccount.customer_id, firstCustomer.id);
+    const sharedPhone = await resolveCustomer({ ...customerInput, customerEmail: "different@example.test" });
+    assert.notEqual(sharedPhone.id, firstCustomer.id, "different emails sharing contact stay separate");
+    const preserved = await app.db.query("api::customer.customer").findOne({ where: { id: firstCustomer.id } });
+    assert.equal(preserved.full_name, "Cliente uno");
+    const customerCount = await app.db.query("api::customer.customer").count({ where: { business: { id: saved.business_id } } });
+    const repeated = await Promise.all(Array.from({ length: 3 }, () => resolveCustomer(customerInput)));
+    assert.ok(repeated.every(row => row.id === firstCustomer.id));
+    assert.equal(await app.db.query("api::customer.customer").count({ where: { business: { id: saved.business_id } } }), customerCount);
+    console.log("PASS: email deduplication, account linking, shared contacts and concurrent reuse.");
     assert.ok(saved.password_hash.startsWith("scrypt:"));
     assert.ok(!saved.password_hash.includes(input.password));
     assert.equal((await post("/customer/register", input)).status, 400);

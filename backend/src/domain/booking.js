@@ -197,7 +197,7 @@ function publicInput(raw) {
   if (!result.serviceVariantId) delete result.serviceVariantId;
   return result;
 }
-async function bookPublic(strapi, business, raw, key) {
+async function bookPublic(strapi, business, raw, key, account = null) {
   if ((await require('./customer-config').resolveConfiguration(strapi, business.id)).enabled)
     throw new errors.UnauthorizedError('Ingresá con tu cuenta y completá la seña para reservar.');
   if (
@@ -207,7 +207,8 @@ async function bookPublic(strapi, business, raw, key) {
     )
   )
     throw new errors.ValidationError('Falta el identificador de la solicitud.');
-  const input = publicInput(raw);
+  const input = publicInput(account ? { ...raw, customerEmail: account.email } : raw);
+  input.customerEmail = input.customerEmail.toLowerCase();
   const hash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
   const requestKey = `${business.id}:${key}`;
   return locked(strapi, business.id, async () => {
@@ -238,25 +239,7 @@ async function bookPublic(strapi, business, raw, key) {
     ).find((item) => item.slots.includes(input.appointmentTime));
     if (!selected) throw conflict();
     const service = state.services.find((item) => item.id === input.serviceId);
-    // Reuse a contact without changing identity details from an unauthenticated request.
-    let customer = await strapi.db.query(resources.customers.uid).findOne({
-      where: {
-        business: { id: business.id },
-        primary_contact: input.contactInfo,
-      },
-    });
-    if (!customer)
-      customer = await strapi.documents(resources.customers.uid).create({
-        data: {
-          business: business.id,
-          full_name: input.clientName,
-          primary_contact: input.contactInfo,
-          email: input.customerEmail || null,
-          status: 'lead',
-          marketing_opt_in: false,
-          joined_at: new Date().toISOString(),
-        },
-      });
+    const customer = await require('./booking-customer').bookingCustomer(strapi, business.id, input, account);
     const record = await strapi.documents(resources.appointments.uid).create({
       data: {
         business: business.id,

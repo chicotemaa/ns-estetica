@@ -12,11 +12,12 @@ async function readJson(response: Response) {
   return body;
 }
 
-export default function Booking({title='Tu próximo momento empieza acá.',intro='Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.',preview=false}:{title?:string;intro?:string;preview?:boolean}) {
+export default function Booking({title='Tu próximo momento empieza acá.',intro='Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.',preview=false,chosenService=null}:{chosenService?:{id:string}|null;title?:string;intro?:string;preview?:boolean}) {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [serviceId, setServiceId] = useState('');
+  useEffect(() => { if (chosenService) { setServiceId(chosenService.id); setVariantId(''); } }, [chosenService]);
   const [variantId, setVariantId] = useState('');
   const [staffId, setStaffId] = useState('');
   const [date, setDate] = useState('');
@@ -122,7 +123,8 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
           <p id="availability-message" role="status" className="booking-wide">{availabilityMessage || (availabilityState === 'loading' ? 'Consultando la agenda…' : availabilityState === 'ready' && times.length ? `${times.length} horarios disponibles. Elegí uno para continuar.` : 'Seleccioná tratamiento y fecha para ver los horarios disponibles.')}</p>
           <label>Nombre<input required minLength={2} maxLength={100} className={inputClass} value={name} onChange={e => setName(e.target.value)} /></label>
           <label>Teléfono o Instagram<input required minLength={3} maxLength={100} className={inputClass} value={contact} onChange={e => setContact(e.target.value)} /></label>
-          <label>Email opcional<input type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
+          <label>Email<input required maxLength={254} readOnly={signedIn} autoComplete="email" type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
+          <p className="booking-wide">Usá siempre el mismo email: tu solicitud se suma a tu ficha de cliente y al historial del estudio. Si tenés cuenta, ingresá para reutilizar tus datos.</p>
           <label className="booking-wide">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
           <button disabled={busy || !time || preview || availabilityState !== 'ready' || !times.includes(time)} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
         </form> : !error && <p>Cargando tratamientos…</p>}

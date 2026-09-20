@@ -7,6 +7,10 @@ async function forward(request: NextRequest, path: string[], method: 'GET' | 'PO
   if (path.length !== 1 || !allowed.has(path[0]) || (method === 'POST') !== (path[0] === 'bookings')) {
     return NextResponse.json({ error: { message: 'Ruta no disponible.' } }, { status: 404 });
   }
+  if (method === 'POST' && request.headers.get('origin') !== request.nextUrl.origin) {
+    return NextResponse.json({ error: { message: 'Origen no permitido.' } }, { status: 403 });
+  }
+  const token = request.cookies.get('ns_customer')?.value;
   const configured = process.env.ESTETICA_BACKEND_URL;
   if (!configured) return NextResponse.json({ error: { message: 'Las reservas todavía no están configuradas.' } }, { status: 503 });
   let origin: string;
@@ -24,6 +28,7 @@ async function forward(request: NextRequest, path: string[], method: 'GET' | 'PO
       method,
       headers: method === 'POST' ? {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         'Idempotency-Key': request.headers.get('Idempotency-Key') || '',
       } : undefined,
       body: method === 'POST' ? await request.text() : undefined,

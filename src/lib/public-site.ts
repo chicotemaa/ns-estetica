@@ -1,6 +1,7 @@
 import { defaultWebsite, type WebsiteContent } from './website-content';
 export type BusinessContact = { address?: string; phone?: string; email?: string; instagramHandle?: string; whatsappPhone?: string };
-export type SiteCatalog = { website?: WebsiteContent | null; brand?: BusinessContact; services?: { id: string; name: string; price: number; durationMinutes?: number }[] };
+export type CatalogService = { id: string; name: string; description?: string; category?: string; price: number; durationMinutes?: number; bookingEnabled?: boolean; variants?: { id: string; name: string; price: number; durationMinutes?: number }[] };
+export type SiteCatalog = { website?: WebsiteContent | null; brand?: BusinessContact; services?: CatalogService[] };
 export async function getSiteCatalog(): Promise<SiteCatalog> {
   const origin = process.env.ESTETICA_BACKEND_URL;
   if (!origin) return {};
@@ -12,4 +13,3 @@ export async function getSiteCatalog(): Promise<SiteCatalog> {
 export function mergeWebsite(saved?: Partial<WebsiteContent> | null): WebsiteContent {
   return Object.fromEntries(Object.entries(defaultWebsite).map(([key, value]) => [key, {...value,...(saved?.[key as keyof WebsiteContent] || {})}])) as WebsiteContent;
 }
-

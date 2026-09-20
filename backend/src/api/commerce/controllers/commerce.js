@@ -251,11 +251,14 @@ module.exports = {
   },
   async booking(ctx) {
     const business = await getBusiness(strapi, ctx.params.slug);
+    const token = ctx.request.headers.authorization?.replace(/^Bearer /, "");
+    const account = token ? await require("../../../domain/customer-auth").accountFor(strapi, business.id, token) : null;
     ctx.body = await bookPublic(
       strapi,
       business,
       ctx.request.body,
       ctx.request.header["idempotency-key"],
+      account,
     );
     ctx.set("Cache-Control", "no-store");
   },
