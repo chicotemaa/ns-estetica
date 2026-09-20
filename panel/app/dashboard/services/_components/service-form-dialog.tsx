@@ -39,7 +39,7 @@ export function ServiceFormDialog({
         <DialogHeader>
           <DialogTitle>{serviceBeingEdited ? "Editar servicio" : "Nuevo servicio"}</DialogTitle>
           <DialogDescription>
-            El catálogo usa nombre, descripción, precio, categoría y duración editable para el sitio y el backoffice.
+            Editá el nombre del trabajo, su descripción, precio y duración. Los cambios se usan en las próximas reservas de la web.
           </DialogDescription>
         </DialogHeader>
 
@@ -51,7 +51,7 @@ export function ServiceFormDialog({
           ) : null}
 
           <div className="space-y-2">
-            <Label htmlFor="service-name">Nombre</Label>
+            <Label htmlFor="service-name">Nombre del servicio o trabajo</Label>
             <Input
               id="service-name"
               value={formState.name}
@@ -70,12 +70,15 @@ export function ServiceFormDialog({
           </div>
 
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={formState.bookingEnabled} onChange={event => onUpdateField("bookingEnabled", event.target.checked)} />Habilitar reservas online (requiere duración)</label>
-          <p className="text-sm text-slate-500">Podés dejar la duración vacía mientras confirmás el tiempo del servicio. Los precios por largo se editan en Precios y variantes.</p>
+          <p className="text-sm text-slate-500">Cada tratamiento puede durar un tiempo distinto: 30, 40, 45, 60, 90 minutos u otro valor. La agenda reserva ese tiempo. Las variantes con un tiempo propio se editan en Precios y variantes.</p>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="service-price">Precio</Label>
+              <Label htmlFor="service-price">Precio (ARS)</Label>
               <Input
                 id="service-price"
+                type="number"
+                min={0}
+                step="0.01"
                 inputMode="decimal"
                 placeholder="26000"
                 value={formState.price}
@@ -103,9 +106,12 @@ export function ServiceFormDialog({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="service-duration">Duración</Label>
+              <Label htmlFor="service-duration">Duración (minutos)</Label>
               <Input
                 id="service-duration"
+                type="number"
+                min={1}
+                step={1}
                 inputMode="numeric"
                 placeholder="45"
                 value={formState.durationMinutes}

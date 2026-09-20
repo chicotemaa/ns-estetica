@@ -55,15 +55,16 @@ export function ServicesTable({
       <TableBody>
         {services.map((service) => (
           <TableRow key={service.id}>
-            <TableCell>
-              <div className="space-y-1">
+            <TableCell className="whitespace-normal">
+              <div className="min-w-48 max-w-sm space-y-2">
                 <div className="flex items-center gap-2">
                   <Scissors className="h-4 w-4 text-slate-400" />
-                  <p className="font-medium text-slate-900">{service.name}</p>
+                  <button type="button" className="text-left font-medium text-slate-900 underline-offset-4 hover:underline" onClick={() => onEdit(service)}>{service.name}</button>
                 </div>
-                <p className="text-sm text-slate-500">
+                <p className="line-clamp-2 break-words text-sm text-slate-500">
                   {service.description ?? "Sin descripción"}
                 </p>
+                <Button variant="outline" size="sm" aria-label={`Editar ${service.name}`} onClick={() => onEdit(service)}><Pencil className="mr-2 h-4 w-4" />Editar servicio</Button>
               </div>
             </TableCell>
             <TableCell>
@@ -96,14 +97,6 @@ export function ServicesTable({
             </TableCell>
             <TableCell>
               <div className="flex items-center justify-end gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  aria-label="Editar registro"
-                  onClick={() => onEdit(service)}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
                 <Button
                   variant="ghost"
                   size="sm"

@@ -156,8 +156,7 @@ export function ServicesPageClient({
         <CardHeader>
           <CardTitle>Catálogo</CardTitle>
           <CardDescription>
-            Activá las reservas online de cada servicio cuando su duración esté
-            definida
+            Usá Editar servicio junto al nombre para cambiar trabajo, descripción, precio y duración.
           </CardDescription>
         </CardHeader>
         <CardContent>

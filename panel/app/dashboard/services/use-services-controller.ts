@@ -3,7 +3,6 @@
 import { useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 
-import { getDefaultDurationMinutes } from "@/lib/service-catalog"
 import { getServiceCategoryLabel } from "@/lib/business-shared"
 
 import type { ServiceFeedbackState, ServiceFormState, ServiceSummary } from "./service-types"
@@ -84,17 +83,6 @@ export function useServicesController(services: ServiceSummary[]) {
 
   function updateFormField<K extends keyof ServiceFormState>(field: K, value: ServiceFormState[K]) {
     setFormState((current) => {
-      if (field === "category") {
-        const nextCategory = value as ServiceFormState["category"]
-        const currentDefault = String(getDefaultDurationMinutes(current.category))
-        const nextDefault = String(getDefaultDurationMinutes(nextCategory))
-
-        return {
-          ...current,
-          category: nextCategory,
-          durationMinutes: current.durationMinutes === currentDefault ? nextDefault : current.durationMinutes,
-        }
-      }
 
       return {
         ...current,
@@ -110,6 +98,7 @@ export function useServicesController(services: ServiceSummary[]) {
   }
 
   async function submitForm() {
+    if (isSubmitting) return
     setIsSubmitting(true)
     setFormError(null)
 

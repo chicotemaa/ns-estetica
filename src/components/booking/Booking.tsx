@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-type Service = { id: string; name: string; price: number; bookingEnabled?: boolean; variants?: { id: string; name: string; price: number }[] };
+type Service = { id: string; name: string; price: number; durationMinutes?: number; bookingEnabled?: boolean; variants?: { id: string; name: string; price: number; durationMinutes?: number }[] };
 type Staff = { id: string; fullName: string };
 type Catalog = { services: Service[]; staffMembers: Staff[]; isLive: boolean };
 
@@ -57,7 +57,8 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
       return;
     }
     const controller = new AbortController();
-    const query = new URLSearchParams({ date, serviceId, staffMemberId: staffId });
+    const query = new URLSearchParams({ date, serviceId });
+    if (staffId) query.set('staffMemberId', staffId);
     if (variantId) query.set('serviceVariantId', variantId);
     setAvailabilityState('loading');
     setError('');
@@ -78,6 +79,7 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
 
   const service = catalog?.services.find((item) => item.id === serviceId);
   const inputClass = 'booking-input';
+  const selectedDuration = service?.variants?.find(v => v.id === variantId)?.durationMinutes || service?.durationMinutes;
   const needsVariant = !!service?.variants && service.variants.length > 1 && !variantId;
   const timePlaceholder = !serviceId ? 'Primero elegí un tratamiento' : !date ? 'Primero elegí una fecha' : needsVariant ? 'Primero elegí una variante' : availabilityState === 'loading' ? 'Cargando horarios…' : availabilityState === 'error' ? 'No se pudo consultar' : availabilityState === 'ready' && !times.length ? 'Sin horarios para esa fecha' : 'Elegí un horario';
 
@@ -113,6 +115,7 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
         <form onSubmit={submit} className="booking-form">
           <label>Tratamiento<select required className={inputClass} value={serviceId} onChange={e => { setServiceId(e.target.value); setVariantId(''); }}><option value="">Elegí un tratamiento</option>{catalog.services.filter(s => s.bookingEnabled !== false).map(s => <option key={s.id} value={s.id}>{s.name} · {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(s.price)}</option>)}</select></label>
           {service?.variants && service.variants.length > 1 && <label>Variante<select required className={inputClass} value={variantId} onChange={e => setVariantId(e.target.value)}><option value="">Elegí una variante</option>{service.variants.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}</select></label>}
+          {selectedDuration && <p className="booking-wide">Duración del tratamiento: <strong>{selectedDuration} minutos</strong>. Los horarios indican el inicio de la sesión.</p>}
           <label>Profesional<select className={inputClass} value={staffId} onChange={e => setStaffId(e.target.value)}><option value="">Sin preferencia</option>{catalog.staffMembers.map(s => <option key={s.id} value={s.id}>{s.fullName}</option>)}</select></label>
           <label>Fecha<input required type="date" min={new Date().toLocaleDateString('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' })} className={inputClass} value={date} onChange={e => setDate(e.target.value)} /></label>
           <label>Horario<select required disabled={availabilityState !== 'ready' || !times.length} aria-describedby="availability-message" className={inputClass} value={time} onChange={e => setTime(e.target.value)}><option value="">{timePlaceholder}</option>{times.map(t => <option key={t} value={t}>{t}</option>)}</select></label>
