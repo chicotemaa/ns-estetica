@@ -223,6 +223,28 @@ async function main() {
     assert.ok(repeated.every(row => row.id === firstCustomer.id));
     assert.equal(await app.db.query("api::customer.customer").count({ where: { business: { id: saved.business_id } } }), customerCount);
     console.log("PASS: email deduplication, account linking, shared contacts and concurrent reuse.");
+    const { resources } = require("../src/domain/repository");
+    const fixtureService = await app.documents(resources.services.uid).create({ data: { business: saved.business_id, name: "Automatic confirmation fixture", duration_minutes: 45, price: 100, is_active: true, booking_enabled: true } });
+    const fixtureDate = new Date();
+    fixtureDate.setUTCDate(fixtureDate.getUTCDate() + 3);
+    while ([0, 1].includes(fixtureDate.getUTCDay())) fixtureDate.setUTCDate(fixtureDate.getUTCDate() + 1);
+    const dateKey = fixtureDate.toISOString().slice(0, 10);
+    const slots = await call(`/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`);
+    assert.ok(slots.body.times.length);
+    const bookingPayload = { clientName: input.name, contactInfo: input.phone, customerEmail: input.email.trim(), serviceId: String(fixtureService.id), appointmentDate: dateKey, appointmentTime: slots.body.times[0] };
+    const bookingHeaders = { "Idempotency-Key": require("node:crypto").randomUUID() };
+    const confirmed = await call("/public/password-fixture/bookings", { method: "POST", token: oldToken, headers: bookingHeaders, body: JSON.stringify(bookingPayload) });
+    assert.equal(confirmed.status, 200, JSON.stringify(confirmed.body));
+    assert.equal(confirmed.body.status, "confirmed");
+    const replay = await call("/public/password-fixture/bookings", { method: "POST", token: oldToken, headers: bookingHeaders, body: JSON.stringify(bookingPayload) });
+    assert.equal(replay.body.createdId, confirmed.body.createdId);
+    const persistedBooking = await app.db.query(resources.appointments.uid).findOne({ where: { documentId: confirmed.body.createdId }, populate: ["customer"] });
+    assert.equal(persistedBooking.status, "confirmed");
+    assert.equal(persistedBooking.customer.id, firstCustomer.id);
+    const afterBooking = await call(`/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`);
+    assert.ok(!afterBooking.body.times.includes(bookingPayload.appointmentTime));
+    console.log("PASS: automatic confirmation, persisted client history, idempotency and occupied slot.");
+
     assert.ok(saved.password_hash.startsWith("scrypt:"));
     assert.ok(!saved.password_hash.includes(input.password));
     assert.equal((await post("/customer/register", input)).status, 400);

@@ -223,3 +223,15 @@ textarea.booking-input { min-height:84px; resize:vertical; }
 .treatment-variants li { display:flex; justify-content:space-between; gap:12px; border-top:1px solid #e7dadd; padding:12px 0; }
 @media(max-width:1050px) { .treatment-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:600px) { .treatment-grid { grid-template-columns:1fr; } .treatment-card { padding:24px; } }
+/* Readable typography across the public site. Brand artwork stays unchanged. */
+.editable-site h1,.editable-site h2,.editable-site h3 { font-family:'DM Sans',Arial,sans-serif; font-weight:700; letter-spacing:-.035em; }
+.editable-site h1 em,.editable-site h2 em { font-weight:700; }
+.editable-site .hero h1 { font-size:clamp(46px,5.5vw,84px); line-height:1.08; }
+.editable-site .section-heading h2,.editable-site .about-copy h2,.editable-site .experience-top h2,.editable-site .booking-intro h2,.editable-site .contact-intro h2,.editable-site .editable-title { font-size:clamp(32px,4vw,56px); line-height:1.15; }
+.editable-site .treatment-card h3 { font-size:27px; line-height:1.22; letter-spacing:-.025em; }
+.editable-site .treatment-description { font-size:16px; line-height:1.7; color:#49413d; }
+.editable-site .hero-description,.editable-site .about-copy>p:not(.eyebrow),.editable-site .section-heading>p,.editable-site .booking-intro>p:not(.eyebrow) { color:#49413d; font-weight:500; }
+.editable-site .nav-links a,.editable-site .text-link,.editable-site .catalog-filters button { font-size:14px; font-weight:600; }
+.editable-site .treatment-facts span,.editable-site .treatment-card>a { font-size:14px; font-weight:600; }
+.editable-site .booking-form label { font-size:15px; font-weight:600; }
+.editable-site .booking-input { font-size:16px; font-weight:500; }

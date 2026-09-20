@@ -2011,3 +2011,27 @@ button:disabled {
     order: 0;
   }
 }
+
+/* Strong event boundaries and readable appointment content. */
+.appointments-calendar .fc-timegrid-slot { height:42px; }
+.appointments-calendar .fc-event { border-width:1px 1px 1px 5px; box-shadow:0 2px 4px rgb(15 23 42 / 14%); }
+.appointments-calendar .fc-appointment-event { padding:7px 8px; gap:3px; }
+.appointments-calendar .fc-appointment-event__time { font-size:12px; font-weight:800; line-height:16px; opacity:1; }
+.appointments-calendar .fc-appointment-event__title { font-size:14px; font-weight:800; line-height:18px; }
+.appointments-calendar .fc-appointment-event__meta { font-size:12px; font-weight:600; line-height:16px; opacity:1; }
+.appointments-calendar .fc-appointment-event__status { font-size:10px; font-weight:700; line-height:14px; }
+.appointments-calendar .fc-timegrid-event-short .fc-appointment-event__status { display:none; }
+.appointments-calendar .fc-daygrid-event .fc-appointment-event { display:grid; gap:2px; padding:6px; }
+.appointments-calendar .fc-daygrid-event .fc-appointment-event__time { font-size:11px; }
+.appointments-calendar .fc-daygrid-event .fc-appointment-event__title { font-size:13px; }
+.appointments-calendar .fc-daygrid-event .fc-appointment-event__meta { display:block; font-size:11px; }
+.appointments-calendar .fc-daygrid-event .fc-appointment-event__status { display:none; }
+.appointments-calendar .fc-event.is-selected-event { outline:3px solid #0f172a; outline-offset:2px; }
+.agenda-day-card { border:2px solid #94a3b8; border-left:6px solid #166534; background:#f0fdf4; box-shadow:0 2px 5px rgb(15 23 42 / 8%); }
+.agenda-day-card__name { font-size:17px; font-weight:800; color:#17251d; }
+.agenda-day-card__service { font-size:14px; font-weight:600; color:#334155; }
+.agenda-day-card__top { font-size:15px; }
+.agenda-day-card[data-status="cancelled"] { background:#fff1f2; border-left-color:#be123c; }
+.agenda-day-card[data-status="completed"] { background:#eff6ff; border-left-color:#2563eb; }
+.agenda-day-card[data-status="pending"] { background:#fffbeb; border-left-color:#a16207; }
+.agenda-day-card[data-status="history"] { background:#f1f5f9; border-left-color:#64748b; }

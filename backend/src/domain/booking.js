@@ -251,7 +251,7 @@ async function bookPublic(strapi, business, raw, key, account = null) {
         customer_email: input.customerEmail || null,
         appointment_date: input.appointmentDate,
         appointment_time: `${input.appointmentTime}:00.000`,
-        status: 'pending',
+        status: 'confirmed',
         channel: 'website',
         notes: input.notes || null,
         service_name_snapshot: service.name,

@@ -97,20 +97,20 @@ function buildCalendarEvents(
             }
           : appointment.status === "completed"
             ? {
-                backgroundColor: "#edf5fa",
-                borderColor: "#8bacbf",
+                backgroundColor: "#dbeafe",
+                borderColor: "#2563eb",
                 textColor: "#0c4a6e",
               }
             : appointment.status === "pending"
               ? {
-                  backgroundColor: "#fff8e7",
-                  borderColor: "#c9a75a",
+                  backgroundColor: "#fef3c7",
+                  borderColor: "#a16207",
                   textColor: "#78350f",
                 }
               : {
-                  backgroundColor: "#eef6f0",
-                  borderColor: "#87ab91",
-                  textColor: "#14532d",
+                  backgroundColor: "#166534",
+                  borderColor: "#14532d",
+                  textColor: "#ffffff",
                 };
 
       return {
@@ -535,9 +535,9 @@ export function AppointmentsCalendar({
           selectable={false}
           eventLongPressDelay={600}
           eventInteractive
-          eventMinHeight={44}
+          eventMinHeight={54}
           eventMaxStack={viewMode === "week" ? 2 : 4}
-          eventShortHeight={65}
+          eventShortHeight={54}
           slotEventOverlap={false}
           eventStartEditable={true}
           weekends
@@ -635,6 +635,7 @@ export function AppointmentsCalendar({
                 <div className="fc-appointment-event__meta" aria-hidden="true">
                   {appointment.serviceName}
                 </div>
+                <div className="fc-appointment-event__status" aria-hidden="true">{getStatusLabel(appointment.status)}</div>
               </div>
             );
           }}

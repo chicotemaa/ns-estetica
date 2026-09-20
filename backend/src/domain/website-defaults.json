@@ -112,7 +112,7 @@
   },
   "booking": {
     "title": "Tu próximo momento empieza acá.",
-    "intro": "Elegí el servicio y el momento para vos. Te contactaremos para confirmar tu turno."
+    "intro": "Elegí el servicio y el momento para vos. Tu turno queda confirmado al reservar."
   },
   "experience": {
     "enabled": true,

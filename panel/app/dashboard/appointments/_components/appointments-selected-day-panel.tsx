@@ -59,6 +59,7 @@ export function AppointmentsSelectedDayPanel({
                 data-history-id={history ? entry.workRecord.id : undefined}
                 className={`agenda-day-card ${selectedAppointmentId === entry.id ? "is-selected" : ""}`}
                 aria-label={`Ver detalle de ${entry.customerName}, ${entry.serviceName}, ${formatAppointmentTime(entry.appointmentTime)}${history ? ", hora estimada" : ""}`}
+                data-status={history ? "history" : entry.status}
                 aria-haspopup="dialog"
                 onClick={() => onSelectAppointment(entry.id)}
               >

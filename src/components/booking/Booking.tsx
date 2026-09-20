@@ -12,7 +12,7 @@ async function readJson(response: Response) {
   return body;
 }
 
-export default function Booking({title='Tu próximo momento empieza acá.',intro='Elegí un tratamiento y un horario disponible. Te contactaremos para confirmar tu turno.',preview=false,chosenService=null}:{chosenService?:{id:string}|null;title?:string;intro?:string;preview?:boolean}) {
+export default function Booking({title='Tu próximo momento empieza acá.',intro='Elegí un tratamiento y un horario disponible. Tu turno queda confirmado al reservar.',preview=false,chosenService=null}:{chosenService?:{id:string}|null;title?:string;intro?:string;preview?:boolean}) {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -109,10 +109,10 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
       <span className="booking-ornament" aria-hidden="true">✳</span>
     </div>
     <div className="booking-panel">
-      <p className="booking-panel-label">SOLICITAR TURNO <span>01 — 02</span></p>
+      <p className="booking-panel-label">RESERVAR TURNO <span>01 — 02</span></p>
       <p>{signedIn ? <>Completamos tus datos con tu cuenta. <a className="text-link" href="/cuenta">Mi cuenta</a></> : <>Podés <a className="text-link" href="/cuenta">ingresar o crear una cuenta</a> para guardar tus datos.</>}</p>
       {error && <p role="alert" className="booking-error">{error}</p>}
-      {sent ? <p role="status" className="booking-success">Recibimos tu solicitud. Te contactaremos para confirmar el turno.</p> : catalog ?
+      {sent ? <p role="status" className="booking-success">Tu turno está confirmado. Te esperamos en el horario elegido.</p> : catalog ?
         <form onSubmit={submit} className="booking-form">
           <label>Tratamiento<select required className={inputClass} value={serviceId} onChange={e => { setServiceId(e.target.value); setVariantId(''); }}><option value="">Elegí un tratamiento</option>{catalog.services.filter(s => s.bookingEnabled !== false).map(s => <option key={s.id} value={s.id}>{s.name} · {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(s.price)}</option>)}</select></label>
           {service?.variants && service.variants.length > 1 && <label>Variante<select required className={inputClass} value={variantId} onChange={e => setVariantId(e.target.value)}><option value="">Elegí una variante</option>{service.variants.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}</select></label>}
@@ -126,7 +126,7 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
           <label>Email<input required maxLength={254} readOnly={signedIn} autoComplete="email" type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
           <p className="booking-wide">Usá siempre el mismo email: tu solicitud se suma a tu ficha de cliente y al historial del estudio. Si tenés cuenta, ingresá para reutilizar tus datos.</p>
           <label className="booking-wide">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
-          <button disabled={busy || !time || preview || availabilityState !== 'ready' || !times.includes(time)} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
+          <button disabled={busy || !time || preview || availabilityState !== 'ready' || !times.includes(time)} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Reservar turno'} <span aria-hidden="true">↗</span></button>
         </form> : !error && <p>Cargando tratamientos…</p>}
     </div>
   </section>;
