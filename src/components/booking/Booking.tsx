@@ -22,6 +22,8 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [times, setTimes] = useState<string[]>([]);
+  const [availabilityState, setAvailabilityState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [availabilityMessage, setAvailabilityMessage] = useState('');
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
   const [email, setEmail] = useState('');
@@ -47,25 +49,41 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
 
   useEffect(() => {
     const selected = catalog?.services.find((item) => item.id === serviceId);
-    if (!serviceId || !date || (selected?.variants && selected.variants.length > 1 && !variantId)) { setTimes([]); return; }
+    setTimes([]);
+    setTime('');
+    setAvailabilityMessage('');
+    if (!serviceId || !date || (selected?.variants && selected.variants.length > 1 && !variantId)) {
+      setAvailabilityState('idle');
+      return;
+    }
     const controller = new AbortController();
     const query = new URLSearchParams({ date, serviceId, staffMemberId: staffId });
     if (variantId) query.set('serviceVariantId', variantId);
-    setTimes([]);
-    setTime('');
+    setAvailabilityState('loading');
     setError('');
-    fetch(`/api/reservas/availability?${query}`, { signal: controller.signal })
-      .then(readJson).then((value: { times: string[] }) => setTimes(value.times))
-      .catch((reason: Error) => { if (reason.name !== 'AbortError') setError(reason.message); });
+    fetch(`/api/reservas/availability?${query}`, { signal: controller.signal, cache: 'no-store' })
+      .then(readJson).then((value: { times: string[]; message?: string }) => {
+        if (controller.signal.aborted) return;
+        setTimes(value.times);
+        setAvailabilityState('ready');
+        setAvailabilityMessage(value.message || (value.times.length ? '' : 'No hay horarios disponibles para este tratamiento en esa fecha. Elegí otro día.'));
+      })
+      .catch((reason: Error) => {
+        if (controller.signal.aborted) return;
+        setAvailabilityState('error');
+        setAvailabilityMessage(reason.message);
+      });
     return () => controller.abort();
   }, [catalog, serviceId, variantId, staffId, date]);
 
   const service = catalog?.services.find((item) => item.id === serviceId);
   const inputClass = 'booking-input';
+  const needsVariant = !!service?.variants && service.variants.length > 1 && !variantId;
+  const timePlaceholder = !serviceId ? 'Primero elegí un tratamiento' : !date ? 'Primero elegí una fecha' : needsVariant ? 'Primero elegí una variante' : availabilityState === 'loading' ? 'Cargando horarios…' : availabilityState === 'error' ? 'No se pudo consultar' : availabilityState === 'ready' && !times.length ? 'Sin horarios para esa fecha' : 'Elegí un horario';
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy || preview) return;
+    if (busy || preview || availabilityState !== 'ready' || !times.includes(time)) return;
     setBusy(true); setError('');
     try {
       const body = JSON.stringify({ clientName: name, contactInfo: contact, customerEmail: email, serviceId, serviceVariantId: variantId, staffMemberId: staffId, appointmentDate: date, appointmentTime: time, notes });
@@ -97,12 +115,13 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
           {service?.variants && service.variants.length > 1 && <label>Variante<select required className={inputClass} value={variantId} onChange={e => setVariantId(e.target.value)}><option value="">Elegí una variante</option>{service.variants.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}</select></label>}
           <label>Profesional<select className={inputClass} value={staffId} onChange={e => setStaffId(e.target.value)}><option value="">Sin preferencia</option>{catalog.staffMembers.map(s => <option key={s.id} value={s.id}>{s.fullName}</option>)}</select></label>
           <label>Fecha<input required type="date" min={new Date().toLocaleDateString('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' })} className={inputClass} value={date} onChange={e => setDate(e.target.value)} /></label>
-          <label>Horario<select required className={inputClass} value={time} onChange={e => setTime(e.target.value)}><option value="">Elegí un horario</option>{times.map(t => <option key={t} value={t}>{t}</option>)}</select></label>
+          <label>Horario<select required disabled={availabilityState !== 'ready' || !times.length} aria-describedby="availability-message" className={inputClass} value={time} onChange={e => setTime(e.target.value)}><option value="">{timePlaceholder}</option>{times.map(t => <option key={t} value={t}>{t}</option>)}</select></label>
+          <p id="availability-message" role="status" className="booking-wide">{availabilityMessage || (availabilityState === 'loading' ? 'Consultando la agenda…' : availabilityState === 'ready' && times.length ? `${times.length} horarios disponibles. Elegí uno para continuar.` : 'Seleccioná tratamiento y fecha para ver los horarios disponibles.')}</p>
           <label>Nombre<input required minLength={2} maxLength={100} className={inputClass} value={name} onChange={e => setName(e.target.value)} /></label>
           <label>Teléfono o Instagram<input required minLength={3} maxLength={100} className={inputClass} value={contact} onChange={e => setContact(e.target.value)} /></label>
           <label>Email opcional<input type="email" className={inputClass} value={email} onChange={e => setEmail(e.target.value)} /></label>
           <label className="booking-wide">Comentario opcional<textarea maxLength={1000} className={inputClass} value={notes} onChange={e => setNotes(e.target.value)} /></label>
-          <button disabled={busy || !time || preview} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
+          <button disabled={busy || !time || preview || availabilityState !== 'ready' || !times.includes(time)} className="button-primary booking-submit">{busy ? 'Enviando…' : 'Solicitar turno'} <span aria-hidden="true">↗</span></button>
         </form> : !error && <p>Cargando tratamientos…</p>}
     </div>
   </section>;

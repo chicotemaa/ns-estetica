@@ -236,15 +236,18 @@ module.exports = {
       serviceVariantId,
     );
     ctx.set("Cache-Control", "no-store");
-    ctx.body = {
-      times: [
-        ...new Set(
-          choices(data, date, serviceId, staffMemberId).flatMap(
-            (item) => item.slots,
-          ),
-        ),
-      ].sort(),
-    };
+    const times = [...new Set(choices(data, date, serviceId, staffMemberId).flatMap(item => item.slots))].sort();
+    let message = '';
+    if (!times.length) {
+      const clock = require("../../../domain/availability").localNow(data.timeZone);
+      const daysAhead = Math.round((Date.parse(`${date}T12:00:00Z`) - Date.parse(`${clock.date}T12:00:00Z`)) / 86400000);
+      const day = data.hours.find(item => item.day_of_week === new Date(`${date}T12:00:00Z`).getUTCDay());
+      if (daysAhead < 0) message = 'Elegí una fecha de hoy en adelante.';
+      else if (daysAhead > data.settings.max_booking_days_in_advance) message = `Podés reservar hasta ${data.settings.max_booking_days_in_advance} días de anticipación. Elegí una fecha más cercana.`;
+      else if (!day?.is_open) message = 'El local está cerrado ese día. Elegí otra fecha.';
+      else message = 'No hay horarios disponibles para este tratamiento y profesional en esa fecha. Probá con otro día o sin preferencia de profesional.';
+    }
+    ctx.body = { times, message };
   },
   async booking(ctx) {
     const business = await getBusiness(strapi, ctx.params.slug);
