@@ -190,6 +190,15 @@ async function main() {
     assert.equal(registered.body.account.email, "client@example.test");
     assert.equal(registered.body.account.password_hash, undefined);
     const oldToken = registered.body.sessionToken;
+    const sessionBooking = await call("/public/password-fixture/bookings", {
+      method: "POST", token: oldToken, body: "{}",
+    });
+    assert.equal(sessionBooking.status, 400, "authenticated request reaches booking validation");
+    const expiredBooking = await call("/public/password-fixture/bookings", {
+      method: "POST", token: "invalid-session", body: "{}",
+    });
+    assert.equal(expiredBooking.status, 401, "invalid customer sessions cannot book as an account");
+
     const authDomain = require("../src/domain/customer-auth");
     const saved = await app.db
       .query(authDomain.ACCOUNT)
