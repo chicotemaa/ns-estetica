@@ -15,7 +15,33 @@ async function session(ctx) {
   const account = await auth.accountFor(strapi, business.id, token(ctx));
   return { business, account };
 }
+const passwords = require("../../../domain/customer-password");
 module.exports = {
+  async register(ctx) {
+    const b = await getBusiness(strapi);
+    ctx.body = await passwords.register(strapi, b.id, ctx.request.body);
+    ctx.set("Cache-Control", "no-store");
+  },
+  async login(ctx) {
+    const b = await getBusiness(strapi);
+    ctx.body = await passwords.login(strapi, b.id, ctx.request.body);
+    ctx.set("Cache-Control", "no-store");
+  },
+  async reset(ctx) {
+    const b = await getBusiness(strapi);
+    ctx.body = await passwords.reset(strapi, b.id, ctx.request.body);
+    ctx.set("Cache-Control", "no-store");
+  },
+  async accounts(ctx) {
+    const b = await getBusiness(strapi);
+    ctx.body = await passwords.list(strapi, b.id, ctx.query.search);
+    ctx.set("Cache-Control", "no-store");
+  },
+  async recovery(ctx) {
+    const b = await getBusiness(strapi);
+    ctx.body = await passwords.recovery(strapi, b.id, ctx.request.body);
+    ctx.set("Cache-Control", "no-store");
+  },
   async config(ctx) {
     const business = await getBusiness(strapi);
     ctx.body = publicConfiguration(

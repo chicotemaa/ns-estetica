@@ -12,6 +12,21 @@ const route = (method, path, handler) => ({
 });
 module.exports = {
   routes: [
+    route("POST", "register", "register"),
+    route("POST", "login", "login"),
+    route("POST", "reset", "reset"),
+    {
+      method: "GET",
+      path: "/backoffice/customer-accounts",
+      handler: "customer-access.accounts",
+      config: { auth: false, policies: ["global::manager"] },
+    },
+    {
+      method: "POST",
+      path: "/backoffice/customer-recovery",
+      handler: "customer-access.recovery",
+      config: { auth: false, policies: ["global::manager"] },
+    },
     route("GET", "config", "config"),
     route("POST", "challenge", "challenge"),
     route("POST", "verify", "verify"),

@@ -32,6 +32,18 @@
     },
     "customer_id": {
       "type": "integer"
+    },
+    "password_hash": {
+      "type": "string",
+      "private": true
+    },
+    "recovery_hash": {
+      "type": "string",
+      "private": true
+    },
+    "recovery_expires_at": {
+      "type": "datetime",
+      "private": true
     }
   }
 }

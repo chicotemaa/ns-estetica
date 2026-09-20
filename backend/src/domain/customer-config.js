@@ -138,8 +138,9 @@ function publicConfiguration(c = configuration()) {
     enabled: c.enabled,
     googleClientId: c.authReady && c.googleEnabled ? c.googleClientId : "",
     emailEnabled: c.authReady && c.mailReady,
+    passwordEnabled: c.authReady,
     accountEnabled:
-      c.authReady && (c.mailReady || (c.googleEnabled && !!c.googleClientId)),
+      c.authReady,
     depositPercent: c.depositPercent,
     cancellationHours: c.cancellationHours,
     holdMinutes: c.holdMinutes,

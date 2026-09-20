@@ -27,6 +27,15 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
   const [email, setEmail] = useState('');
   const [notes, setNotes] = useState('');
   const [sent, setSent] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    if (preview) return;
+    let alive = true;
+    fetch('/api/cuenta/me', { cache: 'no-store' }).then(async r => r.ok ? r.json() : null).then(data => {
+      if (alive && data?.account) { setSignedIn(true); setName(data.account.name); setContact(data.account.phone); setEmail(data.account.email); }
+    }).catch(() => {});
+    return () => { alive = false; };
+  }, [preview]);
   const request = useRef<{ body: string; key: string } | null>(null);
 
   useEffect(() => {
@@ -80,6 +89,7 @@ export default function Booking({title='Tu próximo momento empieza acá.',intro
     </div>
     <div className="booking-panel">
       <p className="booking-panel-label">SOLICITAR TURNO <span>01 — 02</span></p>
+      <p>{signedIn ? <>Completamos tus datos con tu cuenta. <a className="text-link" href="/cuenta">Mi cuenta</a></> : <>Podés <a className="text-link" href="/cuenta">ingresar o crear una cuenta</a> para guardar tus datos.</>}</p>
       {error && <p role="alert" className="booking-error">{error}</p>}
       {sent ? <p role="status" className="booking-success">Recibimos tu solicitud. Te contactaremos para confirmar el turno.</p> : catalog ?
         <form onSubmit={submit} className="booking-form">
