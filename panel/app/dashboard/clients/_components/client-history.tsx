@@ -9,6 +9,7 @@ import {
 } from "@/lib/business-shared";
 type History = {
   visits: {
+    deletedAt?: string | null;
     id: string;
     date: string;
     time: string;
@@ -107,7 +108,7 @@ export function ClientHistory({
         {data.visits.map((v) => (
           <div key={v.id} className="rounded border p-3 text-sm">
             <p>
-              {v.date} · {v.time.slice(0, 5)} · {getStatusLabel(v.status)}
+              {v.date} · {v.time.slice(0, 5)} · {(v.deletedAt ? "Eliminado · " : "") + getStatusLabel(v.status)}
             </p>
             <p>
               {v.service} · {v.staff} · {formatCurrency(v.amount)}

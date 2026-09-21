@@ -103,9 +103,9 @@ const populate = (resource) =>
   );
 
 function repository(strapi, businessId) {
-  async function read(resource, filters = [], order = []) {
+  async function read(resource, filters = [], order = [], includeDeleted = false) {
     const where = {
-      $and: [scope(resource, businessId), ...filtersWhere(resource, filters)],
+      $and: [scope(resource, businessId), ...filtersWhere(resource, filters), ...(resource === "appointments" && !includeDeleted && !filters.some(f => f.field === "deleted_at") ? [{ deleted_at: { $null: true } }] : [])],
     };
     if (!Array.isArray(order) || order.length > 5)
       throw new ValidationError("Orden inválido.");
@@ -357,11 +357,23 @@ function repository(strapi, businessId) {
     }
     if (!["update", "delete"].includes(operation) || !filters?.length)
       throw new ValidationError("La modificación requiere filtros.");
-    const rows = await read(resource, filters);
+    const rows = await read(resource, filters, [], resource === "appointments");
     if (rows.length > 100)
       throw new ValidationError("Demasiados registros para modificar.");
     const result = [];
     for (const row of rows) {
+      if (resource === "appointments" && (operation === "delete" || Object.hasOwn(input || {}, "deleted_at"))) {
+        if (operation !== "delete" && Object.keys(input).some(k => !["deleted_at", "updated_at"].includes(k))) throw new ValidationError("Restaurá el turno antes de modificarlo.");
+        const deletedAt = operation === "delete" ? new Date().toISOString() : input.deleted_at;
+        if (deletedAt !== null && operation !== "delete") throw new ValidationError("Usá Eliminar para archivar un turno.");
+        if (deletedAt === null && row.deleted_at && ["pending", "confirmed"].includes(row.status)) {
+          await require("./booking").validateAppointment(strapi, businessId, { appointment_date: row.appointment_date, appointment_time: row.appointment_time }, { ...row, appointment_date: "" });
+        }
+        const saved = await strapi.documents(definition.uid).update({ documentId: row.documentId, data: { deleted_at: deletedAt } });
+        result.push(await strapi.db.query(definition.uid).findOne({ where: { id: saved.id }, populate: populate(resource) }));
+        continue;
+      }
+      if (resource === "appointments" && row.deleted_at) throw new ValidationError("El turno está eliminado. Restauralo antes de editarlo.");
       if (
         resource === "appointments" &&
         row.checkout_total != null &&
@@ -448,6 +460,12 @@ function repository(strapi, businessId) {
           );
       }
       if (operation === "delete") {
+        if (resource === "services") {
+          const used = await read("appointments", [{ field: "service_id", operator: "eq", value: row.id }], [], true);
+          if (used.length) throw new ValidationError("El servicio tiene historial. Desactivalo para conservar los turnos.");
+          const variants = await read("service_price_variants", [{ field: "service_id", operator: "eq", value: row.id }]);
+          for (const variant of variants) await strapi.documents(resources.service_price_variants.uid).delete({ documentId: variant.documentId });
+        }
         for (const [dependent, spec] of Object.entries(resources)) {
           for (const [field, info] of Object.entries(spec.fields)) {
             if (
@@ -455,7 +473,7 @@ function repository(strapi, businessId) {
               (
                 await read(dependent, [
                   { field, operator: "eq", value: row.id },
-                ])
+                ], [], true)
               ).length
             ) {
               throw new ValidationError(
@@ -492,6 +510,7 @@ function repository(strapi, businessId) {
   }
   async function checkUnique(resource, input, existing) {
     const candidate = { ...serialize(resource, existing), ...input };
+    if (resource === "schedule_blocks") await require("./schedule-blocks").validateBlock(strapi, businessId, candidate, existing?.id);
     if (resource === "staff_members") {
       const first = Number(candidate.payroll_cutoff_first ?? 15),
         second = Number(candidate.payroll_cutoff_second ?? 31);

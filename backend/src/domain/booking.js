@@ -30,6 +30,7 @@ async function schedule(strapi, businessId, date) {
     settings,
     businesses,
     variants,
+    blocks,
   ] = await Promise.all([
     repo.records('services'),
     repo.records('staff_members'),
@@ -42,6 +43,7 @@ async function schedule(strapi, businessId, date) {
     repo.records('booking_settings'),
     repo.records('businesses'),
     repo.records('service_price_variants'),
+    repo.records('schedule_blocks', [{ field: 'block_date', operator: 'eq', value: date }]),
   ]);
   if (settings.length !== 1)
     throw new errors.ValidationError(
@@ -55,6 +57,7 @@ async function schedule(strapi, businessId, date) {
     staffHours,
     assignments,
     variants,
+    blocks,
     appointments: [...appointments, ...holds],
     settings: settings[0],
     timeZone: businesses[0].time_zone || 'America/Argentina/Buenos_Aires',

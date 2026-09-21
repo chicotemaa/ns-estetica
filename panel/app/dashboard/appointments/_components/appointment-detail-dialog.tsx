@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +45,14 @@ export function AppointmentDetailDialog({
   ) => void;
   timeZone: string;
 }) {
+  const router = useRouter();
+  const [deleteId, setDeleteId] = useState<string | null>(null), [busy, setBusy] = useState(false), [error, setError] = useState("");
+  async function remove() {
+    if (!entry || busy) return;
+    setBusy(true); setError("");
+    try { const r = await fetch(`/api/appointments/${entry.id}`, { method: "DELETE" }); const body = await r.json(); if (!r.ok) throw new Error(body.error); setDeleteId(null); onOpenChange(false); router.refresh(); }
+    catch(e) { setError(e instanceof Error ? e.message : "No se pudo eliminar."); } finally { setBusy(false); }
+  }
   if (!entry) return null;
   const history = isHistoricalEntry(entry);
   return (
@@ -125,6 +135,12 @@ export function AppointmentDetailDialog({
                 Editar turno
               </Button>
             </div>
+            <div className="agenda-detail-actions">
+              {entry.status !== "cancelled" && <Button variant="outline" className="text-rose-700" onClick={() => onStatusChange(entry, "cancelled")}>Cancelar turno</Button>}
+              <Button variant="outline" disabled={busy} onClick={() => setDeleteId(entry.id)}>Eliminar turno</Button>
+            </div>
+            {deleteId === entry.id && <div className="rounded border border-rose-300 p-3 space-y-3"><p>El turno se ocultará de la agenda y liberará el horario. Los datos y cobros se conservan. Podés restaurarlo desde Turnos eliminados.</p><Button disabled={busy} onClick={remove}>{busy ? "Eliminando…" : "Sí, eliminar de la agenda"}</Button><Button variant="ghost" disabled={busy} onClick={() => setDeleteId(null)}>Volver</Button></div>}
+            {error && <p role="alert" className="text-red-700">{error}</p>}
             {(entry.notes ||
               entry.internalNotes ||
               entry.cancellationReason) && (
@@ -164,15 +180,7 @@ export function AppointmentDetailDialog({
                     Completar sin cobro
                   </Button>
                 )}
-                {entry.status !== "cancelled" && (
-                  <Button
-                    variant="outline"
-                    className="text-rose-700"
-                    onClick={() => onStatusChange(entry, "cancelled")}
-                  >
-                    Cancelar turno
-                  </Button>
-                )}
+
               </div>
             </details>
           </>

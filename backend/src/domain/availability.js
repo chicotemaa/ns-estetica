@@ -46,6 +46,7 @@ function availableSlots({
   staffHours,
   assignments,
   appointments,
+  blocks = [],
   settings,
   timeZone,
   ignoreId,
@@ -109,9 +110,15 @@ function availableSlots({
   const breaks = [businessDay, employeeDay]
     .map((day) => [minutes(day.break_start_time), minutes(day.break_end_time)])
     .filter(([from, to]) => from !== null && to !== null && to > from);
+  for (const block of blocks) {
+    if (block.block_date === date && (!block.staff_member_id || String(block.staff_member_id) === String(staff.id))) {
+      const from = minutes(block.start_time), to = minutes(block.end_time);
+      if (from !== null && to !== null && to > from) breaks.push([from, to]);
+    }
+  }
   const busy = appointments.filter(
     (item) =>
-      item.id !== ignoreId &&
+      !item.deleted_at && item.id !== ignoreId &&
       item.staff_member_id === staff.id &&
       item.appointment_date === date &&
       ['pending', 'confirmed', 'completed'].includes(item.status),

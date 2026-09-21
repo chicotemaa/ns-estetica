@@ -469,6 +469,9 @@
       },
       "checkout_total": {
         "attribute": "checkout_total"
+      },
+      "deleted_at": {
+        "attribute": "deleted_at"
       }
     }
   },
@@ -956,6 +959,32 @@
       },
       "actor": {
         "attribute": "actor"
+      }
+    }
+  },
+  "schedule_blocks": {
+    "uid": "api::schedule-block.schedule-block",
+    "fields": {
+      "business_id": {
+        "attribute": "business",
+        "target": "businesses",
+        "required": true
+      },
+      "staff_member_id": {
+        "attribute": "staff_member",
+        "target": "staff_members"
+      },
+      "block_date": {
+        "attribute": "block_date"
+      },
+      "start_time": {
+        "attribute": "start_time"
+      },
+      "end_time": {
+        "attribute": "end_time"
+      },
+      "reason": {
+        "attribute": "reason"
       }
     }
   }

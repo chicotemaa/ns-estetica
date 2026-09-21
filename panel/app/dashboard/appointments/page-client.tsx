@@ -1,5 +1,6 @@
 "use client";
 
+import { ScheduleTools, type ScheduleBlock } from "./_components/schedule-tools";
 import { useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
@@ -100,10 +101,12 @@ export function AppointmentsPageClient({
   timeZone,
   todayKey,
 }: AppointmentsPageClientProps) {
+  const [scheduleBlocks, setScheduleBlocks] = useState<ScheduleBlock[]>([]);
   const isMobile = useIsMobile();
   const [isDetailOpen, setIsDetailOpen] = useState(Boolean(initialAppointmentId));
   const detailTriggerRef = useRef<HTMLElement | null>(null);
   const controller = useAppointmentsController({
+    blocks: scheduleBlocks,
     initialViewMode,
     initialDateKey,
     initialAppointmentId,
@@ -337,6 +340,7 @@ export function AppointmentsPageClient({
         </CardContent>
       </Card>
 
+      <ScheduleTools date={controller.selectedDateKey} staff={staffMembers} onBlocks={setScheduleBlocks}/>
       <div className="agenda-workspace" data-view={controller.viewMode}>
         <Card
           className={
@@ -357,6 +361,7 @@ export function AppointmentsPageClient({
           </CardHeader>
           <CardContent>
             <AppointmentsCalendar
+              blocks={scheduleBlocks}
               appointments={controller.visibleAppointments}
               bookingSettings={bookingSettings}
               onOpenDay={controller.openDay}

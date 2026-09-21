@@ -244,6 +244,7 @@ async function main() {
     const afterBooking = await call(`/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`);
     assert.ok(!afterBooking.body.times.includes(bookingPayload.appointmentTime));
     console.log("PASS: automatic confirmation, persisted client history, idempotency and occupied slot.");
+    await require("./agenda-crud-checks")({ app, call, token: managerToken, businessId: saved.business_id, appointmentId: persistedBooking.id, date: dateKey, serviceId: fixtureService.id, time: bookingPayload.appointmentTime });
 
     assert.ok(saved.password_hash.startsWith("scrypt:"));
     assert.ok(!saved.password_hash.includes(input.password));

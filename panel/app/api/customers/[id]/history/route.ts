@@ -19,7 +19,7 @@ export async function GET(
     );
   const [appointments, payments] = await Promise.all([
     backend
-      .from("appointments")
+      .from("appointments").withDeleted()
       .eq("customer_id", id)
       .order("appointment_date", { ascending: false }),
     backend
@@ -36,6 +36,7 @@ export async function GET(
     {
       visits: (appointments.data || []).map((a) => ({
         id: a.id,
+        deletedAt: a.deleted_at,
         date: a.appointment_date,
         time: a.appointment_time,
         service: a.service_name_snapshot,

@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_schedule_blocks",
+  "info": {
+    "singularName": "schedule-block",
+    "pluralName": "schedule-blocks",
+    "displayName": "Bloqueos de agenda"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "staff_member": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::staff-member.staff-member"
+    },
+    "block_date": {
+      "type": "date",
+      "required": true
+    },
+    "start_time": {
+      "type": "time",
+      "required": true
+    },
+    "end_time": {
+      "type": "time",
+      "required": true
+    },
+    "reason": {
+      "type": "string",
+      "maxLength": 200
+    }
+  }
+}

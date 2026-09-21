@@ -1,5 +1,6 @@
 "use client";
 
+import type { ScheduleBlock } from "./schedule-tools";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -240,6 +241,7 @@ function getTimeValueFromDate(date: Date) {
 }
 
 interface AppointmentsCalendarProps {
+  blocks?: ScheduleBlock[];
   appointments: AgendaEntry[];
   bookingSettings: BookingSettingsRecord;
   businessHours: BusinessHourRecord[];
@@ -262,6 +264,7 @@ interface AppointmentsCalendarProps {
 }
 
 export function AppointmentsCalendar({
+  blocks = [],
   appointments,
   bookingSettings,
   businessHours,
@@ -426,6 +429,7 @@ export function AppointmentsCalendar({
   }
 
   function handleEventClick(info: EventClickArg) {
+    if (info.event.id.startsWith("block:")) return;
     info.el.focus({ preventScroll: true });
     const appointmentId = info.event.id;
     const dateKey = info.event.start
@@ -562,7 +566,7 @@ export function AppointmentsCalendar({
           navLinkDayClick={(date) => onOpenDay(getDateKeyFromDate(date))}
           eventOrder="start,-duration,title"
           eventOrderStrict
-          events={[...events, ...breakBackgroundEvents]}
+          events={[...events, ...breakBackgroundEvents, ...blocks.filter(b => !selectedStaffId || !b.staff_member_id || b.staff_member_id === selectedStaffId).map(b => ({ id: `block:${b.id}`, title: `Bloqueado · ${b.reason}`, start: `${b.block_date}T${b.start_time}`, end: `${b.block_date}T${b.end_time}`, editable: false, backgroundColor: "#92400e", borderColor: "#78350f", textColor: "#ffffff", classNames: ["schedule-block-event"] }))]}
           businessHours={businessHoursConfig}
           dateClick={handleDateClick}
           eventClick={handleEventClick}

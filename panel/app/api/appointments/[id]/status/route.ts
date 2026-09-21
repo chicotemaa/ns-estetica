@@ -64,7 +64,7 @@ export async function PATCH(
 
   if (error) {
     return NextResponse.json(
-      { error: "No se pudo actualizar el estado del turno." },
+      { error: error.message || "No se pudo actualizar el estado del turno." },
       { status: 500 },
     );
   }

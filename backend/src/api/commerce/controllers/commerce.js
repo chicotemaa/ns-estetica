@@ -307,7 +307,7 @@ module.exports = {
     const repo = repository(strapi, business.id);
     const result =
       operation === "select"
-        ? await repo.read(resource, filters, order)
+        ? await repo.read(resource, filters, order, ctx.request.body?.includeDeleted === true)
         : await locked(strapi, business.id, () =>
             repo.mutate(resource, operation, data, filters, onConflict),
           );

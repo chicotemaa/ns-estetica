@@ -122,6 +122,9 @@
     "checkout_total": {
       "type": "decimal",
       "min": 0
+    },
+    "deleted_at": {
+      "type": "datetime"
     }
   }
 }

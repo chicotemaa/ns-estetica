@@ -91,7 +91,7 @@ export async function PATCH(
 
   if (error) {
     return NextResponse.json(
-      { error: "No se pudo actualizar el turno." },
+      { error: error.message || "No se pudo actualizar el turno." },
       { status: 500 },
     );
   }
@@ -124,4 +124,12 @@ export async function PATCH(
   }
 
   return NextResponse.json({ appointment: appointmentResult.data });
+}
+
+export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
+  const businessResult = await getManagedBusiness();
+  if (!businessResult.data) return NextResponse.json({ error: businessResult.error }, { status: 401 });
+  const { id } = await context.params;
+  const result = await businessResult.data.backend.from("appointments").delete().eq("id", id);
+  return NextResponse.json(result.error ? { error: result.error.message } : { ok: true }, { status: result.error ? 400 : 200 });
 }

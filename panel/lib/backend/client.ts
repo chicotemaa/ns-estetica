@@ -16,6 +16,8 @@ type Result<T> = { data: T | null; error: BackendError | null };
 
 class Query<T = Row[]> implements PromiseLike<Result<T>> {
   private operation = "select";
+  private includeDeleted = false;
+  withDeleted() { this.includeDeleted = true; return this; }
   private payload: unknown;
   private filters: Filter[] = [];
   private ordering: { field: string; ascending: boolean }[] = [];
@@ -96,6 +98,7 @@ class Query<T = Row[]> implements PromiseLike<Result<T>> {
         },
         body: JSON.stringify({
           resource: this.resource,
+          includeDeleted: this.includeDeleted,
           operation: this.operation,
           data: this.payload,
           filters: this.filters,
