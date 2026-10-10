@@ -116,6 +116,9 @@
       },
       "source_ref": {
         "attribute": "source_ref"
+      },
+      "zone_pricing": {
+        "attribute": "zone_pricing"
       }
     }
   },
@@ -472,6 +475,12 @@
       },
       "deleted_at": {
         "attribute": "deleted_at"
+      },
+      "pricing_snapshot": {
+        "attribute": "pricing_snapshot"
+      },
+      "zone_selection": {
+        "attribute": "zone_selection"
       }
     }
   },

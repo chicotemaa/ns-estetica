@@ -191,13 +191,25 @@ async function main() {
     assert.equal(registered.body.account.password_hash, undefined);
     const oldToken = registered.body.sessionToken;
     const sessionBooking = await call("/public/password-fixture/bookings", {
-      method: "POST", token: oldToken, body: "{}",
+      method: "POST",
+      token: oldToken,
+      body: "{}",
     });
-    assert.equal(sessionBooking.status, 400, "authenticated request reaches booking validation");
+    assert.equal(
+      sessionBooking.status,
+      400,
+      "authenticated request reaches booking validation",
+    );
     const expiredBooking = await call("/public/password-fixture/bookings", {
-      method: "POST", token: "invalid-session", body: "{}",
+      method: "POST",
+      token: "invalid-session",
+      body: "{}",
     });
-    assert.equal(expiredBooking.status, 401, "invalid customer sessions cannot book as an account");
+    assert.equal(
+      expiredBooking.status,
+      401,
+      "invalid customer sessions cannot book as an account",
+    );
 
     const authDomain = require("../src/domain/customer-auth");
     const saved = await app.db
@@ -205,46 +217,159 @@ async function main() {
       .findOne({ where: { email: "client@example.test" } });
     const { bookingCustomer } = require("../src/domain/booking-customer");
     const { locked } = require("../src/domain/booking");
-    const customerInput = { clientName: "Cliente uno", contactInfo: "@cliente", customerEmail: "CLIENT@example.test" };
-    const resolveCustomer = (data, account) => locked(app, saved.business_id, () => bookingCustomer(app, saved.business_id, data, account));
+    const customerInput = {
+      clientName: "Cliente uno",
+      contactInfo: "@cliente",
+      customerEmail: "CLIENT@example.test",
+    };
+    const resolveCustomer = (data, account) =>
+      locked(app, saved.business_id, () =>
+        bookingCustomer(app, saved.business_id, data, account),
+      );
     const firstCustomer = await resolveCustomer(customerInput);
-    const repeatCustomer = await resolveCustomer({ ...customerInput, contactInfo: "+543621234567", customerEmail: "client@example.test" });
-    assert.equal(firstCustomer.id, repeatCustomer.id, "same email reuses client even with a different contact");
-    const accountCustomer = await resolveCustomer({ ...customerInput, customerEmail: "spoof@example.test" }, saved);
-    assert.equal(accountCustomer.id, firstCustomer.id, "authenticated identity uses account email");
-    const linkedAccount = await app.db.query(authDomain.ACCOUNT).findOne({ where: { id: saved.id } });
+    const repeatCustomer = await resolveCustomer({
+      ...customerInput,
+      contactInfo: "+543621234567",
+      customerEmail: "client@example.test",
+    });
+    assert.equal(
+      firstCustomer.id,
+      repeatCustomer.id,
+      "same email reuses client even with a different contact",
+    );
+    const accountCustomer = await resolveCustomer(
+      { ...customerInput, customerEmail: "spoof@example.test" },
+      saved,
+    );
+    assert.equal(
+      accountCustomer.id,
+      firstCustomer.id,
+      "authenticated identity uses account email",
+    );
+    const linkedAccount = await app.db
+      .query(authDomain.ACCOUNT)
+      .findOne({ where: { id: saved.id } });
     assert.equal(linkedAccount.customer_id, firstCustomer.id);
-    const sharedPhone = await resolveCustomer({ ...customerInput, customerEmail: "different@example.test" });
-    assert.notEqual(sharedPhone.id, firstCustomer.id, "different emails sharing contact stay separate");
-    const preserved = await app.db.query("api::customer.customer").findOne({ where: { id: firstCustomer.id } });
+    const sharedPhone = await resolveCustomer({
+      ...customerInput,
+      customerEmail: "different@example.test",
+    });
+    assert.notEqual(
+      sharedPhone.id,
+      firstCustomer.id,
+      "different emails sharing contact stay separate",
+    );
+    const preserved = await app.db
+      .query("api::customer.customer")
+      .findOne({ where: { id: firstCustomer.id } });
     assert.equal(preserved.full_name, "Cliente uno");
-    const customerCount = await app.db.query("api::customer.customer").count({ where: { business: { id: saved.business_id } } });
-    const repeated = await Promise.all(Array.from({ length: 3 }, () => resolveCustomer(customerInput)));
-    assert.ok(repeated.every(row => row.id === firstCustomer.id));
-    assert.equal(await app.db.query("api::customer.customer").count({ where: { business: { id: saved.business_id } } }), customerCount);
-    console.log("PASS: email deduplication, account linking, shared contacts and concurrent reuse.");
+    const customerCount = await app.db
+      .query("api::customer.customer")
+      .count({ where: { business: { id: saved.business_id } } });
+    const repeated = await Promise.all(
+      Array.from({ length: 3 }, () => resolveCustomer(customerInput)),
+    );
+    assert.ok(repeated.every((row) => row.id === firstCustomer.id));
+    assert.equal(
+      await app.db
+        .query("api::customer.customer")
+        .count({ where: { business: { id: saved.business_id } } }),
+      customerCount,
+    );
+    console.log(
+      "PASS: email deduplication, account linking, shared contacts and concurrent reuse.",
+    );
     const { resources } = require("../src/domain/repository");
-    const fixtureService = await app.documents(resources.services.uid).create({ data: { business: saved.business_id, name: "Automatic confirmation fixture", duration_minutes: 45, price: 100, is_active: true, booking_enabled: true } });
+    const fixtureService = await app
+      .documents(resources.services.uid)
+      .create({
+        data: {
+          business: saved.business_id,
+          name: "Automatic confirmation fixture",
+          duration_minutes: 45,
+          price: 100,
+          is_active: true,
+          booking_enabled: true,
+        },
+      });
     const fixtureDate = new Date();
     fixtureDate.setUTCDate(fixtureDate.getUTCDate() + 3);
-    while ([0, 1].includes(fixtureDate.getUTCDay())) fixtureDate.setUTCDate(fixtureDate.getUTCDate() + 1);
+    while ([0, 1].includes(fixtureDate.getUTCDay()))
+      fixtureDate.setUTCDate(fixtureDate.getUTCDate() + 1);
     const dateKey = fixtureDate.toISOString().slice(0, 10);
-    const slots = await call(`/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`);
+    const slots = await call(
+      `/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`,
+    );
     assert.ok(slots.body.times.length);
-    const bookingPayload = { clientName: input.name, contactInfo: input.phone, customerEmail: input.email.trim(), serviceId: String(fixtureService.id), appointmentDate: dateKey, appointmentTime: slots.body.times[0] };
-    const bookingHeaders = { "Idempotency-Key": require("node:crypto").randomUUID() };
-    const confirmed = await call("/public/password-fixture/bookings", { method: "POST", token: oldToken, headers: bookingHeaders, body: JSON.stringify(bookingPayload) });
+    const bookingPayload = {
+      clientName: input.name,
+      contactInfo: input.phone,
+      customerEmail: input.email.trim(),
+      serviceId: String(fixtureService.id),
+      appointmentDate: dateKey,
+      appointmentTime: slots.body.times[0],
+    };
+    const bookingHeaders = {
+      "Idempotency-Key": require("node:crypto").randomUUID(),
+    };
+    const confirmed = await call("/public/password-fixture/bookings", {
+      method: "POST",
+      token: oldToken,
+      headers: bookingHeaders,
+      body: JSON.stringify(bookingPayload),
+    });
     assert.equal(confirmed.status, 200, JSON.stringify(confirmed.body));
     assert.equal(confirmed.body.status, "confirmed");
-    const replay = await call("/public/password-fixture/bookings", { method: "POST", token: oldToken, headers: bookingHeaders, body: JSON.stringify(bookingPayload) });
+    const replay = await call("/public/password-fixture/bookings", {
+      method: "POST",
+      token: oldToken,
+      headers: bookingHeaders,
+      body: JSON.stringify(bookingPayload),
+    });
     assert.equal(replay.body.createdId, confirmed.body.createdId);
-    const persistedBooking = await app.db.query(resources.appointments.uid).findOne({ where: { documentId: confirmed.body.createdId }, populate: ["customer"] });
+    const persistedBooking = await app.db
+      .query(resources.appointments.uid)
+      .findOne({
+        where: { documentId: confirmed.body.createdId },
+        populate: ["customer"],
+      });
     assert.equal(persistedBooking.status, "confirmed");
     assert.equal(persistedBooking.customer.id, firstCustomer.id);
-    const afterBooking = await call(`/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`);
-    assert.ok(!afterBooking.body.times.includes(bookingPayload.appointmentTime));
-    console.log("PASS: automatic confirmation, persisted client history, idempotency and occupied slot.");
-    await require("./agenda-crud-checks")({ app, call, token: managerToken, businessId: saved.business_id, appointmentId: persistedBooking.id, date: dateKey, serviceId: fixtureService.id, time: bookingPayload.appointmentTime });
+    const afterBooking = await call(
+      `/public/password-fixture/availability?date=${dateKey}&serviceId=${fixtureService.id}`,
+    );
+    assert.ok(
+      !afterBooking.body.times.includes(bookingPayload.appointmentTime),
+    );
+    console.log(
+      "PASS: automatic confirmation, persisted client history, idempotency and occupied slot.",
+    );
+    await require("./agenda-crud-checks")({
+      app,
+      call,
+      token: managerToken,
+      businessId: saved.business_id,
+      appointmentId: persistedBooking.id,
+      date: dateKey,
+      serviceId: fixtureService.id,
+      time: bookingPayload.appointmentTime,
+    });
+    await require("./google-calendar-integration-checks")({
+      app,
+      call,
+      token: managerToken,
+      businessId: saved.business_id,
+      appointmentId: persistedBooking.id,
+      date: dateKey,
+      serviceId: fixtureService.id,
+    });
+    await require("./zone-pricing-integration-checks")({
+      app,
+      call,
+      token: managerToken,
+      businessId: saved.business_id,
+      date: dateKey,
+    });
 
     assert.ok(saved.password_hash.startsWith("scrypt:"));
     assert.ok(!saved.password_hash.includes(input.password));
@@ -278,24 +403,20 @@ async function main() {
         body: JSON.stringify({ accountId: saved.id, identityConfirmed }),
       });
     assert.equal((await makeRecovery(false)).status, 400);
-    const otherBusiness = await app
-      .documents("api::business.business")
-      .create({
-        data: {
-          name: "Other",
-          slug: "other-fixture",
-          time_zone: "America/Argentina/Buenos_Aires",
-        },
-      });
-    const foreign = await app.db
-      .query(authDomain.ACCOUNT)
-      .create({
-        data: {
-          business_id: otherBusiness.id,
-          email: "other@example.test",
-          email_key: otherBusiness.id + ":other@example.test",
-        },
-      });
+    const otherBusiness = await app.documents("api::business.business").create({
+      data: {
+        name: "Other",
+        slug: "other-fixture",
+        time_zone: "America/Argentina/Buenos_Aires",
+      },
+    });
+    const foreign = await app.db.query(authDomain.ACCOUNT).create({
+      data: {
+        business_id: otherBusiness.id,
+        email: "other@example.test",
+        email_key: otherBusiness.id + ":other@example.test",
+      },
+    });
     assert.equal(
       (
         await call("/backoffice/customer-recovery", {
@@ -341,12 +462,10 @@ async function main() {
       200,
     );
     const expired = await makeRecovery(true);
-    await app.db
-      .query(authDomain.ACCOUNT)
-      .update({
-        where: { id: saved.id },
-        data: { recovery_expires_at: new Date(Date.now() - 1).toISOString() },
-      });
+    await app.db.query(authDomain.ACCOUNT).update({
+      where: { id: saved.id },
+      data: { recovery_expires_at: new Date(Date.now() - 1).toISOString() },
+    });
     assert.equal(
       (
         await post("/customer/reset", {

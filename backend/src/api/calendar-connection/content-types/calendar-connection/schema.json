@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "na_calendar_connections",
+  "info": {
+    "singularName": "calendar-connection",
+    "pluralName": "calendar-connections",
+    "displayName": "Calendar connection"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "business_key": { "type": "string", "unique": true, "required": true },
+    "credentials": { "type": "text", "private": true },
+    "oauth_pending": { "type": "json", "private": true },
+    "calendar_id": { "type": "string" },
+    "calendar_name": { "type": "string" },
+    "enabled": { "type": "boolean", "default": false },
+    "state": { "type": "json", "private": true },
+    "last_sync": { "type": "datetime" },
+    "last_error": { "type": "string" }
+  }
+}

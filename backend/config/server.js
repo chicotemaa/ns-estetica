@@ -7,6 +7,18 @@ module.exports = ({ env }) => ({
   cron: {
     enabled: true,
     tasks: {
+      googleCalendar: {
+        task: async ({ strapi }) => {
+          try {
+            await require("../src/domain/google-calendar").maintain(strapi);
+          } catch {
+            strapi.log.error(
+              "No se pudo sincronizar Google Calendar. Revisar el estado en Configuración.",
+            );
+          }
+        },
+        options: { rule: "*/2 * * * *" },
+      },
       customerBookings: {
         task: async ({ strapi }) => {
           try {

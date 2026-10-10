@@ -87,6 +87,9 @@ async function start(
   const allowed = [
     "serviceId",
     "serviceVariantId",
+    "zoneIds",
+    "fullBody",
+    "quoteTotalCents",
     "staffMemberId",
     "appointmentDate",
     "appointmentTime",
@@ -153,6 +156,7 @@ async function start(
       await schedule(strapi, business.id, form.appointmentDate),
       form.serviceId,
       form.serviceVariantId,
+      form,
     );
     const choice = choices(
       state,
@@ -204,6 +208,8 @@ async function start(
           service_name_snapshot: service.name,
           staff_name_snapshot: choice.staff.full_name,
           price_snapshot: total / 100,
+          pricing_snapshot: service.zone_quote || null,
+          zone_selection: service.zone_quote?.selection || null,
           duration_snapshot: service.duration_minutes,
         },
       },

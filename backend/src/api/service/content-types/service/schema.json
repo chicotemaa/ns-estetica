@@ -62,6 +62,9 @@
     "source_ref": {
       "type": "string",
       "unique": true
+    },
+    "zone_pricing": {
+      "type": "json"
     }
   }
 }

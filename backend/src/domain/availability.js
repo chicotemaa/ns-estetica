@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
 function minutes(value) {
   if (
-    typeof value !== 'string' ||
+    typeof value !== "string" ||
     !/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?$/.test(value)
   )
     return null;
   return Number(value.slice(0, 2)) * 60 + Number(value.slice(3, 5));
 }
 function validDate(value) {
-  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value))
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value))
     return false;
   const date = new Date(`${value}T12:00:00Z`);
   return (
@@ -18,14 +18,14 @@ function validDate(value) {
 }
 function localNow(timeZone, now = new Date()) {
   const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-CA', {
+    new Intl.DateTimeFormat("en-CA", {
       timeZone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23',
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
     })
       .formatToParts(now)
       .map(({ type, value }) => [type, value]),
@@ -65,6 +65,13 @@ function availableSlots({
   )
     return [];
   const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
+  const zoneRules = service.zone_pricing;
+  if (
+    zoneRules &&
+    !zoneRules.dates.includes(date) &&
+    !zoneRules.weekdays.includes(weekday)
+  )
+    return [];
   const businessDay = hours.find((day) => day.day_of_week === weekday);
   if (!businessDay?.is_open) return [];
   const employeeDays = staffHours.filter(
@@ -93,8 +100,16 @@ function availableSlots({
     employeeDay.end_time,
   ].map(minutes);
   if (boundaries.some((value) => value === null)) return [];
-  const start = Math.max(boundaries[0], boundaries[2]);
-  const end = Math.min(boundaries[1], boundaries[3]);
+  const start = Math.max(
+    boundaries[0],
+    boundaries[2],
+    zoneRules?.opens ? minutes(zoneRules.opens) : 0,
+  );
+  const end = Math.min(
+    boundaries[1],
+    boundaries[3],
+    zoneRules?.closes ? minutes(zoneRules.closes) : 1440,
+  );
   const duration = Number(service.duration_minutes);
   const interval = Number(settings.slot_interval_minutes);
   const buffer = Number(settings.buffer_between_appointments_minutes);
@@ -111,17 +126,23 @@ function availableSlots({
     .map((day) => [minutes(day.break_start_time), minutes(day.break_end_time)])
     .filter(([from, to]) => from !== null && to !== null && to > from);
   for (const block of blocks) {
-    if (block.block_date === date && (!block.staff_member_id || String(block.staff_member_id) === String(staff.id))) {
-      const from = minutes(block.start_time), to = minutes(block.end_time);
+    if (
+      block.block_date === date &&
+      (!block.staff_member_id ||
+        String(block.staff_member_id) === String(staff.id))
+    ) {
+      const from = minutes(block.start_time),
+        to = block.end_time === "24:00" ? 1440 : minutes(block.end_time);
       if (from !== null && to !== null && to > from) breaks.push([from, to]);
     }
   }
   const busy = appointments.filter(
     (item) =>
-      !item.deleted_at && item.id !== ignoreId &&
+      !item.deleted_at &&
+      item.id !== ignoreId &&
       item.staff_member_id === staff.id &&
       item.appointment_date === date &&
-      ['pending', 'confirmed', 'completed'].includes(item.status),
+      ["pending", "confirmed", "completed"].includes(item.status),
   );
   const results = [];
   for (
@@ -132,7 +153,11 @@ function availableSlots({
     if (
       enforceLead &&
       daysAhead * 1440 + candidate <
-        clock.minutes + Number(settings.lead_time_minutes)
+        clock.minutes +
+          Math.max(
+            Number(settings.lead_time_minutes),
+            Number(zoneRules?.leadMinutes || 0),
+          )
     )
       continue;
     if (
@@ -157,7 +182,7 @@ function availableSlots({
     )
       continue;
     results.push(
-      `${String(Math.floor(candidate / 60)).padStart(2, '0')}:${String(candidate % 60).padStart(2, '0')}`,
+      `${String(Math.floor(candidate / 60)).padStart(2, "0")}:${String(candidate % 60).padStart(2, "0")}`,
     );
   }
   return results;

@@ -125,6 +125,12 @@
     },
     "deleted_at": {
       "type": "datetime"
+    },
+    "pricing_snapshot": {
+      "type": "json"
+    },
+    "zone_selection": {
+      "type": "json"
     }
   }
 }

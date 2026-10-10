@@ -186,7 +186,12 @@ module.exports = {
     ctx.body = {
       businessName: business.name,
       onlineBooking:
-        require("../../../domain/customer-config").publicConfiguration(await require("../../../domain/customer-config").resolveConfiguration(strapi, business.id)),
+        require("../../../domain/customer-config").publicConfiguration(
+          await require("../../../domain/customer-config").resolveConfiguration(
+            strapi,
+            business.id,
+          ),
+        ),
       businessSlug: business.slug,
       website: business.website_content || null,
       brand: {
@@ -234,25 +239,57 @@ module.exports = {
       await schedule(strapi, business.id, date),
       serviceId,
       serviceVariantId,
+      {
+        zoneIds:
+          typeof ctx.query.zoneIds === "string" && ctx.query.zoneIds
+            ? ctx.query.zoneIds.split(",")
+            : [],
+        fullBody: ctx.query.fullBody === "true",
+      },
     );
     ctx.set("Cache-Control", "no-store");
-    const times = [...new Set(choices(data, date, serviceId, staffMemberId).flatMap(item => item.slots))].sort();
-    let message = '';
+    const times = [
+      ...new Set(
+        choices(data, date, serviceId, staffMemberId).flatMap(
+          (item) => item.slots,
+        ),
+      ),
+    ].sort();
+    let message = "";
     if (!times.length) {
-      const clock = require("../../../domain/availability").localNow(data.timeZone);
-      const daysAhead = Math.round((Date.parse(`${date}T12:00:00Z`) - Date.parse(`${clock.date}T12:00:00Z`)) / 86400000);
-      const day = data.hours.find(item => item.day_of_week === new Date(`${date}T12:00:00Z`).getUTCDay());
-      if (daysAhead < 0) message = 'Elegí una fecha de hoy en adelante.';
-      else if (daysAhead > data.settings.max_booking_days_in_advance) message = `Podés reservar hasta ${data.settings.max_booking_days_in_advance} días de anticipación. Elegí una fecha más cercana.`;
-      else if (!day?.is_open) message = 'El local está cerrado ese día. Elegí otra fecha.';
-      else message = 'No hay horarios disponibles para este tratamiento y profesional en esa fecha. Probá con otro día o sin preferencia de profesional.';
+      const clock = require("../../../domain/availability").localNow(
+        data.timeZone,
+      );
+      const daysAhead = Math.round(
+        (Date.parse(`${date}T12:00:00Z`) -
+          Date.parse(`${clock.date}T12:00:00Z`)) /
+          86400000,
+      );
+      const day = data.hours.find(
+        (item) =>
+          item.day_of_week === new Date(`${date}T12:00:00Z`).getUTCDay(),
+      );
+      if (daysAhead < 0) message = "Elegí una fecha de hoy en adelante.";
+      else if (daysAhead > data.settings.max_booking_days_in_advance)
+        message = `Podés reservar hasta ${data.settings.max_booking_days_in_advance} días de anticipación. Elegí una fecha más cercana.`;
+      else if (!day?.is_open)
+        message = "El local está cerrado ese día. Elegí otra fecha.";
+      else
+        message =
+          "No hay horarios disponibles para este tratamiento y profesional en esa fecha. Probá con otro día o sin preferencia de profesional.";
     }
     ctx.body = { times, message };
   },
   async booking(ctx) {
     const business = await getBusiness(strapi, ctx.params.slug);
     const token = ctx.request.headers.authorization?.replace(/^Bearer /, "");
-    const account = token ? await require("../../../domain/customer-auth").accountFor(strapi, business.id, token) : null;
+    const account = token
+      ? await require("../../../domain/customer-auth").accountFor(
+          strapi,
+          business.id,
+          token,
+        )
+      : null;
     ctx.body = await bookPublic(
       strapi,
       business,
@@ -307,7 +344,12 @@ module.exports = {
     const repo = repository(strapi, business.id);
     const result =
       operation === "select"
-        ? await repo.read(resource, filters, order, ctx.request.body?.includeDeleted === true)
+        ? await repo.read(
+            resource,
+            filters,
+            order,
+            ctx.request.body?.includeDeleted === true,
+          )
         : await locked(strapi, business.id, () =>
             repo.mutate(resource, operation, data, filters, onConflict),
           );

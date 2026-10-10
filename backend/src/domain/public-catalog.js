@@ -10,6 +10,7 @@ function publicServices(services, variants) {
       category: service.category || "tratamiento",
       durationMinutes: service.duration_minutes || null,
       price: Number(service.price),
+      zonePricing: service.zone_pricing || null,
       bookingEnabled:
         service.booking_enabled !== false &&
         Number(service.duration_minutes) > 0,
@@ -28,7 +29,9 @@ function publicServices(services, variants) {
 }
 
 // A variant must belong to this active service. Never trust a price or duration from the browser.
-function withVariant(data, serviceId, variantId) {
+function withVariant(data, serviceId, variantId, zoneSelection) {
+  if (data.services.find((s) => s.id === String(serviceId))?.zone_pricing)
+    return require("./zone-pricing").apply(data, serviceId, zoneSelection);
   if (!variantId) {
     const variants = data.variants.filter(
       (item) => item.service_id === String(serviceId) && item.is_active,
