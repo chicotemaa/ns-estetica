@@ -11,7 +11,12 @@ export type PaymentMethod =
   | "transfer"
   | "mercado_pago"
   | "other";
-export type PaymentStatus = "pending" | "completed" | "failed" | "refunded" | "voided";
+export type PaymentStatus =
+  | "pending"
+  | "completed"
+  | "failed"
+  | "refunded"
+  | "voided";
 export type ServiceCategory = "corte" | "coloraciones" | "tratamiento";
 export type StaffCompensationType = "hourly" | "category_percentage";
 
@@ -44,6 +49,7 @@ export interface BookingSettingsRecord {
 }
 
 export interface ServiceRecord {
+  zonePricing?: import("./zone-pricing").ZonePricing | null;
   bookingEnabled?: boolean;
   id: string;
   name: string;
@@ -101,6 +107,8 @@ export interface StaffCategoryRateRecord {
 }
 
 export interface AppointmentRecord {
+  pricingSnapshot?: import("./zone-pricing").ZoneQuote | null;
+  zoneSelection?: import("./zone-pricing").ZoneSelection | null;
   arrivedAt?: string | null;
   startedAt?: string | null;
   finishedAt?: string | null;

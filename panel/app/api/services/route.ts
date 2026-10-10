@@ -1,40 +1,50 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { getManagedBusiness, parseServicePayload, type ServicePayload } from "@/lib/service-management"
+import {
+  getManagedBusiness,
+  parseServicePayload,
+  type ServicePayload,
+} from "@/lib/service-management";
 
 function badRequest(message: string) {
-  return NextResponse.json({ error: message }, { status: 400 })
+  return NextResponse.json({ error: message }, { status: 400 });
 }
 
 export async function POST(request: Request) {
-  const businessResult = await getManagedBusiness()
+  const businessResult = await getManagedBusiness();
 
   if (businessResult.error || !businessResult.data) {
-    return NextResponse.json({ error: businessResult.error ?? "No se pudo resolver el negocio." }, { status: 500 })
+    return NextResponse.json(
+      { error: businessResult.error ?? "No se pudo resolver el negocio." },
+      { status: 500 },
+    );
   }
 
-  const payload = (await request.json()) as ServicePayload
-  const parsed = parseServicePayload(payload)
+  const payload = (await request.json()) as ServicePayload;
+  const parsed = parseServicePayload(payload);
 
   if (parsed.error || !parsed.data) {
-    return badRequest(parsed.error ?? "Solicitud inválida.")
+    return badRequest(parsed.error ?? "Solicitud inválida.");
   }
 
-  const { backend, business } = businessResult.data
+  const { backend, business } = businessResult.data;
 
   const { data: existingService, error: existingError } = await backend
     .from("services")
     .select("id")
     .eq("business_id", business.id)
     .ilike("name", parsed.data.name)
-    .maybeSingle()
+    .maybeSingle();
 
   if (existingError) {
-    return NextResponse.json({ error: "No se pudo validar si el servicio ya existe." }, { status: 500 })
+    return NextResponse.json(
+      { error: "No se pudo validar si el servicio ya existe." },
+      { status: 500 },
+    );
   }
 
   if (existingService) {
-    return badRequest("Ya existe un servicio con ese nombre.")
+    return badRequest("Ya existe un servicio con ese nombre.");
   }
 
   const { data, error } = await backend
@@ -42,6 +52,7 @@ export async function POST(request: Request) {
     .insert({
       business_id: business.id,
       name: parsed.data.name,
+      zone_pricing: parsed.data.zonePricing || null,
       description: parsed.data.description,
       duration_minutes: parsed.data.durationMinutes,
       price: parsed.data.price,
@@ -50,11 +61,16 @@ export async function POST(request: Request) {
       booking_enabled: parsed.data.bookingEnabled,
       updated_at: new Date().toISOString(),
     })
-    .select("id, name, description, duration_minutes, price, is_active, category")
-    .single()
+    .select(
+      "id, name, description, duration_minutes, price, is_active, category",
+    )
+    .single();
 
   if (error || !data) {
-    return NextResponse.json({ error: "No se pudo crear el servicio." }, { status: 500 })
+    return NextResponse.json(
+      { error: error?.message || "No se pudo crear el servicio." },
+      { status: 400 },
+    );
   }
 
   await backend.from("service_price_variants").insert({
@@ -68,7 +84,7 @@ export async function POST(request: Request) {
     display_order: 1,
     notes: "Variante base creada desde el CRUD del backoffice.",
     updated_at: new Date().toISOString(),
-  })
+  });
 
-  return NextResponse.json({ service: data }, { status: 201 })
+  return NextResponse.json({ service: data }, { status: 201 });
 }

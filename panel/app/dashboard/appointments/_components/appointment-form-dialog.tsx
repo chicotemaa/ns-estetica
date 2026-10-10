@@ -1,4 +1,5 @@
 "use client";
+import { AppointmentZones } from "./appointment-zones";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,7 @@ import {
   getChannelLabel,
   getStatusLabel,
   type AppointmentStatus,
+  type AppointmentRecord,
   type BookingChannel,
   type CustomerRecord,
   type ServiceRecord,
@@ -34,7 +36,7 @@ import {
 import type { AppointmentFormState } from "../appointment-types";
 
 interface AppointmentFormDialogProps {
-  appointmentBeingEdited: { id: string } | null;
+  appointmentBeingEdited: AppointmentRecord | null;
   availableTimeOptions: string[];
   customers: CustomerRecord[];
   errorMessage: string | null;
@@ -184,7 +186,10 @@ export function AppointmentFormDialog({
                 <Label>Servicio</Label>
                 <Select
                   value={formState.serviceId}
-                  onValueChange={(value) => onUpdateField("serviceId", value)}
+                  onValueChange={(value) => {
+                    onUpdateField("serviceId", value);
+                    onUpdateField("zoneSelection", null);
+                  }}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar servicio" />
@@ -203,6 +208,18 @@ export function AppointmentFormDialog({
                     {formatCurrency(selectedService.price)}
                   </p>
                 ) : null}
+                {selectedService?.zonePricing && (
+                  <AppointmentZones
+                    config={selectedService.zonePricing}
+                    original={
+                      appointmentBeingEdited?.serviceId === selectedService.id
+                        ? appointmentBeingEdited.pricingSnapshot
+                        : null
+                    }
+                    value={formState.zoneSelection}
+                    onChange={(s) => onUpdateField("zoneSelection", s)}
+                  />
+                )}
               </div>
 
               <div className="space-y-2">

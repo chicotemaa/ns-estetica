@@ -1,4 +1,10 @@
 import "server-only";
+import {
+  estimateZones,
+  sameZoneSelection,
+  type ZonePricing,
+  type ZoneSelection,
+} from "./zone-pricing";
 
 import type {
   AppointmentRecord,
@@ -25,6 +31,7 @@ import {
 } from "@/lib/schedule-schema";
 
 export interface AppointmentPayload {
+  zoneSelection?: ZoneSelection | null;
   customerId?: unknown;
   customerName?: unknown;
   customerContact?: unknown;
@@ -46,6 +53,7 @@ export interface AppointmentStatusPayload {
 }
 
 export interface ParsedAppointmentPayload {
+  zoneSelection?: ZoneSelection | null;
   customerId: string | null;
   customerName: string;
   customerContact: string;
@@ -62,6 +70,8 @@ export interface ParsedAppointmentPayload {
 }
 
 interface BackendAppointmentMutationRow {
+  pricing_snapshot?: import("./zone-pricing").ZoneQuote | null;
+  zone_selection?: ZoneSelection | null;
   id: string;
   customer_id: string | null;
   customer_name: string;
@@ -129,6 +139,8 @@ function mapAppointmentRow(
     channel: row.channel,
     serviceId: row.service_id,
     serviceName: row.service_name_snapshot,
+    zoneSelection: row.zone_selection || null,
+    pricingSnapshot: row.pricing_snapshot || null,
     staffMemberId: row.staff_member_id,
     staffName: row.staff_name_snapshot,
     price: Number(row.checkout_total ?? row.price_snapshot),
@@ -274,6 +286,7 @@ export function parseAppointmentPayload(payload: AppointmentPayload): {
   return {
     data: {
       customerId,
+      zoneSelection: payload.zoneSelection,
       customerName,
       customerContact,
       customerEmail,
@@ -586,6 +599,32 @@ export async function validateAppointmentPayload(
     return {
       error: "El servicio seleccionado está inactivo. Reactívalo o elige otro.",
     };
+  }
+  if (service.zone_pricing) {
+    const pick = payload.zoneSelection;
+    if (
+      !pick ||
+      !Array.isArray(pick.zoneIds) ||
+      (!pick.fullBody && !pick.zoneIds.length)
+    )
+      return { error: "Seleccioná las zonas de depilación." };
+    const q = estimateZones(service.zone_pricing as ZonePricing, pick);
+    service.price = q.totalCents / 100;
+    if (options?.appointmentIdToIgnore) {
+      const old = await findBusinessAppointment(
+        context,
+        options.appointmentIdToIgnore,
+      );
+      if (
+        old.data?.pricing_snapshot &&
+        old.data.service_id === payload.serviceId &&
+        sameZoneSelection(pick, old.data.pricing_snapshot.selection)
+      ) {
+        service.price = old.data.price_snapshot;
+        service.duration_minutes = old.data.duration_snapshot;
+        service.name = old.data.service_name_snapshot;
+      }
+    }
   }
 
   if (staffError || !staffMember) {

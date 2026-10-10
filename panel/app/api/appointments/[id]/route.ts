@@ -69,6 +69,9 @@ export async function PATCH(
       customer_contact: parsed.data.customerContact,
       customer_email: parsed.data.customerEmail,
       service_id: parsed.data.serviceId,
+      ...(parsed.data.zoneSelection
+        ? { zone_selection: parsed.data.zoneSelection }
+        : {}),
       staff_member_id: parsed.data.staffMemberId,
       appointment_date: parsed.data.appointmentDate,
       appointment_time: parsed.data.appointmentTime,
@@ -107,10 +110,7 @@ export async function PATCH(
     ),
   ]);
 
-  const appointmentResult = await getAppointmentRecord(
-    businessResult.data,
-    id,
-  );
+  const appointmentResult = await getAppointmentRecord(businessResult.data, id);
 
   if (appointmentResult.error || !appointmentResult.data) {
     return NextResponse.json(
@@ -126,10 +126,20 @@ export async function PATCH(
   return NextResponse.json({ appointment: appointmentResult.data });
 }
 
-export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  _request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
   const businessResult = await getManagedBusiness();
-  if (!businessResult.data) return NextResponse.json({ error: businessResult.error }, { status: 401 });
+  if (!businessResult.data)
+    return NextResponse.json({ error: businessResult.error }, { status: 401 });
   const { id } = await context.params;
-  const result = await businessResult.data.backend.from("appointments").delete().eq("id", id);
-  return NextResponse.json(result.error ? { error: result.error.message } : { ok: true }, { status: result.error ? 400 : 200 });
+  const result = await businessResult.data.backend
+    .from("appointments")
+    .delete()
+    .eq("id", id);
+  return NextResponse.json(
+    result.error ? { error: result.error.message } : { ok: true },
+    { status: result.error ? 400 : 200 },
+  );
 }

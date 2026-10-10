@@ -11,6 +11,7 @@ import {
 import type { ServiceCategory } from "@/lib/business-shared";
 
 export interface ServicePayload {
+  zonePricing?: unknown;
   name?: unknown;
   description?: unknown;
   price?: unknown;
@@ -21,6 +22,7 @@ export interface ServicePayload {
 }
 
 export interface ParsedServicePayload {
+  zonePricing?: unknown;
   name: string;
   description: string | null;
   price: number;
@@ -82,6 +84,9 @@ export function parseServicePayload(payload: ServicePayload): {
 
   return {
     data: {
+      ...(payload.zonePricing !== undefined
+        ? { zonePricing: payload.zonePricing }
+        : {}),
       name,
       description: description || null,
       price,

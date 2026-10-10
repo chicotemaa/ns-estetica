@@ -302,6 +302,7 @@ export function createAppointmentFormState(options?: {
   if (appointment) {
     return {
       customerId: appointment.customerId ?? "",
+      zoneSelection: appointment.zoneSelection || null,
       customerName: appointment.customerName,
       customerContact: appointment.customerContact,
       customerEmail: appointment.customerEmail ?? "",

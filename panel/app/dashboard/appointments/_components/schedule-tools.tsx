@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 export type ScheduleBlock = {
+  read_only?: boolean;
   id: string;
   block_date: string;
   start_time: string;
@@ -181,33 +182,37 @@ export function ScheduleTools({
                   {staff.find((s) => s.id === b.staff_member_id)?.fullName ||
                     "Todo el local"}
                 </span>
-                <div className="flex gap-2">
-                  <Button
-                    disabled={busy}
-                    variant="outline"
-                    onClick={() =>
-                      setForm({
-                        id: b.id,
-                        date: b.block_date,
-                        start: b.start_time.slice(0, 5),
-                        end: b.end_time.slice(0, 5),
-                        reason: b.reason,
-                        staffId: b.staff_member_id || "",
-                      })
-                    }
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    disabled={busy}
-                    variant="outline"
-                    onClick={() =>
-                      mutate("/api/schedule-blocks", "DELETE", { id: b.id })
-                    }
-                  >
-                    Quitar bloqueo
-                  </Button>
-                </div>
+                {b.read_only ? (
+                  <span className="text-sm">Editar desde Google Calendar</span>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button
+                      disabled={busy}
+                      variant="outline"
+                      onClick={() =>
+                        setForm({
+                          id: b.id,
+                          date: b.block_date,
+                          start: b.start_time.slice(0, 5),
+                          end: b.end_time.slice(0, 5),
+                          reason: b.reason,
+                          staffId: b.staff_member_id || "",
+                        })
+                      }
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      disabled={busy}
+                      variant="outline"
+                      onClick={() =>
+                        mutate("/api/schedule-blocks", "DELETE", { id: b.id })
+                      }
+                    >
+                      Quitar bloqueo
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
         </div>

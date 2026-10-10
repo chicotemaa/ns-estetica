@@ -52,6 +52,9 @@ export async function POST(request: Request) {
       customer_contact: parsed.data.customerContact,
       customer_email: parsed.data.customerEmail,
       service_id: parsed.data.serviceId,
+      ...(parsed.data.zoneSelection
+        ? { zone_selection: parsed.data.zoneSelection }
+        : {}),
       staff_member_id: parsed.data.staffMemberId,
       appointment_date: parsed.data.appointmentDate,
       appointment_time: parsed.data.appointmentTime,
@@ -74,7 +77,7 @@ export async function POST(request: Request) {
 
   if (error || !data) {
     return NextResponse.json(
-      { error: "No se pudo crear el turno." },
+      { error: error?.message || "No se pudo crear el turno." },
       { status: 500 },
     );
   }

@@ -235,3 +235,20 @@ textarea.booking-input { min-height:84px; resize:vertical; }
 .editable-site .treatment-facts span,.editable-site .treatment-card>a { font-size:14px; font-weight:600; }
 .editable-site .booking-form label { font-size:15px; font-weight:600; }
 .editable-site .booking-input { font-size:16px; font-weight:500; }
+.zone-selector { border: 1px solid #d6b9aa; border-radius: 16px; padding: 18px; margin: 16px 0; min-width: 0; }
+.zone-selector legend { font-weight: 700; padding: 0 8px; }
+.zone-selector p { font-size: .9rem; line-height: 1.6; }
+.zone-options { display: grid; gap: 8px; margin: 16px 0; }
+.zone-selector .zone-choice { display: flex; align-items: center; gap: 10px; border-radius: 9px; padding: 10px; background: #fffaf7; color: #442c22; }
+.zone-choice input { width: 19px; height: 19px; flex: 0 0 auto; accent-color: #865746; }
+.zone-choice span { flex: 1; font-size: .95rem; }
+.zone-choice strong { white-space: nowrap; font-size: .95rem; }
+.zone-choice small { display: block; font-size: .8rem; }
+.zone-selector .zone-package { border: 1px solid #ad7962; background: #f4e2d8; margin-top: 14px; }
+.zone-total { background: #f5e6de; border-radius: 12px; padding: 18px; color: #442c22; }
+.zone-total > div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; }
+.zone-total dd { margin: 0; font-weight: 700; white-space: nowrap; }
+.zone-total .zone-grand-total { border-top: 1px solid #c8a48e; margin-top: 8px; padding-top: 14px; font-size: 1.2rem; font-weight: 700; }
+.zone-estimate summary { cursor: pointer; font-weight: 700; padding: 12px 0; }
+.treatment-card:has(.zone-estimate[open]) { grid-column: 1 / -1; }
+@media (min-width: 760px) { .zone-estimate .zone-options { grid-template-columns: repeat(2,minmax(0,1fr)); } }

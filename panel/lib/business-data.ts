@@ -106,6 +106,7 @@ interface BackendBusinessRow {
 }
 
 interface BackendServiceRow {
+  zone_pricing?: import("./zone-pricing").ZonePricing | null;
   booking_enabled?: boolean;
   id: string;
   name: string;
@@ -139,6 +140,8 @@ interface BackendStaffRow {
 }
 
 interface BackendAppointmentRow {
+  pricing_snapshot?: import("./zone-pricing").ZoneQuote | null;
+  zone_selection?: import("./zone-pricing").ZoneSelection | null;
   arrived_at?: string | null;
   started_at?: string | null;
   finished_at?: string | null;
@@ -368,7 +371,8 @@ function createDemoBundle(): BusinessDataBundle {
     {
       id: "service-facial",
       name: "Tratamiento facial",
-      description: "Cuidado facial personalizado según las necesidades de la piel.",
+      description:
+        "Cuidado facial personalizado según las necesidades de la piel.",
       durationMinutes: 30,
       price: 12000,
       isActive: true,
@@ -743,6 +747,7 @@ function mapBusiness(row: BackendBusinessRow): BusinessRecord {
 
 function mapService(row: BackendServiceRow): ServiceRecord {
   return {
+    zonePricing: row.zone_pricing || null,
     id: row.id,
     name: row.name,
     description: row.description,
@@ -785,6 +790,8 @@ function mapStaff(row: BackendStaffRow): StaffRecord {
 
 function mapAppointment(row: BackendAppointmentRow): AppointmentRecord {
   return {
+    zoneSelection: row.zone_selection || null,
+    pricingSnapshot: row.pricing_snapshot || null,
     arrivedAt: row.arrived_at,
     startedAt: row.started_at,
     finishedAt: row.finished_at,
@@ -1821,4 +1828,3 @@ export async function getBusinessTeamBundle(): Promise<BusinessTeamBundle> {
     throw new Error("No se pudo cargar el negocio desde Strapi.");
   }
 }
-

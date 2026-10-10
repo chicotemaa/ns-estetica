@@ -1,11 +1,15 @@
 "use client";
+import { zoneAllows } from "@/lib/zone-pricing";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import type { ScheduleBlock } from "./_components/schedule-tools";
-import { getAvailableAppointmentTimes, timeStringToMinutes } from "@/lib/appointment-scheduling";
+import {
+  getAvailableAppointmentTimes,
+  timeStringToMinutes,
+} from "@/lib/appointment-scheduling";
 import {
   buildHistoricalAgendaEntries,
   matchesAgendaSource,
@@ -392,10 +396,31 @@ export function useAppointmentsController({
       durationMinutes: selectedService.durationMinutes,
       staffMemberId: formState.staffMemberId,
       staffWorkingHours,
-    }).map((timeValue) => timeValue.slice(0, 5)).filter(time => {
-      const start = timeStringToMinutes(time)!;
-      return !blocks.some(b => b.block_date === formState.appointmentDate && (!b.staff_member_id || b.staff_member_id === formState.staffMemberId) && start < timeStringToMinutes(b.end_time)! && start + selectedService.durationMinutes > timeStringToMinutes(b.start_time)!);
-    });
+    })
+      .map((timeValue) => timeValue.slice(0, 5))
+      .filter((time) => {
+        const start = timeStringToMinutes(time)!;
+        if (
+          selectedService.zonePricing &&
+          !zoneAllows(
+            selectedService.zonePricing,
+            formState.appointmentDate,
+            time,
+            selectedService.durationMinutes,
+            !editingAppointment,
+          )
+        )
+          return false;
+        return !blocks.some(
+          (b) =>
+            b.block_date === formState.appointmentDate &&
+            (!b.staff_member_id ||
+              b.staff_member_id === formState.staffMemberId) &&
+            start < timeStringToMinutes(b.end_time)! &&
+            start + selectedService.durationMinutes >
+              timeStringToMinutes(b.start_time)!,
+        );
+      });
   }, [
     blocks,
     appointmentsState,
@@ -553,6 +578,7 @@ export function useAppointmentsController({
           customerContact: formState.customerContact,
           customerEmail: formState.customerEmail,
           serviceId: formState.serviceId,
+          zoneSelection: formState.zoneSelection,
           staffMemberId: formState.staffMemberId,
           appointmentDate: formState.appointmentDate,
           appointmentTime: formState.appointmentTime,

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getManagedBusiness } from "@/lib/managed-business";
+import { calendarRequest } from "@/lib/google-calendar-server";
 export async function GET() {
   const context = await getManagedBusiness();
   if (!context.data)
@@ -7,8 +8,19 @@ export async function GET() {
   const result = await context.data.backend
     .from("schedule_blocks")
     .order("block_date");
+  let googleBlocks = [];
+  try {
+    googleBlocks = (await calendarRequest("/blocks")).blocks;
+  } catch {
+    return NextResponse.json(
+      { error: "No se pudieron cargar los horarios de Google Calendar." },
+      { status: 503 },
+    );
+  }
   return NextResponse.json(
-    result.error ? { error: result.error.message } : { blocks: result.data },
+    result.error
+      ? { error: result.error.message }
+      : { blocks: [...(result.data || []), ...googleBlocks] },
     { status: result.error ? 400 : 200 },
   );
 }

@@ -7,6 +7,7 @@ import type {
 export type AgendaViewMode = "day" | "week" | "month" | "year";
 
 export interface AppointmentFormState {
+  zoneSelection?: import("@/lib/zone-pricing").ZoneSelection | null;
   customerId: string;
   customerName: string;
   customerContact: string;
