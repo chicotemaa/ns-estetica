@@ -244,14 +244,8 @@ export default function ServiceExperience({
                 alt={`Imagen ilustrativa de ${service.name}`}
                 position={service.imagePosition || "50% 50%"}
               >
-                <span className="photo-action">
-                  Explorar tratamiento{" "}
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 19 19 5M5 5h14v14" />
-                  </svg>
-                </span>
                 {isGeneratedImage(serviceImage(service)) && (
-                  <span className="photo-credit">Ambientación ilustrativa</span>
+                  <span className="photo-credit">Imagen ilustrativa</span>
                 )}
               </VisualImage>
             </button>
@@ -356,7 +350,7 @@ export default function ServiceExperience({
               )}
               <span className="detail-image-note">
                 {isGeneratedImage(photo)
-                  ? "Ambientación generada · Imagen ilustrativa"
+                  ? "Imagen generada · Ilustrativa"
                   : "Imagen ilustrativa del tratamiento"}
               </span>
             </div>
