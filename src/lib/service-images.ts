@@ -9,10 +9,6 @@ const treatmentImages = {
   reductores: "/images/masaje-reductor.webp",
   aparatologia: "/images/facial-led.webp",
 };
-export const isGeneratedImage = (src: string) =>
-  src === ambientImage ||
-  src === laserImage ||
-  Object.values(treatmentImages).includes(src);
 export function serviceImage(
   service: Pick<
     CatalogService,

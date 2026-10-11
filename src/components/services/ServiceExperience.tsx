@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useLayoutEffect, useRef, useState } from "react";
 import type { CatalogService } from "@/lib/public-site";
-import { isGeneratedImage, serviceImage } from "@/lib/service-images";
+import { serviceImage } from "@/lib/service-images";
 import ZoneEstimate from "@/components/booking/ZoneEstimate";
 import VisualImage from "./VisualImage";
 
@@ -241,13 +241,9 @@ export default function ServiceExperience({
             >
               <VisualImage
                 src={serviceImage(service)}
-                alt={`Imagen ilustrativa de ${service.name}`}
+                alt={service.name}
                 position={service.imagePosition || "50% 50%"}
-              >
-                {isGeneratedImage(serviceImage(service)) && (
-                  <span className="photo-credit">Imagen ilustrativa</span>
-                )}
-              </VisualImage>
+              ></VisualImage>
             </button>
             <div className="visual-treatment-copy">
               <span className="treatment-category">{label(service)}</span>
@@ -325,7 +321,7 @@ export default function ServiceExperience({
                 <VisualImage
                   key={photo}
                   src={photo}
-                  alt={`Imagen ilustrativa de ${active.name}`}
+                  alt={active.name}
                   position={active.imagePosition || "50% 50%"}
                   eager
                 />
@@ -348,11 +344,6 @@ export default function ServiceExperience({
                   ))}
                 </div>
               )}
-              <span className="detail-image-note">
-                {isGeneratedImage(photo)
-                  ? "Imagen generada · Ilustrativa"
-                  : "Imagen ilustrativa del tratamiento"}
-              </span>
             </div>
             <div className="detail-copy">
               <span className="treatment-category">{label(active)}</span>
