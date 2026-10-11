@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './experience.css';
+import './journey.css';
 
 export const metadata: Metadata = {
   title: 'Natalia Sánchez Estética | Cuidado y bienestar',

@@ -285,7 +285,16 @@ export default function Booking({
         <p className="eyebrow">RESERVAS</p>
         <h2>{title}</h2>
         <p>{intro}</p>
-        {service && <div className="booking-selected-image"><VisualImage src={serviceImage(service)} alt={`Tratamiento elegido: ${service.name}`} position={service.imagePosition}/><p>{service.name}</p></div>}
+        {service && (
+          <div className="booking-selected-image">
+            <VisualImage
+              src={serviceImage(service)}
+              alt={`Tratamiento elegido: ${service.name}`}
+              position={service.imagePosition}
+            />
+            <p>{service.name}</p>
+          </div>
+        )}
         <span className="booking-ornament" aria-hidden="true">
           ✳
         </span>
@@ -323,6 +332,10 @@ export default function Booking({
           </p>
         ) : catalog ? (
           <form onSubmit={submit} className="booking-form">
+            <div className="booking-stage-heading booking-wide">
+              <span>1</span>
+              <h3>Elegí tu momento</h3>
+            </div>
             <label>
               Tratamiento
               <select
@@ -433,24 +446,29 @@ export default function Booking({
                 onChange={(e) => setDate(e.target.value)}
               />
             </label>
-            <label>
-              Horario
-              <select
-                required
-                disabled={availabilityState !== "ready" || !times.length}
-                aria-describedby="availability-message"
-                className={inputClass}
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              >
-                <option value="">{timePlaceholder}</option>
-                {times.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <fieldset
+              className="booking-slots booking-wide"
+              aria-describedby="availability-message"
+            >
+              <legend>Horario</legend>
+              {availabilityState === "ready" && times.length > 0 ? (
+                <div className="booking-slot-grid">
+                  {times.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      aria-pressed={time === t}
+                      aria-label={`Elegir horario ${t}`}
+                      onClick={() => setTime(t)}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="booking-slot-prompt">{timePlaceholder}</p>
+              )}
+            </fieldset>
             <p id="availability-message" role="status" className="booking-wide">
               {availabilityMessage ||
                 (availabilityState === "loading"
@@ -459,6 +477,23 @@ export default function Booking({
                     ? `${times.length} horarios disponibles. Elegí uno para continuar.`
                     : "Seleccioná tratamiento y fecha para ver los horarios disponibles.")}
             </p>
+            {time && times.includes(time) && (
+              <div className="booking-choice booking-wide" role="status">
+                <span>Tu horario elegido</span>
+                <strong>
+                  {new Date(date + "T12:00:00").toLocaleDateString("es-AR", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                  })}{" "}
+                  · {time}
+                </strong>
+              </div>
+            )}
+            <div className="booking-stage-heading booking-wide">
+              <span>2</span>
+              <h3>Tus datos</h3>
+            </div>
             <label>
               Nombre
               <input
@@ -466,6 +501,7 @@ export default function Booking({
                 minLength={2}
                 maxLength={100}
                 className={inputClass}
+                autoComplete="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
