@@ -9,4 +9,5 @@ RUN npm prune --omit=dev
 RUN mkdir -p /app/public/uploads
 ENV NODE_ENV=production
 EXPOSE 1337
-CMD ["npm", "start"]
+# Strapi must receive Railway's SIGTERM directly for a clean deployment shutdown.
+CMD ["node", "node_modules/@strapi/strapi/bin/strapi.js", "start"]
