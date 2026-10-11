@@ -67,7 +67,7 @@ export function ZonePricingEditor({
           />
         </label>
         <label>
-          Descuento por zonas (%)
+          Descuento para {value.minimumZones} zonas (%)
           <Input
             type="number"
             min={0}
@@ -79,7 +79,7 @@ export function ZonePricingEditor({
           />
         </label>
         <label>
-          Todo el cuerpo (%)
+          Desde {value.minimumZones + 1} zonas (%)
           <Input
             type="number"
             min={0}

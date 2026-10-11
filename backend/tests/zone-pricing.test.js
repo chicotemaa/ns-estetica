@@ -18,6 +18,22 @@ test("laser price list and tier discounts use integer cents and never stack", ()
   assert.equal(q.subtotalCents, 2400000);
   assert.equal(q.discountCents, 480000);
   assert.equal(q.totalCents, 1920000);
+  const four = pricing.quote(service, {
+    zoneIds: ["axilas", "bozo", "cavado-bikini", "medio-brazo"],
+  });
+  assert.equal(four.subtotalCents, 3200000);
+  assert.equal(four.discountPercent, 30);
+  assert.equal(four.totalCents, 2240000);
+  const five = pricing.quote(service, {
+    zoneIds: ["axilas", "bozo", "cavado-bikini", "medio-brazo", "manos"],
+  });
+  assert.equal(five.totalCents, 2590000);
+  assert.equal(
+    pricing.quote(service, {
+      zoneIds: service.zone_pricing.zones.map((z) => z.id),
+    }).totalCents,
+    13020000,
+  );
   const full = pricing.quote(service, { fullBody: true });
   assert.equal(full.subtotalCents, 18600000);
   assert.equal(full.discountPercent, 30);

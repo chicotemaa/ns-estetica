@@ -3,7 +3,7 @@
 ## Reglas acordadas
 
 - Catálogo inicial: las 18 zonas y precios del flyer de Natalia Estética.
-- Cada zona se elige una vez; desde 3 zonas se aplica 20% al subtotal.
+- Cada zona se elige una vez; exactamente 3 zonas aplican 20% al subtotal y 4 o más aplican 30%. Una o dos zonas no tienen descuento. Corrección indicada por el usuario el 10/10/2026. El campo histórico `fullBodyPercent` representa ahora el segundo tramo, desde `minimumZones + 1`, y el paquete completo.
 - «Todo el cuerpo» incluye las 18 filas, según la indicación «seguir la lista», y aplica 30%, sin acumular el 20%. Subtotal inicial: $186.000; total: $130.200.
 - El administrador define fechas puntuales o días semanales, horario y duración fija del turno desde Servicios. Las jornadas respetan además el horario del negocio, profesionales y bloqueos.
 - Cierre inicial de reservas: 24 horas antes del comienzo del turno. El administrador puede editarlo.

@@ -27,7 +27,7 @@ module.exports = {
           business_id: String(b.id),
           name,
           description:
-            "Seleccioná tus zonas. Desde 3 zonas, 20% de descuento; todo el cuerpo, 30%. Reservá hasta 24 horas antes de tu turno.",
+            "Seleccioná tus zonas. 3 zonas, 20% de descuento; desde 4 zonas, 30%. Reservá hasta 24 horas antes de tu turno.",
           category: "coloraciones",
           price: 5000,
           duration_minutes: null,

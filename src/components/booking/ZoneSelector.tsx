@@ -59,9 +59,10 @@ export default function ZoneSelector({
     <fieldset className="zone-selector booking-wide">
       <legend>Armá tu sesión de depilación</legend>
       <p>
-        Desde {config.minimumZones} zonas: {config.discountPercent}% de
-        descuento. Todo el cuerpo: {config.fullBodyPercent}%. Las promociones no
-        se acumulan.
+        {config.minimumZones} zonas: {config.discountPercent}% de descuento.
+        Desde {config.minimumZones + 1} zonas: {config.fullBodyPercent}%. El
+        descuento se aplica sobre la suma de los precios. Las promociones no se
+        acumulan.
       </p>
       <label className="zone-choice zone-package">
         <input

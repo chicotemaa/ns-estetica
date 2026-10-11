@@ -108,11 +108,12 @@ function quote(service, raw) {
     (sum, z) => sum + Math.round(z.price * 100),
     0,
   );
-  const percent = picked.fullBody
-    ? config.fullBodyPercent
-    : lines.length >= config.minimumZones
-      ? config.discountPercent
-      : 0;
+  const percent =
+    picked.fullBody || lines.length > config.minimumZones
+      ? config.fullBodyPercent
+      : lines.length >= config.minimumZones
+        ? config.discountPercent
+        : 0;
   const discountCents = Math.round((subtotalCents * percent) / 100);
   return {
     selection: {

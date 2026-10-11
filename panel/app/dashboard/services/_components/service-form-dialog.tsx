@@ -66,7 +66,7 @@ export function ServiceFormDialog({
       onUpdateField("bookingEnabled", false);
       onUpdateField(
         "description",
-        "Elegí tus zonas de depilación. Desde 3 zonas: 20% de descuento. Todo el cuerpo: 30% de descuento. Reservas hasta 24 horas antes.",
+        "Elegí tus zonas de depilación. 3 zonas: 20% de descuento. Desde 4 zonas: 30% de descuento. Reservas hasta 24 horas antes.",
       );
     } catch (e) {
       setTemplateError(e instanceof Error ? e.message : "No se pudo cargar.");

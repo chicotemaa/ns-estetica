@@ -43,11 +43,12 @@ export function estimateZones(config: ZonePricing, selection: ZoneSelection) {
     (n, z) => n + Math.round(z.price * 100),
     0,
   );
-  const discountPercent = selection.fullBody
-    ? config.fullBodyPercent
-    : lines.length >= config.minimumZones
-      ? config.discountPercent
-      : 0;
+  const discountPercent =
+    selection.fullBody || lines.length > config.minimumZones
+      ? config.fullBodyPercent
+      : lines.length >= config.minimumZones
+        ? config.discountPercent
+        : 0;
   const discountCents = Math.round((subtotalCents * discountPercent) / 100);
   return {
     lines,
