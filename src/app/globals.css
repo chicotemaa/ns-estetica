@@ -251,4 +251,32 @@ textarea.booking-input { min-height:84px; resize:vertical; }
 .zone-total .zone-grand-total { border-top: 1px solid #c8a48e; margin-top: 8px; padding-top: 14px; font-size: 1.2rem; font-weight: 700; }
 .zone-estimate summary { cursor: pointer; font-weight: 700; padding: 12px 0; }
 .treatment-card:has(.zone-estimate[open]) { grid-column: 1 / -1; }
+/* Gentle, finite motion. Prices are never animated or counted up. */
+@keyframes ns-arrive { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes ns-photo-arrive { from { opacity:.65; transform:scale(1.035); } to { opacity:1; transform:scale(1); } }
+@media (prefers-reduced-motion:no-preference) {
+  .editable-site .hero-copy > * { animation:ns-arrive 750ms cubic-bezier(.22,1,.36,1) both; }
+  .editable-site .hero-copy h1 { animation-delay:70ms; }
+  .editable-site .hero-description { animation-delay:140ms; }
+  .editable-site .hero-actions { animation-delay:210ms; }
+  .editable-site .hero-footnote { animation-delay:260ms; }
+  .editable-site .hero-image-wrap { animation:ns-photo-arrive 1100ms cubic-bezier(.22,1,.36,1) both; }
+  .editable-site .nav-links.is-open { animation:ns-arrive 240ms ease-out; }
+  .editable-site .zone-estimate[open] > :not(summary) { animation:ns-arrive 280ms ease-out; }
+  .editable-site .booking-success { animation:ns-arrive 300ms ease-out; }
+  .editable-site .button-primary, .editable-site .catalog-filters button { transition:background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease; }
+  .editable-site .treatment-card { transition:border-color 220ms ease, box-shadow 220ms ease; }
+  .editable-site .treatment-card > a span { transition:transform 200ms ease; }
+  .editable-site .zone-choice { transition:background-color 180ms ease, box-shadow 180ms ease; }
+  .editable-site .menu-toggle span { transition:transform 200ms ease; }
+}
+.editable-site .zone-choice:has(input:checked) { background:#f4e2d8; box-shadow:inset 0 0 0 1px #ad7962; }
+.editable-site .menu-toggle[aria-expanded="true"] span:first-child { transform:translateY(3px) rotate(45deg); }
+.editable-site .menu-toggle[aria-expanded="true"] span:last-child { transform:translateY(-3px) rotate(-45deg); }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .editable-site .treatment-card:hover { border-color:var(--rose-dark); box-shadow:0 10px 28px rgba(90,55,45,.08); }
+  .editable-site .treatment-card > a:hover span { transform:translate(3px,-3px); }
+  .editable-site .catalog-filters button:hover { transform:translateY(-2px); }
+  .editable-site .button-primary:active { transform:translateY(0) scale(.985); }
+}
 @media (min-width: 760px) { .zone-estimate .zone-options { grid-template-columns: repeat(2,minmax(0,1fr)); } }

@@ -1,9 +1,10 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useState, useRef, type CSSProperties } from 'react';
 import { defaultWebsite, type WebsiteContent } from '@/lib/website-content';
 import type { SiteCatalog } from '@/lib/public-site';
 import Booking from '../booking/Booking';
+import { useHomeMotion } from './useHomeMotion';
 import ServiceCatalog from '../services/ServiceCatalog';
 import ContactForm from '../contact/ContactForm';
 
@@ -14,6 +15,8 @@ function videoEmbed(raw: string) {
   return null;
 }
 export default function Site({initial,catalog}:{initial:WebsiteContent;catalog:SiteCatalog}) {
+  const motionRoot = useRef<HTMLDivElement>(null);
+  useHomeMotion(motionRoot);
   const [content,setContent]=useState(initial),[menu,setMenu]=useState(false),[preview,setPreview]=useState(false);
   const [chosenService, setChosenService] = useState<{id:string} | null>(null);
   const contact={...fallbackContact,...Object.fromEntries(Object.entries(catalog.brand || {}).filter(([,v])=>v!==null && v!==undefined))};
@@ -34,7 +37,7 @@ export default function Site({initial,catalog}:{initial:WebsiteContent;catalog:S
   const style={'--ink':c.identity.black,'--cream':c.identity.gray,'--paper':c.identity.white,'--rose-dark':c.identity.burgundy, color:c.identity.black,background:c.identity.white,fontFamily:c.identity.font==='system'?'system-ui, sans-serif':undefined} as CSSProperties;
   const links=[...(c.services.enabled?[{href:'#services',label:c.navigation.services}]:[]),...(c.about.enabled?[{href:'#about',label:c.navigation.about}]:[]),...(c.work.enabled?[{href:'#gallery',label:c.navigation.work}]:[]),...(c.journal.enabled?[{href:'#journal',label:c.navigation.journal}]:[]),{href:'#contact',label:'Contacto'}];
   const photoSection=(section:typeof c.brand,id:string)=><section id={id} className="section-pad"><p className="eyebrow">{section.eyebrow}</p><h2 className="editable-title">{section.title}</h2><p className="editable-copy">{section.body}</p><div className="service-grid">{section.photos.map(p=><figure key={p.id}><div className="service-photo"><img src={p.image} alt={p.alt} className="cover-image" loading="lazy" /></div><figcaption><h3>{p.title}</h3><p>{p.description}</p></figcaption></figure>)}</div>{section.credit&&<p>{section.credit}</p>}</section>;
-  return <div style={style} className={c.identity.rounded?'editable-site rounded-site':'editable-site'}>
+  return <div ref={motionRoot} style={style} className={c.identity.rounded?'editable-site rounded-site':'editable-site'}>
     {preview&&<div className="preview-banner" role="status">Vista previa · Borrador sin publicar</div>}
     <header className="site-header"><div className="site-header-inner">
       <a className="brand" href="#inicio" aria-label={c.identity.name+', inicio'}><img src={c.identity.logo} alt={c.identity.name} width={66} height={48} className="brand-logo" /><span className="brand-name">{c.identity.shortName}<small>{c.navigation.topbar}</small></span></a>
