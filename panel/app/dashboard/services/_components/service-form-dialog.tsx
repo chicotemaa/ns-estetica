@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ZonePricingEditor } from "./zone-pricing-editor";
+import { ServiceImagesEditor } from "./service-images-editor";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -52,6 +53,7 @@ export function ServiceFormDialog({
   serviceBeingEdited,
 }: ServiceFormDialogProps) {
   const [templateError, setTemplateError] = useState("");
+  const [uploadBusy, setUploadBusy] = useState(false);
   async function loadLaser() {
     setTemplateError("");
     try {
@@ -119,6 +121,11 @@ export function ServiceFormDialog({
             />
           </div>
 
+          <ServiceImagesEditor
+            value={formState}
+            onChange={onUpdateField}
+            onBusy={setUploadBusy}
+          />
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -200,7 +207,7 @@ export function ServiceFormDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button disabled={isSubmitting} onClick={onSubmit}>
+          <Button disabled={isSubmitting || uploadBusy} onClick={onSubmit}>
             {serviceBeingEdited ? "Guardar cambios" : "Crear servicio"}
           </Button>
         </DialogFooter>

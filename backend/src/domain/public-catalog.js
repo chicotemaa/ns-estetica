@@ -5,6 +5,10 @@ function publicServices(services, variants) {
     .filter((service) => service.is_active)
     .map((service) => ({
       id: service.id,
+      imageUrl: service.image_url || null,
+      gallery: service.image_gallery || [],
+      imagePosition: service.image_position || "50% 50%",
+      featured: !!service.featured,
       name: service.name,
       description: service.description,
       category: service.category || "tratamiento",

@@ -119,6 +119,15 @@
       },
       "zone_pricing": {
         "attribute": "zone_pricing"
+      },
+      "image_gallery": {
+        "attribute": "image_gallery"
+      },
+      "image_position": {
+        "attribute": "image_position"
+      },
+      "featured": {
+        "attribute": "featured"
       }
     }
   },

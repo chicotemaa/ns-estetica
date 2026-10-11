@@ -4,6 +4,7 @@ import type { ServiceCategory } from "@/lib/business-shared";
 import type { ServiceFormState, ServiceSummary } from "./service-types";
 
 export const INITIAL_SERVICE_FORM: ServiceFormState = {
+  imageUrl: "", gallery: [], imagePosition: "50% 50%", featured: false,
   zonePricing: null,
   bookingEnabled: true,
   name: "",
@@ -34,6 +35,7 @@ export function createServiceFormState(
   }
 
   return {
+    imageUrl: service.imageUrl || "", gallery: service.gallery || [], imagePosition: service.imagePosition || "50% 50%", featured: !!service.featured,
     zonePricing: service.zonePricing || null,
     name: service.name,
     description: service.description ?? "",

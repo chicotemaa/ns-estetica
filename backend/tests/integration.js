@@ -119,6 +119,7 @@ async function main() {
       PUBLIC_URL: "http://127.0.0.1:1339",
       CORS_ORIGINS: "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:3009",
       DATABASE_URL: `postgresql://postgres:${password}@127.0.0.1:55439/barber_test`,
+      ESTETICA_DATABASE_URL: `postgresql://postgres:${password}@127.0.0.1:55439/barber_test`,
       DATABASE_SSL: "false",
       APP_KEYS: randomBytes(32).toString("hex"),
       ADMIN_JWT_SECRET: randomBytes(32).toString("hex"),
@@ -176,6 +177,10 @@ async function main() {
       });
     const anonymous = await query(null, { resource: "appointments" });
     assert.equal(anonymous.status, 403, JSON.stringify(anonymous.body));
+    if (process.argv.includes('--service-images')) {
+      await require('./service-images-integration')({ app, call, query, password });
+      return;
+    }
     const { body: catalog, status: catalogStatus } = await call(
       "/public/nerea-aylen-barber/catalog",
     );

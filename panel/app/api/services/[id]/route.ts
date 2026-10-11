@@ -55,6 +55,10 @@ export async function PATCH(
   const { data, error } = await backend
     .from("services")
     .update({
+      ...(parsed.data.imageUrl !== undefined ? { image_url: parsed.data.imageUrl } : {}),
+      ...(parsed.data.gallery !== undefined ? { image_gallery: parsed.data.gallery } : {}),
+      ...(parsed.data.imagePosition !== undefined ? { image_position: parsed.data.imagePosition } : {}),
+      ...(parsed.data.featured !== undefined ? { featured: parsed.data.featured } : {}),
       name: parsed.data.name,
       ...(parsed.data.zonePricing !== undefined
         ? { zone_pricing: parsed.data.zonePricing }

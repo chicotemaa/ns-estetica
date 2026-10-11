@@ -65,6 +65,16 @@
     },
     "zone_pricing": {
       "type": "json"
+    },
+    "image_gallery": {
+      "type": "json"
+    },
+    "image_position": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

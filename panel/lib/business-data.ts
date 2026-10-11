@@ -106,6 +106,10 @@ interface BackendBusinessRow {
 }
 
 interface BackendServiceRow {
+  image_url?: string | null;
+  image_gallery?: string[];
+  image_position?: string;
+  featured?: boolean;
   zone_pricing?: import("./zone-pricing").ZonePricing | null;
   booking_enabled?: boolean;
   id: string;
@@ -747,6 +751,7 @@ function mapBusiness(row: BackendBusinessRow): BusinessRecord {
 
 function mapService(row: BackendServiceRow): ServiceRecord {
   return {
+    imageUrl: row.image_url || null, gallery: row.image_gallery || [], imagePosition: row.image_position || "50% 50%", featured: !!row.featured,
     zonePricing: row.zone_pricing || null,
     id: row.id,
     name: row.name,
@@ -1092,7 +1097,7 @@ export async function getBusinessDataBundle(): Promise<BusinessDataBundle> {
       backend
         .from("services")
         .select(
-          "id, name, description, duration_minutes, price, is_active, category",
+          "id, name, description, duration_minutes, price, is_active, category, image_url, image_gallery, image_position, featured",
         )
         .eq("business_id", business.id)
         .order("display_order", { ascending: true }),
@@ -1518,7 +1523,7 @@ export async function getBusinessAgendaBundle(): Promise<BusinessAgendaBundle> {
       backend
         .from("services")
         .select(
-          "id, name, description, duration_minutes, price, is_active, category",
+          "id, name, description, duration_minutes, price, is_active, category, image_url, image_gallery, image_position, featured",
         )
         .eq("business_id", business.id)
         .order("display_order", { ascending: true }),
@@ -1723,7 +1728,7 @@ export async function getBusinessTeamBundle(): Promise<BusinessTeamBundle> {
       backend
         .from("services")
         .select(
-          "id, name, description, duration_minutes, price, is_active, category",
+          "id, name, description, duration_minutes, price, is_active, category, image_url, image_gallery, image_position, featured",
         )
         .eq("business_id", business.id)
         .order("display_order", { ascending: true }),

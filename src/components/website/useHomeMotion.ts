@@ -3,7 +3,7 @@
 import { useEffect, type RefObject } from "react";
 
 const targets =
-  ".section-heading, .treatment-card, .about-visual, .about-copy, .experience-top, .experience-step, .location-strip, .booking-intro, .contact-intro, .service-grid > figure, .editable-title";
+  ".section-heading, .visual-treatment-copy, .treatment-card, .about-visual, .about-copy, .experience-top, .experience-step, .location-strip, .booking-intro, .contact-intro, .service-grid > figure, .editable-title";
 
 /** Content stays visible without JavaScript; each section animates only once. */
 export function useHomeMotion(rootRef: RefObject<HTMLDivElement>) {
@@ -12,6 +12,16 @@ export function useHomeMotion(rootRef: RefObject<HTMLDivElement>) {
     if (!root || !window.IntersectionObserver || !Element.prototype.animate)
       return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const hero = root.querySelector<HTMLElement>('.hero');
+    let frame = 0;
+    const scroll = () => {
+      cancelAnimationFrame(frame);
+      if (preference.matches || !hero) return;
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      frame = requestAnimationFrame(() => hero.style.setProperty('--hero-scroll', `${Math.max(-35, Math.min(55, -rect.top * .09))}px`));
+    };
+    window.addEventListener('scroll', scroll, {passive:true});
     const seen = new WeakSet<Element>();
     const running = new Map<Element, Animation>();
     const observer = new IntersectionObserver(
@@ -67,6 +77,8 @@ export function useHomeMotion(rootRef: RefObject<HTMLDivElement>) {
     mutations.observe(root, { childList: true, subtree: true });
     const stop = () => {
       if (!preference.matches) return;
+      cancelAnimationFrame(frame);
+      hero?.style.removeProperty('--hero-scroll');
       observer.disconnect();
       running.forEach((animation) => animation.cancel());
       running.clear();
@@ -82,6 +94,8 @@ export function useHomeMotion(rootRef: RefObject<HTMLDivElement>) {
     preference.addEventListener("change", stop);
     root.addEventListener("focusin", focus);
     return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', scroll);
       observer.disconnect();
       mutations.disconnect();
       running.forEach((animation) => animation.cancel());

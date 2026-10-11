@@ -11,6 +11,10 @@ import {
 import type { ServiceCategory } from "@/lib/business-shared";
 
 export interface ServicePayload {
+  imageUrl?: unknown;
+  gallery?: unknown;
+  imagePosition?: unknown;
+  featured?: unknown;
   zonePricing?: unknown;
   name?: unknown;
   description?: unknown;
@@ -22,6 +26,10 @@ export interface ServicePayload {
 }
 
 export interface ParsedServicePayload {
+  imageUrl?: string | null;
+  gallery?: string[];
+  imagePosition?: string;
+  featured?: boolean;
   zonePricing?: unknown;
   name: string;
   description: string | null;
@@ -37,6 +45,42 @@ export function parseServicePayload(payload: ServicePayload): {
   error?: string;
 } {
   const name = typeof payload.name === "string" ? payload.name.trim() : "";
+  const validImage = (value: unknown): value is string => {
+    if (typeof value !== "string" || value.length > 2048) return false;
+    if (/^\/images\/[\w./-]+$/.test(value) && !value.includes(".."))
+      return true;
+    try {
+      const url = new URL(value);
+      return url.protocol === "https:" && !url.username && !url.password;
+    } catch {
+      return false;
+    }
+  };
+  if (
+    payload.imageUrl !== undefined &&
+    payload.imageUrl !== null &&
+    payload.imageUrl !== "" &&
+    !validImage(payload.imageUrl)
+  )
+    return { error: "Usá una imagen subida o una dirección HTTPS válida." };
+  if (
+    payload.gallery !== undefined &&
+    (!Array.isArray(payload.gallery) ||
+      payload.gallery.length > 6 ||
+      !payload.gallery.every(validImage))
+  )
+    return {
+      error:
+        "La galería admite hasta 6 imágenes con direcciones HTTPS válidas.",
+    };
+  if (
+    payload.imagePosition !== undefined &&
+    (typeof payload.imagePosition !== "string" ||
+      !/^(0|25|50|75|100)% (0|25|50|75|100)%$/.test(payload.imagePosition))
+  )
+    return { error: "Elegí un encuadre válido para la imagen." };
+  if (payload.featured !== undefined && typeof payload.featured !== "boolean")
+    return { error: "La opción destacado debe ser verdadera o falsa." };
   const description =
     typeof payload.description === "string" ? payload.description.trim() : "";
   const price =
@@ -84,6 +128,18 @@ export function parseServicePayload(payload: ServicePayload): {
 
   return {
     data: {
+      ...(payload.imageUrl !== undefined
+        ? { imageUrl: payload.imageUrl ? String(payload.imageUrl) : null }
+        : {}),
+      ...(payload.gallery !== undefined
+        ? { gallery: payload.gallery as string[] }
+        : {}),
+      ...(payload.imagePosition !== undefined
+        ? { imagePosition: payload.imagePosition as string }
+        : {}),
+      ...(payload.featured !== undefined
+        ? { featured: payload.featured as boolean }
+        : {}),
       ...(payload.zonePricing !== undefined
         ? { zonePricing: payload.zonePricing }
         : {}),

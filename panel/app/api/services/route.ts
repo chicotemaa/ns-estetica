@@ -51,6 +51,10 @@ export async function POST(request: Request) {
     .from("services")
     .insert({
       business_id: business.id,
+      ...(parsed.data.imageUrl !== undefined ? { image_url: parsed.data.imageUrl } : {}),
+      ...(parsed.data.gallery !== undefined ? { image_gallery: parsed.data.gallery } : {}),
+      ...(parsed.data.imagePosition !== undefined ? { image_position: parsed.data.imagePosition } : {}),
+      ...(parsed.data.featured !== undefined ? { featured: parsed.data.featured } : {}),
       name: parsed.data.name,
       zone_pricing: parsed.data.zonePricing || null,
       description: parsed.data.description,

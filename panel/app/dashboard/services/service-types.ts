@@ -2,6 +2,10 @@ import type { ServiceCategory } from "@/lib/business-shared";
 import type { ZonePricing } from "@/lib/zone-pricing";
 
 export interface ServiceSummary {
+  imageUrl?: string | null;
+  gallery?: string[];
+  imagePosition?: string;
+  featured?: boolean;
   zonePricing?: ZonePricing | null;
   id: string;
   name: string;
@@ -16,6 +20,10 @@ export interface ServiceSummary {
 }
 
 export interface ServiceFormState {
+  imageUrl: string;
+  gallery: string[];
+  imagePosition: string;
+  featured: boolean;
   zonePricing: ZonePricing | null;
   name: string;
   description: string;

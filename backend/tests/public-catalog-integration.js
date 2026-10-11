@@ -72,7 +72,29 @@ module.exports = async function ({
   });
   assert.equal(variant.status, 200, JSON.stringify(variant.body));
   const serviceVariantId = variant.body.data[0].id;
+  const photos = {
+    image_url: "https://example.com/facial.webp",
+    image_gallery: ["https://example.com/studio.webp"],
+    image_position: "50% 0%",
+    featured: true,
+  };
+  const imageUpdate = await query(token, {
+    resource: "services",
+    operation: "update",
+    filters: [{ field: "id", operator: "eq", value: serviceId }],
+    data: photos,
+  });
+  assert.equal(imageUpdate.status, 200, JSON.stringify(imageUpdate.body));
+  const savedService = (await get("services")).find(
+    (item) => item.id === serviceId,
+  );
+  assert.deepEqual(savedService.image_gallery, photos.image_gallery);
+  assert.equal(savedService.image_url, photos.image_url);
   const catalog = (await call("/public/nerea-aylen-barber/catalog")).body;
+  const publicService = catalog.services.find((item) => item.id === serviceId);
+  assert.equal(publicService.imageUrl, photos.image_url);
+  assert.deepEqual(publicService.gallery, photos.image_gallery);
+  assert.equal(publicService.featured, true);
   assert.equal(
     catalog.services
       .find((item) => item.id === serviceId)

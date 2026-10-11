@@ -143,6 +143,7 @@ export function useServicesController(services: ServiceSummary[]) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          imageUrl: formState.imageUrl, gallery: formState.gallery, imagePosition: formState.imagePosition, featured: formState.featured,
           name: formState.name,
           zonePricing: formState.zonePricing,
           description: formState.description,

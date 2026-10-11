@@ -49,6 +49,10 @@ export interface BookingSettingsRecord {
 }
 
 export interface ServiceRecord {
+  imageUrl?: string | null;
+  gallery?: string[];
+  imagePosition?: string;
+  featured?: boolean;
   zonePricing?: import("./zone-pricing").ZonePricing | null;
   bookingEnabled?: boolean;
   id: string;

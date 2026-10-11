@@ -67,3 +67,24 @@ test("foreign and missing multi-price variants cannot produce a bookable service
   assert.equal(selected.name, "Color · Largo");
   assert.equal(selected.booking_enabled, false);
 });
+test("service photographs and gallery survive the public projection without exposing internal metadata", () => {
+  const catalog = publicServices(
+    [
+      {
+        ...services[1],
+        image_url: "https://example.com/facial.webp",
+        image_gallery: ["https://example.com/studio.webp"],
+        image_position: "50% 0%",
+        featured: true,
+        source_ref: "private-import",
+      },
+    ],
+    [],
+  );
+  assert.equal(catalog[0].imageUrl, "https://example.com/facial.webp");
+  assert.deepEqual(catalog[0].gallery, ["https://example.com/studio.webp"]);
+  assert.equal(catalog[0].imagePosition, "50% 0%");
+  assert.equal(catalog[0].featured, true);
+  assert.equal(catalog[0].source_ref, undefined);
+  assert.equal(catalog[0].price, 26000);
+});

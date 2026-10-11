@@ -14,6 +14,10 @@ export type CatalogService = {
   price: number;
   durationMinutes?: number;
   bookingEnabled?: boolean;
+  imageUrl?: string | null;
+  gallery?: string[];
+  imagePosition?: string;
+  featured?: boolean;
   zonePricing?: import("@/components/booking/ZoneSelector").ZonePricing | null;
   variants?: {
     id: string;

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import VisualImage from "../services/VisualImage";
+import { serviceImage } from "@/lib/service-images";
 import ZoneSelector, {
   QuoteSummary,
   type ZonePricing,
@@ -8,6 +10,9 @@ import ZoneSelector, {
 } from "./ZoneSelector";
 
 type Service = {
+  imageUrl?: string | null;
+  category?: string;
+  imagePosition?: string;
   id: string;
   name: string;
   price: number;
@@ -280,6 +285,7 @@ export default function Booking({
         <p className="eyebrow">RESERVAS</p>
         <h2>{title}</h2>
         <p>{intro}</p>
+        {service && <div className="booking-selected-image"><VisualImage src={serviceImage(service)} alt={`Tratamiento elegido: ${service.name}`} position={service.imagePosition}/><p>{service.name}</p></div>}
         <span className="booking-ornament" aria-hidden="true">
           ✳
         </span>
