@@ -1,5 +1,7 @@
 "use client";
+import Link from "next/link";
 import { AppointmentZones } from "./appointment-zones";
+import { hasAppointmentDuration } from "@/lib/appointment-services";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -183,7 +185,7 @@ export function AppointmentFormDialog({
               </div>
 
               <div className="space-y-2">
-                <Label>Servicio</Label>
+                <Label htmlFor="appointment-service">Servicio</Label>
                 <Select
                   value={formState.serviceId}
                   onValueChange={(value) => {
@@ -191,22 +193,36 @@ export function AppointmentFormDialog({
                     onUpdateField("zoneSelection", null);
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="appointment-service" className="w-full min-w-0">
                     <SelectValue placeholder="Seleccionar servicio" />
                   </SelectTrigger>
                   <SelectContent>
                     {services.map((service) => (
                       <SelectItem key={service.id} value={service.id}>
                         {service.name} · {formatCurrency(service.price)}
+                        {!hasAppointmentDuration(service) ? " · Falta duración" : ""}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {selectedService ? (
+                {selectedService && hasAppointmentDuration(selectedService) ? (
                   <p className="text-xs text-slate-500">
                     {selectedService.durationMinutes} min ·{" "}
                     {formatCurrency(selectedService.price)}
                   </p>
+                ) : null}
+                {selectedService && !hasAppointmentDuration(selectedService) ? (
+                  <div role="status" className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-sm text-amber-950">
+                    <p>Este servicio todavía no tiene una duración válida. Completala para calcular los horarios disponibles.</p>
+                    <Link
+                      className="mt-2 inline-block font-semibold underline underline-offset-4"
+                      href={`/dashboard/services?edit=${encodeURIComponent(selectedService.id)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Configurar servicio (nueva pestaña)
+                    </Link>
+                  </div>
                 ) : null}
                 {selectedService?.zonePricing && (
                   <AppointmentZones
@@ -415,7 +431,7 @@ export function AppointmentFormDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button disabled={isSubmitting} onClick={onSubmit}>
+          <Button disabled={isSubmitting || !hasAppointmentDuration(selectedService)} onClick={onSubmit}>
             {appointmentBeingEdited ? "Guardar cambios" : "Crear turno"}
           </Button>
         </DialogFooter>

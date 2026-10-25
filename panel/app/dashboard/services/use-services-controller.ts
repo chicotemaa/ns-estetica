@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { getServiceCategoryLabel } from "@/lib/business-shared";
 
@@ -26,11 +26,13 @@ function createFeedbackState(
 
 export function useServicesController(services: ServiceSummary[]) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedService = services.find((service) => service.id === searchParams.get("edit")) ?? null;
   const [isRefreshing, startTransition] = useTransition();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [editingService, setEditingService] = useState<ServiceSummary | null>(
-    null,
+    requestedService,
   );
   const [serviceToDelete, setServiceToDelete] = useState<ServiceSummary | null>(
     null,
@@ -39,9 +41,9 @@ export function useServicesController(services: ServiceSummary[]) {
     null,
   );
   const [formState, setFormState] = useState<ServiceFormState>(
-    createServiceFormState(),
+    createServiceFormState(requestedService),
   );
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(Boolean(requestedService));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);

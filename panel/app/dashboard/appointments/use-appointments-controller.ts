@@ -1,5 +1,6 @@
 "use client";
 import { zoneAllows } from "@/lib/zone-pricing";
+import { getAppointmentServices, hasAppointmentDuration } from "@/lib/appointment-services";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -198,7 +199,8 @@ export function useAppointmentsController({
     ...(initialCreate
       ? {
           serviceId:
-            services.find((s) => s.isActive && s.durationMinutes > 0)?.id || "",
+            (services.find((s) => s.isActive && hasAppointmentDuration(s)) ??
+              services.find((s) => s.isActive))?.id || "",
           staffMemberId: staffMembers.find((s) => s.isActive)?.id || "",
         }
       : {}),
@@ -219,11 +221,7 @@ export function useAppointmentsController({
 
   const activeServices = useMemo(
     () =>
-      services.filter(
-        (service) =>
-          (service.isActive && service.durationMinutes > 0) ||
-          service.id === formState.serviceId,
-      ),
+      getAppointmentServices(services, formState.serviceId),
     [formState.serviceId, services],
   );
   const activeStaffMembers = useMemo(
@@ -382,7 +380,7 @@ export function useAppointmentsController({
       !formState.appointmentDate ||
       !formState.serviceId ||
       !formState.staffMemberId ||
-      !selectedService
+      !hasAppointmentDuration(selectedService) || !selectedService
     ) {
       return [];
     }
@@ -507,7 +505,8 @@ export function useAppointmentsController({
   function openCreateDialog(options?: { dateKey?: string; time?: string }) {
     const dateKey = options?.dateKey ?? selectedDateKey;
     const time = options?.time ?? "";
-    const defaultService = activeServices[0] ?? null;
+    const defaultService = activeServices.find((service) => service.isActive && hasAppointmentDuration(service)) ??
+      activeServices.find((service) => service.isActive) ?? null;
     const defaultStaff =
       getCompatibleStaffForService(defaultService?.id ?? "")[0] ??
       activeStaffMembers[0] ??
@@ -558,6 +557,10 @@ export function useAppointmentsController({
   }
 
   async function submitForm() {
+    if (!hasAppointmentDuration(selectedService)) {
+      setFormError("Configurá la duración del servicio antes de guardar el turno.");
+      return;
+    }
     setIsSubmitting(true);
     setFormError(null);
 
