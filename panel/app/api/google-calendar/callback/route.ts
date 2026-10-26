@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { calendarRequest } from "@/lib/google-calendar-server";
+import { panelOrigin } from "@/lib/panel-origin";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   let outcome = "connected";
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
   const response = NextResponse.redirect(
     new URL(
       `/dashboard/settings/google-calendar?connection=${outcome}`,
-      url.origin,
+      panelOrigin(),
     ),
   );
   response.headers.set("Cache-Control", "no-store");

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { backendUrl, sessionCookie } from "./lib/backend/config";
+import { panelOrigin } from "./lib/panel-origin";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -43,7 +44,7 @@ export async function middleware(request: NextRequest) {
         { error: "Iniciá sesión para continuar." },
         { status: 401 },
       )
-    : NextResponse.redirect(new URL("/auth", request.url));
+    : NextResponse.redirect(new URL("/auth", panelOrigin()));
   response.cookies.delete(sessionCookie);
   return response;
 }

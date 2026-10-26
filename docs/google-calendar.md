@@ -27,8 +27,14 @@ Referencias oficiales: [OAuth servidor](https://developers.google.com/identity/p
 
 ## Verificación y aceptación
 
+- Configuración productiva realizada el 25/10/2026: proyecto Google Cloud `natalia-sanchez-estetica`, Calendar API habilitada, cliente de tipo Aplicación web con el redirect indicado arriba y los dos scopes documentados. Las cuatro variables están configuradas en el servicio backend `ns-estetica` de Railway; el despliegue terminó correctamente. No copiar valores de credenciales a esta documentación.
+- El panel productivo muestra «Conectar con Google» y el botón alcanza el selector de cuentas de Google. Política específica publicada en `https://app.nataliasanchez.com.ar/privacidad/google-calendar`, enlazada desde la configuración del panel y desde la marca OAuth. TypeScript y ESLint de los archivos modificados pasaron.
+- OAuth publicado en modo «En producción» con confirmación del usuario. Google todavía indica marca y acceso a datos sin verificar: puede mostrar el aviso de app no verificada y aplica el límite de 100 usuarios hasta completar su revisión. Publicar OAuth no equivale a obtener la verificación de Google ni a conectar una cuenta.
+- El 26/10/2026 se comprobó la cuenta autorizada, se activó el calendario principal seleccionado y la sincronización manual terminó correctamente con fecha de última sincronización visible y sin errores ni conflictos mostrados. La aceptación detallada de crear/mover/cancelar turnos ficticios en ambos sentidos sigue pendiente.
+- Los redirects OAuth y de sesión usan `PANEL_ORIGIN` (origen HTTPS público en producción), sin confiar en el host interno ni cabeceras reenviadas. El fallback productivo es `https://app.nataliasanchez.com.ar`; configurar esta variable al reutilizar el panel en otro dominio. Se verificaron rechazo de protocolos inseguros, credenciales e IP de escucha y funcionamiento local.
+
 - Verificado localmente el 10/10/2026: 36 pruebas unitarias, integración PostgreSQL con API Google simulada, TypeScript, ESLint de archivos modificados y compilación de producción del panel. El intercambio OAuth real y la aceptación en navegador con Google siguen pendientes.
 - Pruebas locales con datos ficticios y API Google simulada; ninguna prueba automática debe leer secretos productivos.
 - Ejecutar tests del backend, integración PostgreSQL y TypeScript del panel.
-- Aceptación productiva pendiente hasta configurar OAuth: conectar una cuenta de prueba desde el botón, seleccionar calendario privado de prueba, crear/mover/cancelar un turno ficticio en ambos sentidos, verificar bloqueo recurrente/día completo, desconectar/reconectar y comprobar que no duplica eventos.
+- Aceptación productiva pendiente de autorizar una cuenta: conectar una cuenta de prueba desde el botón, seleccionar calendario privado de prueba, crear/mover/cancelar un turno ficticio en ambos sentidos, verificar bloqueo recurrente/día completo, desconectar/reconectar y comprobar que no duplica eventos.
 - No marcar conexión real ni sincronización productiva como verificadas únicamente por pasar pruebas locales.
