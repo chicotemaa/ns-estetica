@@ -94,6 +94,9 @@ export default function GoogleCalendarPage() {
         Conectá tu cuenta de Google y elegí el calendario que usás para la
         estética. Esta conexión administra la agenda de todo el local.
       </p>
+      <Link className="inline-block text-sm underline" href="/privacidad/google-calendar">
+        Cómo usamos tus datos de Google Calendar
+      </Link>
       {error && (
         <p
           role="alert"
