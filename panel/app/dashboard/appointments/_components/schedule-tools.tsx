@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,20 +44,34 @@ export function ScheduleTools({
   useEffect(() => {
     setForm((f) => (f.id ? f : { ...f, date }));
   }, [date]);
-  async function load() {
-    const [b, a] = await Promise.all([
-      fetch("/api/schedule-blocks", { cache: "no-store" }),
-      fetch("/api/appointments/archive", { cache: "no-store" }),
-    ]);
-    const [bj, aj] = await Promise.all([b.json(), a.json()]);
-    if (!b.ok || !a.ok) throw new Error(bj.error || aj.error);
+  const loadBlocks = useCallback(async () => {
+    const b = await fetch("/api/schedule-blocks", { cache: "no-store" });
+    const bj = await b.json();
+    if (!b.ok) throw new Error(bj.error || "No se pudieron cargar los bloqueos.");
     setBlocks(bj.blocks);
     onBlocks(bj.blocks);
+  }, [onBlocks]);
+  async function loadArchive() {
+    const a = await fetch("/api/appointments/archive", { cache: "no-store" });
+    const aj = await a.json();
+    if (!a.ok) throw new Error(aj.error || "No se pudieron cargar los turnos eliminados.");
     setArchive(aj.appointments);
   }
+  async function load() {
+    await Promise.all([loadBlocks(), loadArchive()]);
+  }
   useEffect(() => {
-    load().catch((e) => setError(e.message));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    let active = true;
+    const refresh = () => {
+      if (document.visibilityState === "hidden") return;
+      loadBlocks().then(() => { if (active) setError(""); }).catch((e) => { if (active) setError(e.message); });
+    };
+    refresh();
+    loadArchive().catch((e) => { if (active) setError(e.message); });
+    const timer = window.setInterval(refresh, 60000);
+    window.addEventListener("focus", refresh);
+    return () => { active = false; window.clearInterval(timer); window.removeEventListener("focus", refresh); };
+  }, [loadBlocks]);
   async function mutate(url: string, method: string, data: unknown) {
     if (busy) return;
     setBusy(true);
@@ -84,9 +98,10 @@ export function ScheduleTools({
       className="rounded-xl border bg-white p-5 space-y-4"
       aria-label="Bloqueos y turnos eliminados"
     >
+      <p className="text-sm text-slate-700">Los bloqueos aparecen en la agenda y en el detalle del día. Los de Google Calendar se actualizan automáticamente; tocá uno para consultar su horario.</p>
       <details>
         <summary className="cursor-pointer font-semibold">
-          Bloquear horarios · almuerzos y pausas
+          Bloqueos de agenda · Google Calendar, almuerzos y pausas
         </summary>
         <p className="my-3 text-sm">
           Elegí el día y el período. El bloqueo afecta solo esa fecha y no
@@ -170,7 +185,7 @@ export function ScheduleTools({
             .filter((b) => b.block_date >= date)
             .map((b) => (
               <div
-                className="flex flex-wrap items-center justify-between gap-2 rounded border-l-4 border-amber-600 bg-amber-50 p-3"
+                className="flex flex-wrap items-center justify-between gap-2 rounded border border-amber-200 bg-amber-50 p-3 text-amber-950"
                 key={b.id}
               >
                 <span>

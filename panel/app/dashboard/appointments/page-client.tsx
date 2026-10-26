@@ -396,6 +396,8 @@ export function AppointmentsPageClient({
         </Card>
 
         <AppointmentsSelectedDayPanel
+          staff={staffMembers}
+          blocks={scheduleBlocks.filter((block) => block.block_date === controller.selectedDateKey && (controller.staffFilter === "all" || controller.staffFilter === "unassigned" || !block.staff_member_id || block.staff_member_id === controller.staffFilter))}
           appointments={controller.selectedDateAppointments}
           dateKey={controller.selectedDateKey}
           onCreate={() =>

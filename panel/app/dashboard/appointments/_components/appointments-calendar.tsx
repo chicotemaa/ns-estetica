@@ -344,6 +344,23 @@ export function AppointmentsCalendar({
     () => buildCalendarEvents(appointments, bookingSettings),
     [appointments, bookingSettings],
   );
+  const visibleBlocks = useMemo(() => blocks.filter((block) =>
+    !selectedStaffId || !block.staff_member_id || block.staff_member_id === selectedStaffId
+  ), [blocks, selectedStaffId]);
+  const blockEvents: EventInput[] = visibleBlocks.map((block) => ({
+    id: `block:${block.id}`,
+    title: block.reason,
+    start: `${block.block_date}T${block.start_time}`,
+    end: `${block.block_date}T${block.end_time}`,
+    allDay: block.start_time.slice(0, 5) === "00:00" && block.end_time.slice(0, 5) === "24:00",
+    editable: false,
+    display: "block",
+    backgroundColor: "#92400e",
+    borderColor: "#78350f",
+    textColor: "#ffffff",
+    classNames: ["schedule-block-event"],
+    extendedProps: { block },
+  }));
   // Past work can predate today's opening hours or fall on a now-closed day.
   // Include every visible event in the time axis instead of clipping it.
   const displayBounds = useMemo(
@@ -363,9 +380,12 @@ export function AppointmentsCalendar({
             latest: Math.max(bounds.latest, end),
           };
         },
-        { earliest: calendarBounds.earliest, latest: calendarBounds.latest },
+        visibleBlocks.reduce((bounds, block) => {
+          if (!visibleDateKeys.includes(block.block_date) || (block.start_time.slice(0, 5) === "00:00" && block.end_time.slice(0, 5) === "24:00")) return bounds;
+          return { earliest: Math.min(bounds.earliest, timeStringToMinutes(block.start_time) ?? bounds.earliest), latest: Math.max(bounds.latest, timeStringToMinutes(block.end_time) ?? bounds.latest) };
+        }, { earliest: calendarBounds.earliest, latest: calendarBounds.latest }),
       ),
-    [appointments, bookingSettings, calendarBounds],
+    [appointments, bookingSettings, calendarBounds, visibleBlocks, visibleDateKeys],
   );
   const breakBackgroundEvents = useMemo(
     () =>
@@ -429,7 +449,11 @@ export function AppointmentsCalendar({
   }
 
   function handleEventClick(info: EventClickArg) {
-    if (info.event.id.startsWith("block:")) return;
+    const block = info.event.extendedProps.block as ScheduleBlock | undefined;
+    if (block) {
+      onOpenDay(block.block_date);
+      return;
+    }
     info.el.focus({ preventScroll: true });
     const appointmentId = info.event.id;
     const dateKey = info.event.start
@@ -549,7 +573,8 @@ export function AppointmentsCalendar({
           slotMinTime={`${String(Math.floor(displayBounds.earliest / 60)).padStart(2, "0")}:${String(displayBounds.earliest % 60).padStart(2, "0")}:00`}
           slotMaxTime={`${String(Math.floor(displayBounds.latest / 60)).padStart(2, "0")}:${String(displayBounds.latest % 60).padStart(2, "0")}:00`}
           nowIndicator
-          allDaySlot={false}
+          allDaySlot={blockEvents.some((event) => event.allDay)}
+          allDayText="Todo el día"
           expandRows
           dayMaxEvents={summaryOnly ? 0 : viewMode === "month" ? 3 : false}
           moreLinkContent={(arg) =>
@@ -566,7 +591,7 @@ export function AppointmentsCalendar({
           navLinkDayClick={(date) => onOpenDay(getDateKeyFromDate(date))}
           eventOrder="start,-duration,title"
           eventOrderStrict
-          events={[...events, ...breakBackgroundEvents, ...blocks.filter(b => !selectedStaffId || !b.staff_member_id || b.staff_member_id === selectedStaffId).map(b => ({ id: `block:${b.id}`, title: `Bloqueado · ${b.reason}`, start: `${b.block_date}T${b.start_time}`, end: `${b.block_date}T${b.end_time}`, editable: false, backgroundColor: "#92400e", borderColor: "#78350f", textColor: "#ffffff", classNames: ["schedule-block-event"] }))]}
+          events={[...events, ...breakBackgroundEvents, ...blockEvents]}
           businessHours={businessHoursConfig}
           dateClick={handleDateClick}
           eventClick={handleEventClick}
@@ -615,6 +640,15 @@ export function AppointmentsCalendar({
             arg.event.id === selectedAppointmentId ? ["is-selected-event"] : []
           }
           eventContent={(contentArg) => {
+            const block = contentArg.event.extendedProps.block as ScheduleBlock | undefined;
+            if (block) {
+              const time = contentArg.event.allDay ? "Todo el día" : `${block.start_time.slice(0, 5)}–${block.end_time.slice(0, 5)}`;
+              return <div className="fc-appointment-event" title={`${time} · Bloqueado · ${block.reason}. Tocá para ver el detalle.`}>
+                <div className="fc-appointment-event__time">{time} · Bloqueado</div>
+                <div className="fc-appointment-event__title">{block.reason}</div>
+                <div className="fc-appointment-event__meta">{block.read_only ? "Google Calendar" : "Pausa del panel"}</div>
+              </div>;
+            }
             const appointment = contentArg.event.extendedProps.appointment as
               | AgendaEntry
               | undefined;
