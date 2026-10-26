@@ -452,6 +452,11 @@ export function AppointmentsCalendar({
     const block = info.event.extendedProps.block as ScheduleBlock | undefined;
     if (block) {
       onOpenDay(block.block_date);
+      requestAnimationFrame(() => {
+        const detail = document.getElementById("agenda-day-detail");
+        detail?.scrollIntoView({ block: "start" });
+        detail?.focus({ preventScroll: true });
+      });
       return;
     }
     info.el.focus({ preventScroll: true });

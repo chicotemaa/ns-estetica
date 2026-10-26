@@ -33,7 +33,7 @@ export function AppointmentsSelectedDayPanel({
   timeZone,
 }: AppointmentsSelectedDayPanelProps) {
   return (
-    <section className="selected-day-panel" aria-label="Atenciones del día">
+    <section id="agenda-day-detail" tabIndex={-1} className="selected-day-panel scroll-mt-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4" aria-label="Atenciones del día">
       <div className="selected-day-heading">
         <div className="min-w-0">
           <h2 className="text-sm font-semibold capitalize text-slate-900">
