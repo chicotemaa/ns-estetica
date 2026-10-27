@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getAppointmentServices, hasAppointmentDuration } from "../lib/appointment-services.ts";
+import { getAppointmentServices, hasAppointmentDuration, requiresAvailableSlot } from "../lib/appointment-services.ts";
 
 const service = (id, extra = {}) => ({
   id, name: `Servicio ${id}`, description: null, durationMinutes: 45,
@@ -26,4 +26,14 @@ test("do not invent durations or expose slots for invalid scheduling data", () =
   }
   assert.equal(hasAppointmentDuration(null), false);
   assert.equal(hasAppointmentDuration(service("facial", { durationMinutes: 30 })), true);
+});
+
+test("new and rescheduled appointments validate availability while unchanged edits and cancellations remain possible", () => {
+  const original = { appointmentDate: "2026-10-27", appointmentTime: "10:00:00", serviceId: "fixture", staffMemberId: "fixture", status: "confirmed" };
+  const form = { ...original, appointmentTime: "10:00" };
+  assert.equal(requiresAvailableSlot(form, null), true);
+  assert.equal(requiresAvailableSlot(form, original), false);
+  assert.equal(requiresAvailableSlot({ ...form, appointmentTime: "14:00" }, original), true);
+  assert.equal(requiresAvailableSlot({ ...form, staffMemberId: "other" }, original), true);
+  assert.equal(requiresAvailableSlot({ ...form, status: "cancelled" }, original), false);
 });

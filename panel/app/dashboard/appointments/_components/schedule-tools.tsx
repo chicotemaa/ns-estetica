@@ -11,7 +11,18 @@ export type ScheduleBlock = {
   end_time: string;
   reason: string;
   staff_member_id: string | null;
+  google_event?: {
+    title: string; description: string; location: string;
+    start: { date?: string; dateTime?: string; timeZone?: string } | null;
+    end: { date?: string; dateTime?: string; timeZone?: string } | null;
+    organizer: GoogleEventPerson | null; creator: GoogleEventPerson | null;
+    attendees: GoogleEventPerson[];
+    status: string; visibility: string; recurring: boolean;
+    html_link: string | null; video_link: string | null;
+    created: string | null; updated: string | null;
+  };
 };
+type GoogleEventPerson = { name: string; email: string; response: string; optional: boolean };
 type Archived = {
   id: string;
   name: string;

@@ -10,6 +10,7 @@ import {
 import { ChevronRight, Plus } from "lucide-react";
 import { formatAgendaDayLabel } from "../appointment-utils";
 import type { ScheduleBlock } from "./schedule-tools";
+import { GoogleEventDetails } from "./google-event-details";
 
 interface AppointmentsSelectedDayPanelProps {
   appointments: AgendaEntry[];
@@ -60,8 +61,9 @@ export function AppointmentsSelectedDayPanel({
             </p>
             <p className="mt-1 break-words font-semibold">{block.reason}</p>
             <p className="mt-1 text-sm">{block.read_only ? "Google Calendar" : "Bloqueo del panel"} · {block.staff_member_id ? staff.find((member) => member.id === block.staff_member_id)?.fullName || "Profesional" : "Todo el local"}</p>
+            {block.google_event && <GoogleEventDetails event={block.google_event} timeZone={timeZone} />}
             {block.read_only && (
-              <a className="mt-3 inline-flex min-h-11 items-center font-semibold underline underline-offset-4 focus-visible:outline focus-visible:outline-2" href={`https://calendar.google.com/calendar/r/day/${block.block_date.replaceAll("-", "/")}`} target="_blank" rel="noopener noreferrer">
+              <a className="mt-3 inline-flex min-h-11 items-center font-semibold underline underline-offset-4 focus-visible:outline focus-visible:outline-2" href={block.google_event?.html_link || `https://calendar.google.com/calendar/r/day/${block.block_date.replaceAll("-", "/")}`} target="_blank" rel="noopener noreferrer">
                 Ver evento en Google Calendar
               </a>
             )}

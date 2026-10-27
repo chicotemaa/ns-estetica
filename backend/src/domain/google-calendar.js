@@ -156,10 +156,13 @@ async function disconnect(s, id) {
     return { ok: true };
   });
 }
-async function blocks(s, id, date) {
+async function blocks(s, id, date, includeDetails = false) {
   const c = await read(s, id);
   return c?.enabled
-    ? (c.state?.busy || []).filter((b) => !date || b.block_date === date)
+    ? (c.state?.busy || []).filter((b) => !date || b.block_date === date).map((b) => {
+        const { google_event, ...interval } = b;
+        return includeDetails && google_event ? { ...interval, reason: google_event.title, google_event } : interval;
+      })
     : [];
 }
 async function sync(s, id, makeClient = google.client) {
@@ -314,6 +317,7 @@ async function sync(s, id, makeClient = google.client) {
         zone,
         from.slice(0, 10),
         to.slice(0, 10),
+        true,
       );
       await save(s, c, {
         state: { links, busy: finalBusy, conflicts },

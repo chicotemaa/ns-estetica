@@ -14,7 +14,7 @@ export default function GoogleCalendarPrivacyPage() {
           <p className="font-semibold text-stone-600">Natalia Sánchez Estética</p>
           <h1 className="text-3xl font-bold tracking-tight">Google Calendar y privacidad</h1>
           <p className="leading-7">La conexión es opcional y permite al administrador sincronizar la agenda de la estética con un calendario de Google que elija.</p>
-          <p className="text-sm text-stone-600">Actualizado el 25 de octubre de 2026.</p>
+          <p className="text-sm text-stone-600">Actualizado el 26 de octubre de 2026.</p>
         </header>
         <section className="space-y-3 leading-7">
           <h2 className="text-xl font-semibold">Responsable y contacto</h2>
@@ -23,7 +23,7 @@ export default function GoogleCalendarPrivacyPage() {
         <section className="space-y-3 leading-7">
           <h2 className="text-xl font-semibold">Datos a los que accede la aplicación</h2>
           <p>Google solicita permiso para consultar tu lista de calendarios y para ver y editar eventos. Usamos la lista para mostrar los calendarios editables y operamos sobre el que selecciones. La aplicación recibe los eventos de ese calendario para comparar fechas, horarios, duración, cancelaciones y disponibilidad.</p>
-          <p>En el servidor guardamos el identificador y nombre del calendario elegido, una credencial de actualización cifrada, referencias a eventos sincronizados, intervalos ocupados y datos técnicos de sincronización. Los títulos y descripciones de otros eventos personales no se guardan en nuestra base de datos.</p>
+          <p>En el servidor guardamos el identificador y nombre del calendario elegido, una credencial de actualización cifrada, referencias a eventos sincronizados, intervalos ocupados y datos técnicos de sincronización. Para mostrar el detalle de los eventos ocupados al administrador, también guardamos su título, descripción, ubicación, fechas, organizador, creador, participantes y respuestas, estado, visibilidad y enlaces de Google Calendar y Google Meet, cuando Google los proporciona. Estos detalles se muestran solo en el panel administrativo; la reserva pública recibe únicamente la disponibilidad.</p>
         </section>
         <section className="space-y-3 leading-7">
           <h2 className="text-xl font-semibold">Para qué se usan los datos</h2>

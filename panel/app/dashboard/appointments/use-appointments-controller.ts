@@ -1,6 +1,6 @@
 "use client";
 import { zoneAllows } from "@/lib/zone-pricing";
-import { getAppointmentServices, hasAppointmentDuration } from "@/lib/appointment-services";
+import { getAppointmentServices, hasAppointmentDuration, requiresAvailableSlot } from "@/lib/appointment-services";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -424,7 +424,7 @@ export function useAppointmentsController({
     appointmentsState,
     bookingSettings,
     businessHours,
-    editingAppointment?.id,
+    editingAppointment,
     formState.appointmentDate,
     formState.serviceId,
     formState.staffMemberId,
@@ -437,16 +437,7 @@ export function useAppointmentsController({
       return;
     }
 
-    if (availableTimeOptions.length === 0) {
-      if (!formState.appointmentTime) {
-        return;
-      }
-
-      setFormState((current) => ({ ...current, appointmentTime: "" }));
-      return;
-    }
-
-    if (availableTimeOptions.includes(formState.appointmentTime)) {
+    if (formState.appointmentTime || availableTimeOptions.length === 0) {
       return;
     }
 
@@ -507,8 +498,10 @@ export function useAppointmentsController({
     const time = options?.time ?? "";
     const defaultService = activeServices.find((service) => service.isActive && hasAppointmentDuration(service)) ??
       activeServices.find((service) => service.isActive) ?? null;
+    const compatibleStaff = getCompatibleStaffForService(defaultService?.id ?? "");
     const defaultStaff =
-      getCompatibleStaffForService(defaultService?.id ?? "")[0] ??
+      compatibleStaff.find((member) => member.id === staffFilter) ??
+      compatibleStaff[0] ??
       activeStaffMembers[0] ??
       null;
 
@@ -557,6 +550,10 @@ export function useAppointmentsController({
   }
 
   async function submitForm() {
+    if (requiresAvailableSlot(formState, editingAppointment) && !availableTimeOptions.includes(formState.appointmentTime)) {
+      setFormError("Ese horario no está disponible para el servicio y profesional elegidos. Seleccioná otro horario o revisá los bloqueos y horarios de atención.");
+      return;
+    }
     if (!hasAppointmentDuration(selectedService)) {
       setFormError("Configurá la duración del servicio antes de guardar el turno.");
       return;

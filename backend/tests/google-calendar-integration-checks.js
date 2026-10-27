@@ -163,7 +163,7 @@ module.exports = async function ({
     await sync();
     link = (await getConnection()).state.links[key];
     remote = events.get(link.eventId);
-    // An all-day personal event must remove all public availability without storing its name.
+    // Private event information is available only through the manager projection.
     events.set("personal", {
       id: "personal",
       summary: "Private appointment",
@@ -186,10 +186,14 @@ module.exports = async function ({
       0,
     );
     assert.ok(
-      !JSON.stringify((await getConnection()).state.busy).includes(
+      !JSON.stringify(await calendar.blocks(app, businessId, date)).includes(
         "Private appointment",
       ),
     );
+    const adminBlocks = await call("/backoffice/google-calendar/blocks", { token });
+    assert.equal(adminBlocks.status, 200);
+    assert.ok(adminBlocks.body.blocks.some((b) => b.google_event?.title === "Private appointment"));
+    assert.equal((await call("/backoffice/google-calendar/blocks")).status, 403);
     events.delete("personal");
     await sync();
     assert.equal((await calendar.blocks(app, businessId, date)).length, 0);

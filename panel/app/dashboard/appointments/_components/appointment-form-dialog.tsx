@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { AppointmentZones } from "./appointment-zones";
-import { hasAppointmentDuration } from "@/lib/appointment-services";
+import { hasAppointmentDuration, requiresAvailableSlot } from "@/lib/appointment-services";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +84,8 @@ export function AppointmentFormDialog({
 }: AppointmentFormDialogProps) {
   const selectedService =
     services.find((service) => service.id === formState.serviceId) ?? null;
+  const unavailableTime = !!formState.appointmentTime && !availableTimeOptions.includes(formState.appointmentTime);
+  const invalidSlot = requiresAvailableSlot(formState, appointmentBeingEdited) && !availableTimeOptions.includes(formState.appointmentTime);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -287,6 +289,7 @@ export function AppointmentFormDialog({
                       <SelectValue placeholder="Seleccionar horario" />
                     </SelectTrigger>
                     <SelectContent>
+                      {unavailableTime && <SelectItem disabled value={formState.appointmentTime}>{formatAppointmentTime(formState.appointmentTime)} · No disponible</SelectItem>}
                       {availableTimeOptions.length === 0 ? (
                         <SelectItem disabled value="none">
                           Sin horarios disponibles
@@ -303,6 +306,7 @@ export function AppointmentFormDialog({
                 </div>
               </div>
 
+              {unavailableTime && <p role="status" className="rounded-xl bg-amber-50 p-3 text-sm text-amber-950">Conservamos las {formatAppointmentTime(formState.appointmentTime)} que elegiste. Ese horario no está disponible para esta combinación de servicio, profesional y fecha; elegí otro o revisá los bloqueos y horarios de atención.</p>}
               {availableTimeOptions.length > 0 ? (
                 <div className="space-y-2">
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -431,7 +435,7 @@ export function AppointmentFormDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button disabled={isSubmitting || !hasAppointmentDuration(selectedService)} onClick={onSubmit}>
+          <Button disabled={isSubmitting || !hasAppointmentDuration(selectedService) || invalidSlot} onClick={onSubmit}>
             {appointmentBeingEdited ? "Guardar cambios" : "Crear turno"}
           </Button>
         </DialogFooter>

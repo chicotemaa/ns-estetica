@@ -141,8 +141,28 @@ function localEvent(kind, row, zone) {
     transparency: "opaque",
   };
 }
-// Personal event names/details are deliberately never stored. Only busy intervals.
-function busyBlocks(events, zone, from, to) {
+function eventDetails(e) {
+  // Manager-facing fields only; no provider tokens or attachment metadata.
+  const person = (p) => p ? { name: p.displayName || "", email: p.email || "", response: p.responseStatus || "", optional: !!p.optional } : null;
+  function googleLink(value, meeting = false) {
+    try {
+      const u = new URL(value);
+      return u.protocol === "https:" && !u.username && !u.password &&
+        (meeting ? u.hostname === "meet.google.com" : u.hostname === "calendar.google.com" || (u.hostname === "www.google.com" && u.pathname.startsWith("/calendar"))) ? u.href : null;
+    } catch { return null; }
+  }
+  return {
+    title: e.summary || "Evento sin título", description: e.description || "", location: e.location || "",
+    start: e.start || null, end: e.end || null,
+    organizer: person(e.organizer), creator: person(e.creator), attendees: (e.attendees || []).map(person),
+    status: e.status || "confirmed", visibility: e.visibility || "default",
+    recurring: !!e.recurringEventId || !!e.recurrence?.length,
+    html_link: googleLink(e.htmlLink), video_link: googleLink(e.hangoutLink, true),
+    created: e.created || null, updated: e.updated || null,
+  };
+}
+// Availability receives intervals only. Details are opt-in for the manager.
+function busyBlocks(events, zone, from, to, includeDetails = false) {
   const result = [];
   for (const e of events) {
     if (
@@ -179,6 +199,7 @@ function busyBlocks(events, zone, from, to) {
           staff_member_id: null,
           reason: "Ocupado en Google Calendar",
           read_only: true,
+          ...(includeDetails ? { google_event: eventDetails(e) } : {}),
         });
     }
   }

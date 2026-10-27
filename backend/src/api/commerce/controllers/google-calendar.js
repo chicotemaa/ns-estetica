@@ -11,7 +11,7 @@ module.exports = {
   async blocks(ctx) {
     const b = await getBusiness(strapi);
     ctx.set("Cache-Control", "no-store");
-    ctx.body = { blocks: await calendar.blocks(strapi, b.id) };
+    ctx.body = { blocks: await calendar.blocks(strapi, b.id, undefined, true) };
   },
   async calendars(ctx) {
     const b = await getBusiness(strapi);

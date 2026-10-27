@@ -419,32 +419,7 @@ export function AppointmentsCalendar({
     }
     const timeValue = info.allDay ? undefined : getTimeValueFromDate(info.date);
 
-    if (timeValue) {
-      const slotMinutes = timeStringToMinutes(timeValue);
-      const dayWindow = getCalendarDayWindow({
-        businessHours,
-        dateKey,
-        staffMemberId: selectedStaffId,
-        staffWorkingHours,
-      });
-
-      if (
-        slotMinutes === null ||
-        !dayWindow.isOpen ||
-        dayWindow.openMinutes === null ||
-        dayWindow.closeMinutes === null ||
-        slotMinutes < dayWindow.openMinutes ||
-        slotMinutes >= dayWindow.closeMinutes ||
-        slotIsBlocked(
-          slotMinutes,
-          bookingSettings.slotIntervalMinutes,
-          dayWindow.blockedRanges,
-        )
-      ) {
-        return;
-      }
-    }
-
+    // The form explains unavailable times instead of silently ignoring a click.
     onDateClick(dateKey, timeValue);
   }
 

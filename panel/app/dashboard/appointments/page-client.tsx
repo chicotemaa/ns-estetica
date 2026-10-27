@@ -2,7 +2,6 @@
 
 import { ScheduleTools, type ScheduleBlock } from "./_components/schedule-tools";
 import { useRef, useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardPageHeader } from "@/components/dashboard/page-header";
@@ -102,7 +101,6 @@ export function AppointmentsPageClient({
   todayKey,
 }: AppointmentsPageClientProps) {
   const [scheduleBlocks, setScheduleBlocks] = useState<ScheduleBlock[]>([]);
-  const isMobile = useIsMobile();
   const [isDetailOpen, setIsDetailOpen] = useState(Boolean(initialAppointmentId));
   const detailTriggerRef = useRef<HTMLElement | null>(null);
   const controller = useAppointmentsController({
@@ -343,9 +341,7 @@ export function AppointmentsPageClient({
       <ScheduleTools date={controller.selectedDateKey} staff={staffMembers} onBlocks={setScheduleBlocks}/>
       <div className="agenda-workspace" data-view={controller.viewMode}>
         <Card
-          className={
-            isMobile && controller.viewMode === "day" ? "hidden" : "min-w-0"
-          }
+          className="min-w-0"
         >
           <CardHeader>
             <CardTitle className="capitalize">
@@ -356,7 +352,7 @@ export function AppointmentsPageClient({
                 (entry) => entry.channel === "history",
               )
                 ? "El historial sin hora usa horarios de referencia separados por una hora."
-                : "Seleccioná un turno para ver sus detalles."}
+                : "Tocá un horario libre para cargar un turno. Tocá un evento para ver sus detalles."}
             </CardDescription>
           </CardHeader>
           <CardContent>

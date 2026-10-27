@@ -89,6 +89,22 @@ test("busy intervals split days, respect exclusive all-day end and omit private 
   );
   assert.ok(!JSON.stringify(blocks).includes("SECRET"));
 });
+test("manager event details include visible fields and reject unsafe provider links", () => {
+  const e = { id: "fixture", summary: "Consulta ficticia", description: "Detalle de prueba", location: "Consultorio ficticio", start: { dateTime: "2026-10-20T10:00:00-03:00" }, end: { dateTime: "2026-10-20T11:00:00-03:00" }, organizer: { email: "organizer@example.test" }, attendees: [{ displayName: "Persona ficticia", email: "person@example.test", responseStatus: "accepted", accessToken: "do-not-copy" }], htmlLink: "javascript:alert(1)", hangoutLink: "https://attacker.test/meeting", accessToken: "do-not-copy" };
+  const admin = m.busyBlocks([e], zone, "2026-10-01", "2026-11-01", true)[0];
+  assert.equal(admin.google_event.title, e.summary);
+  assert.equal(admin.google_event.description, e.description);
+  assert.equal(admin.google_event.location, e.location);
+  assert.equal(admin.google_event.attendees[0].response, "accepted");
+  assert.equal(admin.google_event.html_link, null);
+  assert.equal(admin.google_event.video_link, null);
+  assert.ok(!JSON.stringify(admin).includes("do-not-copy"));
+  assert.ok(!JSON.stringify(m.busyBlocks([e], zone, "2026-10-01", "2026-11-01")).includes(e.summary));
+  const valid = m.busyBlocks([{ ...e, htmlLink: "https://www.google.com/calendar/event?eid=fixture", hangoutLink: "https://meet.google.com/fixture" }], zone, "2026-10-01", "2026-11-01", true)[0];
+  assert.ok(valid.google_event.html_link.startsWith("https://www.google.com/calendar/"));
+  assert.ok(valid.google_event.video_link.startsWith("https://meet.google.com/"));
+});
+
 test("export only shares appointment title and schedule, not contact, notes or price", () => {
   const row = {
     customer_name: "Cliente ficticio",
